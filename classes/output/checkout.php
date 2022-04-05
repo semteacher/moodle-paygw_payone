@@ -38,15 +38,19 @@ use templatable;
  */
 class checkout implements renderable, templatable {
 
-    /** @var stdClass $checkoutid */
-    public $checkoutid = null;
+    /** @var array $checkoutid */
+    public $data = [];
 
     /**
      * In the Constructor, we gather all the data we need ans store it in the data property.
      */
-    public function __construct($checkoutid) {
+    public function __construct($orderid, $itemid, $paymentarea, $component, $resourcePath) {
 
-        $this->checkoutid = $checkoutid;
+        $this->data['orderid'] = $orderid;
+        $this->data['itemid'] = $itemid;
+        $this->data['paymentarea'] = $paymentarea;
+        $this->data['component'] = $component;
+        $this->data['resourcePath'] = $resourcePath;
     }
 
     /**
@@ -55,8 +59,6 @@ class checkout implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
 
-        $returnarray['checkoutid'] = $this->checkoutid;
-
-        return $returnarray;
+        return $this->data;
     }
 }

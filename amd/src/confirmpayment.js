@@ -27,18 +27,24 @@ import Ajax from 'core/ajax';
  * Confirm checkout.
  * @param {string} checkoutid
  */
-export const init = (checkoutid) => {
+export const init = (orderid,
+                    itemid,
+                    paymentarea,
+                    component,
+                    resourcePath) => {
 
     // eslint-disable-next-line no-console
-    console.log('checkoutid', checkoutid);
+    console.log('checkoutid', orderid, itemid, paymentarea, component, resourcePath);
 
     Ajax.call([{
         methodname: "paygw_payunity_create_transaction_complete",
         args: {
-            checkoutid
+            component,
+            paymentarea,
+            orderid,
+            itemid
         },
         done: function(data) {
-
 
             // eslint-disable-next-line no-console
             console.log(data);

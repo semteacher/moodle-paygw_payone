@@ -52,11 +52,9 @@ $PAGE->add_body_class('paygw_payunity_checkout');
 echo $OUTPUT->header();
 
 $output = $PAGE->get_renderer('paygw_payunity');
-$data = new checkout();
+$data = new checkout($orderid, $itemid, $paymentarea, $component, $resourcePath);
 
 echo $output->render_checkout($data);
-
-echo $checkoutid;
 
 echo $OUTPUT->footer();
 
