@@ -40,7 +40,10 @@
 
 {{#js}}
     require(['paygw_payunity/confirmpayment'], function(confirmpayment) {
-    confirmpayment.init('{{checkoutid}}');
+    confirmpayment.init('{{checkoutid}}',
+                        '{{itemid}}',
+                        '{{paymentarea}}',
+                        '{{component}}',
+                        '{{resourcePath}}');
     });
 {{/js}}
-
