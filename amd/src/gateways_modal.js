@@ -18,7 +18,7 @@
  * This module is responsible for PayPal content in the gateways modal.
  *
  * @module     paygw_payunity/gateway_modal
- * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

@@ -17,7 +17,7 @@
  * PayPal repository module to encapsulate all of the AJAX requests that can be sent for PayPal.
  *
  * @module     paygw_payunity/repository
- * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

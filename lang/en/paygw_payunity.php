@@ -43,3 +43,6 @@ $string['repeatedorder'] = 'This order has already been processed earlier.';
 $string['sandbox'] = 'Sandbox';
 $string['secret'] = 'Secret';
 $string['secret_help'] = 'The secret that PayUnity generated for your application.';
+
+$string['checkout'] = 'Checkout';
+$string['loading'] = 'Loading...';
