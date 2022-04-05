@@ -58,11 +58,6 @@ class get_config_for_js extends external_api {
                     "&currency=" . $currency .
                     "&paymentType=" . $paymenttype;
 
-                    $data2 = "entityId=8a8294174e0078ad014e1a2781d035a7" .
-                "&amount=92.00" .
-                "&currency=EUR" .
-                "&paymentType=DB";
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -88,6 +83,7 @@ class get_config_for_js extends external_api {
      * @return string[]
      */
     public static function execute(string $component, string $paymentarea, int $itemid): array {
+        GLOBAL $CFG;
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
             'paymentarea' => $paymentarea,
@@ -102,6 +98,7 @@ class get_config_for_js extends external_api {
         $currency = $payable->get_currency();
         $secret = $config['secret'];
         $entityid = $config['clientid'];
+        $root = $CFG->wwwroot;
 
         $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid);
         $data = json_decode($responsedata);
@@ -112,7 +109,8 @@ class get_config_for_js extends external_api {
             'brandname' => $config['brandname'],
             'cost' => helper::get_rounded_cost($payable->get_amount(), $payable->get_currency(), $surcharge),
             'currency' => $payable->get_currency(),
-            'purchaseid' => $purchaseid
+            'purchaseid' => $purchaseid,
+            'rooturl' => $root,
         ];
     }
 
@@ -128,6 +126,7 @@ class get_config_for_js extends external_api {
             'cost' => new external_value(PARAM_FLOAT, 'Cost with gateway surcharge'),
             'currency' => new external_value(PARAM_TEXT, 'Currency'),
             'purchaseid' => new external_value(PARAM_TEXT, 'Purchase Id'),
+            'rooturl' => new external_value(PARAM_TEXT, 'Moodle Root URI'),
         ]);
     }
 }

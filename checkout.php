@@ -27,9 +27,11 @@ require_once(__DIR__ . '/../../../config.php');
 
 global $DB, $PAGE, $OUTPUT, $USER;
 
-$resourcePath = required_param('resourcePath', PARAM_RAW);
+$resourcepath = required_param('resourcePath', PARAM_RAW);
 $itemid = required_param('itemid', PARAM_RAW);
-$checkoutid = required_param('checkoutid', PARAM_RAW);
+$orderid = required_param('orderid', PARAM_RAW);
+$component = required_param('component', PARAM_RAW);
+$paymentarea = required_param('paymentarea', PARAM_RAW);
 
 if (!$context = context_system::instance()) {
     throw new moodle_exception('badcontext');
@@ -50,10 +52,11 @@ $PAGE->add_body_class('paygw_payunity_checkout');
 echo $OUTPUT->header();
 
 $output = $PAGE->get_renderer('paygw_payunity');
-$data = new checkout($checkoutid);
+$data = new checkout();
 
 echo $output->render_checkout($data);
 
 echo $checkoutid;
 
 echo $OUTPUT->footer();
+

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 // This file is part of Moodle - http://moodle.org/
 //
@@ -68,10 +69,13 @@ export const process = (component, paymentArea, itemId, description) => {
             loadSdk(payunityConfig.purchaseid),
         ]);
     })
-    .then(([modal, paypalConfig]) => {
-        // eslint-disable-next-line max-len
+    .then(([modal, payunityConfig]) => {
+
        const form = document.createElement('form');
-       form.setAttribute('action', "https://payunity.docs.oppwa.com/tutorials/integration-guide");
+       const resourcePath = `/v1/checkouts/${payunityConfig.purchaseid}/payment`;
+       const url = `${payunityConfig.rooturl}/payment/gateway/payunity/checkout.php?resourcepath=${resourcePath}&itemid=${itemId}&orderid=${payunityConfig.clientid}&component=${component}&paymentarea=${paymentArea}`;
+        const test = `http://localhost:8000/payment/gateway/payunity/checkout.php?resourcePath=/v1/checkouts/E89F4136CECEEBA9FF3708011BED4BE4.uat01-vm-tx03/payment&checkoutid=E89F4136CECEEBA9FF3708011BED4BE4.uat01-vm-tx03&itemid=13`;
+       form.setAttribute('action', url);
        form.classList.add('paymentWidgets');
        form.setAttribute('data-brands', "VISA MASTER AMEX");
         modal.setBody(form);

@@ -29,7 +29,8 @@ import Ajax from 'core/ajax';
  * @param {string} component Name of the component that the itemId belongs to
  * @param {string} paymentArea The area of the component that the itemId belongs to
  * @param {number} itemId An internal identifier that is used by the component
- * @returns {Promise<{clientid: string, brandname: string, cost: number, currency: string, purchaseid: string}>}
+ * @returns {Promise<{clientid: string, brandname: string, cost: number, currency: string,
+ * purchaseid: string, rooturl: string}>}
  */
 export const getConfigForJs = (component, paymentArea, itemId) => {
     const request = {
