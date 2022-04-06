@@ -99,7 +99,7 @@ class transaction_complete extends external_api {
                     // Approved.
                     $status = 'success';
                 } else {
-                    // NO BUENO.
+                    // Not Approved.
                     $status = 'nosuccess';
                 }
             } else {
@@ -107,7 +107,7 @@ class transaction_complete extends external_api {
                     // Approved.
                     $status = 'success';
                 } else {
-                    // NO BUENO.
+                    // Not Approved.
                     $status = 'nosuccess';
                 }
             }
