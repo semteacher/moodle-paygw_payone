@@ -74,8 +74,14 @@ export const process = (component, paymentArea, itemId, description) => {
        form.setAttribute('data-brands', "VISA MASTER AMEX");
         modal.setBody(form);
         return '';
-    }).then(x => new Promise(resolve => setTimeout(() => resolve(x), 100000))
-    );
+    }).then(x => {
+        const promise = new Promise(resolve => {
+            window.addEventListener('onbeforeunload', (e) => {
+                promise.resolve();
+            });
+        });
+        return promise;
+    });
 };
 
 /**

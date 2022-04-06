@@ -31,10 +31,11 @@ export const init = (orderid,
                     itemid,
                     paymentarea,
                     component,
-                    resourcePath) => {
+                    resourcePath,
+                    successurl) => {
 
     // eslint-disable-next-line no-console
-    console.log('orderid', orderid);
+    console.log('orderid', orderid, successurl);
     // eslint-disable-next-line no-console
     console.log('checkoutid', orderid, itemid, paymentarea, component, resourcePath);
 
@@ -45,12 +46,13 @@ export const init = (orderid,
             paymentarea,
             orderid,
             itemid,
-            resourcePath
+            resourcePath,
         },
         done: function(data) {
 
             // eslint-disable-next-line no-console
-            console.log(data);
+            console.log(data, successurl);
+            location.href = successurl;
         },
         fail: function(ex) {
             // eslint-disable-next-line no-console

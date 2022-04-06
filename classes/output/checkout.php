@@ -28,6 +28,7 @@ use renderer_base;
 use renderable;
 use stdClass;
 use templatable;
+use core_payment\helper;
 
 /**
  * This class prepares data for displaying a booking option instance
@@ -51,6 +52,7 @@ class checkout implements renderable, templatable {
         $this->data['paymentarea'] = $paymentarea;
         $this->data['component'] = $component;
         $this->data['resourcePath'] = $resourcepath;
+        $this->data['successurl'] = helper::get_success_url($component, $paymentarea, $itemid);
     }
 
     /**
