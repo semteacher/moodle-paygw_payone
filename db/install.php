@@ -18,14 +18,14 @@
  * paygw_payunity installer script.
  *
  * @package    paygw_payunity
- * @copyright  2020 Marina Glancy
+ * @copyright  2020 2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 function xmldb_paygw_payunity_install() {
     global $CFG;
 
-    // Enable the Paypal payment gateway on installation. It still needs to be configured and enabled for accounts.
+    // Enable the PayUnity payment gateway on installation. It still needs to be configured and enabled for accounts.
     $order = (!empty($CFG->paygw_plugins_sortorder)) ? explode(',', $CFG->paygw_plugins_sortorder) : [];
     set_config('paygw_plugins_sortorder', join(',', array_merge($order, ['payunity'])));
 }

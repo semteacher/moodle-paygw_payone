@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This class contains a list of webservice functions related to the PayPal payment gateway.
+ * This class contains a list of webservice functions related to the PayUnity payment gateway.
  *
  * @package    paygw_payunity
- * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -81,7 +81,7 @@ class get_config_for_js extends external_api {
     }
 
     /**
-     * Returns the config values required by the PayPal JavaScript SDK.
+     * Returns the config values required by the PayUnity JavaScript SDK.
      *
      * @param string $component
      * @param string $paymentarea
@@ -129,7 +129,7 @@ class get_config_for_js extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'clientid' => new external_value(PARAM_TEXT, 'PayPal client ID'),
+            'clientid' => new external_value(PARAM_TEXT, 'PayUnity client ID'),
             'brandname' => new external_value(PARAM_TEXT, 'Brand name'),
             'cost' => new external_value(PARAM_FLOAT, 'Cost with gateway surcharge'),
             'currency' => new external_value(PARAM_TEXT, 'Currency'),

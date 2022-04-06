@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This module is responsible for PayPal content in the gateways modal.
+ * This module is responsible for PayUnity content in the gateways modal.
  *
  * @module     paygw_payunity/gateway_modal
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
@@ -37,7 +37,7 @@ import {get_string as getString} from 'core/str';
  */
 const showModalWithPlaceholder = async() => {
     const modal = await ModalFactory.create({
-        body: await Templates.render('paygw_payunity/paypal_button_placeholder', {})
+        body: await Templates.render('paygw_payunity/payunity_button_placeholder', {})
     });
     modal.show();
     return modal;

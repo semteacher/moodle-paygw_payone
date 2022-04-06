@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="payment/gateway/payunity/db" VERSION="20201216" COMMENT="XMLDB file for PayPal payment gateway plugin"
+<XMLDB PATH="payment/gateway/payunity/db" VERSION="20201216" COMMENT="XMLDB file for PayUnity payment gateway plugin"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="paygw_payunity" COMMENT="Stores PayPal related information">
+    <TABLE NAME="paygw_payunity" COMMENT="Stores PayUnity related information">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="paymentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>

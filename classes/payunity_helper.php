@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Contains helper class to work with PayPal REST API.
+ * Contains helper class to work with PayUnity REST API.
  *
  * @package    core_payment
- * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -43,7 +43,7 @@ class payunity_helper {
     private $clientid;
 
     /**
-     * @var string PayPal App secret
+     * @var string PayUnity App secret
      */
     private $secret;
 

@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * PayPal repository module to encapsulate all of the AJAX requests that can be sent for PayPal.
+ * PayUnity repository module to encapsulate all of the AJAX requests that can be sent for PayUnity.
  *
  * @module     paygw_payunity/confirmpayment
  * @copyright  2022 Georg Maißer <info@wunderbyte.at>
@@ -25,7 +25,12 @@ import Ajax from 'core/ajax';
 
 /**
  * Confirm checkout.
- * @param {string} checkoutid
+ * @param {string} orderid
+ * @param {string} itemid
+ * @param {string} paymentarea
+ * @param {string} component
+ * @param {string} resourcePath
+ * @param {string} successurl
  */
 export const init = (orderid,
                     itemid,

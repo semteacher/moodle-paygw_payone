@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * External functions and service definitions for the PayPal payment gateway plugin.
+ * External functions and service definitions for the PayUnity payment gateway plugin.
  *
  * @package    paygw_payunity
- * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,7 +35,7 @@ $functions = [
     'paygw_payunity_create_transaction_complete' => [
         'classname'   => 'paygw_payunity\external\transaction_complete',
         'classpath'   => '',
-        'description' => 'Takes care of what needs to be done when a PayPal transaction comes back as complete.',
+        'description' => 'Takes care of what needs to be done when a PayUnity transaction comes back as complete.',
         'type'        => 'write',
         'ajax'        => true,
         'loginrequired' => false,

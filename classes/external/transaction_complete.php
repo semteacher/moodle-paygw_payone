@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This class contains a list of webservice functions related to the PayPal payment gateway.
+ * This class contains a list of webservice functions related to the PayUnity payment gateway.
  *
  * @package    paygw_payunity
- * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -49,8 +49,8 @@ class transaction_complete extends external_api {
             'component' => new external_value(PARAM_COMPONENT, 'The component name'),
             'paymentarea' => new external_value(PARAM_AREA, 'Payment area in the component'),
             'itemid' => new external_value(PARAM_INT, 'The item id in the context of the component area'),
-            'orderid' => new external_value(PARAM_TEXT, 'The order id coming back from PayPal'),
-            'resourcePath' => new external_value(PARAM_TEXT, 'The order id coming back from PayPal'),
+            'orderid' => new external_value(PARAM_TEXT, 'The order id coming back from PayUnity'),
+            'resourcePath' => new external_value(PARAM_TEXT, 'The order id coming back from PayUnity'),
         ]);
     }
 
@@ -61,7 +61,7 @@ class transaction_complete extends external_api {
      * @param string $component Name of the component that the itemid belongs to
      * @param string $paymentarea
      * @param int $itemid An internal identifier that is used by the component
-     * @param string $orderid PayPal order ID
+     * @param string $orderid PayUnity order ID
      * @return array
      */
     public static function execute(string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath): array {
@@ -124,7 +124,7 @@ class transaction_complete extends external_api {
                         $paymentid = payment_helper::save_payment($payable->get_account_id(), $component, $paymentarea,
                             $itemid, (int) $USER->id, $amount, $currency, 'payunity');
 
-                        // Store PayPal extra information.
+                        // Store PayUnity extra information.
                         $record = new \stdClass();
                         $record->paymentid = $paymentid;
                         $record->pu_orderid = $orderid;

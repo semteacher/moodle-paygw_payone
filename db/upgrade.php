@@ -18,7 +18,7 @@
  * Upgrade script for paygw_payunity.
  *
  * @package    paygw_payunity
- * @copyright  2021 Shamim Rezaie <shamim@moodle.com>
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -43,7 +43,7 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
         // Launch add key paymentid.
         $dbman->add_key($table, $key);
 
-        // Paypal savepoint reached.
+        // PayUnity savepoint reached.
         upgrade_plugin_savepoint(true, 2020121600, 'paygw', 'payunity');
     }
 

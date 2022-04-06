@@ -18,7 +18,7 @@
  * Version information
  *
  * @package    paygw_payunity
- * @copyright  2019 Shamim Rezaie <shamim@moodle.com>
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

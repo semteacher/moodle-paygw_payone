@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * PayPal repository module to encapsulate all of the AJAX requests that can be sent for PayPal.
+ * PayPal repository module to encapsulate all of the AJAX requests that can be sent for PayUnity.
  *
  * @module     paygw_payunity/repository
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
@@ -39,29 +39,6 @@ export const getConfigForJs = (component, paymentArea, itemId) => {
             component,
             paymentarea: paymentArea,
             itemid: itemId,
-        },
-    };
-
-    return Ajax.call([request])[0];
-};
-
-/**
- * Call server to validate and capture payment for order.
- *
- * @param {string} component Name of the component that the itemId belongs to
- * @param {string} paymentArea The area of the component that the itemId belongs to
- * @param {number} itemId An internal identifier that is used by the component
- * @param {string} orderId The order id coming back from PayPal
- * @returns {*}
- */
-export const markTransactionComplete = (component, paymentArea, itemId, orderId) => {
-    const request = {
-        methodname: 'paygw_payunity_create_transaction_complete',
-        args: {
-            component,
-            paymentarea: paymentArea,
-            itemid: itemId,
-            orderid: orderId,
         },
     };
 
