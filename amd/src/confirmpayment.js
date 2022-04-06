@@ -34,6 +34,8 @@ export const init = (orderid,
                     resourcePath) => {
 
     // eslint-disable-next-line no-console
+    console.log('orderid', orderid);
+    // eslint-disable-next-line no-console
     console.log('checkoutid', orderid, itemid, paymentarea, component, resourcePath);
 
     Ajax.call([{
@@ -42,7 +44,8 @@ export const init = (orderid,
             component,
             paymentarea,
             orderid,
-            itemid
+            itemid,
+            resourcePath
         },
         done: function(data) {
 

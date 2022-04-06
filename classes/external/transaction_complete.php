@@ -50,6 +50,7 @@ class transaction_complete extends external_api {
             'paymentarea' => new external_value(PARAM_AREA, 'Payment area in the component'),
             'itemid' => new external_value(PARAM_INT, 'The item id in the context of the component area'),
             'orderid' => new external_value(PARAM_TEXT, 'The order id coming back from PayPal'),
+            'resourcePath' => new external_value(PARAM_TEXT, 'The order id coming back from PayPal'),
         ]);
     }
 
@@ -63,7 +64,7 @@ class transaction_complete extends external_api {
      * @param string $orderid PayPal order ID
      * @return array
      */
-    public static function execute(string $component, string $paymentarea, int $itemid, string $orderid): array {
+    public static function execute(string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath): array {
         global $USER, $DB;
 
         self::validate_parameters(self::execute_parameters(), [
@@ -71,6 +72,7 @@ class transaction_complete extends external_api {
             'paymentarea' => $paymentarea,
             'itemid' => $itemid,
             'orderid' => $orderid,
+            'resourcePath' => $resourcepath
         ]);
 
         $config = (object)helper::get_gateway_configuration($component, $paymentarea, $itemid, 'payunity');
@@ -84,49 +86,67 @@ class transaction_complete extends external_api {
         $amount = helper::get_rounded_cost($payable->get_amount(), $currency, $surcharge);
 
         $payunityhelper = new payunity_helper($config->clientid, $config->secret, $sandbox);
-        $orderdetails = $payunityhelper->get_order_details($orderid);
+        $orderdetails = $payunityhelper->get_order_details($resourcepath);
 
         $success = false;
         $message = '';
 
         if ($orderdetails) {
-            if ($orderdetails['status'] == payunity_helper::ORDER_STATUS_APPROVED &&
-                    $orderdetails['intent'] == payunity_helper::ORDER_INTENT_CAPTURE) {
-                $item = $orderdetails['purchase_units'][0];
-                if ($item['amount']['value'] == $amount && $item['amount']['currency_code'] == $currency) {
-                    $capture = $payunityhelper->capture_order($orderid);
-                    if ($capture && $capture['status'] == payunity_helper::CAPTURE_STATUS_COMPLETED) {
-                        $success = true;
-                        // Everything is correct. Let's give them what they paid for.
-                        try {
-                            $paymentid = payment_helper::save_payment($payable->get_account_id(), $component, $paymentarea,
-                                $itemid, (int) $USER->id, $amount, $currency, 'payunity');
+            $status = '';
+            // SANDBOX OR PROD.
+            if ($sandbox == true) {
+                if ($orderdetails->result->code == '000.100.110') {
+                    // Approved.
+                    $status = 'success';
+                } else {
+                    // NO BUENO.
+                    $status = 'nosuccess';
+                }
+            } else {
+                if ($orderdetails->result->code == '000.000.000') {
+                    // Approved.
+                    $status = 'success';
+                } else {
+                    // NO BUENO.
+                    $status = 'nosuccess';
+                }
+            }
 
-                            // Store PayPal extra information.
-                            $record = new \stdClass();
-                            $record->paymentid = $paymentid;
-                            $record->pp_orderid = $orderid;
+            if ($status == 'success') {
+                // Get item from response.
+                $item['amount'] = $orderdetails->amount;
+                $item['currency'] = $orderdetails->currency;
 
-                            $DB->insert_record('paygw_payunity', $record);
+                if ($item['amount'] == $amount && $item['currency'] == $currency) {
+                    $success = true;
 
-                            payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $USER->id);
-                        } catch (\Exception $e) {
-                            debugging('Exception while trying to process payment: ' . $e->getMessage(), DEBUG_DEVELOPER);
-                            $success = false;
-                            $message = get_string('internalerror', 'paygw_payunity');
-                        }
-                    } else {
+                    try {
+                        $paymentid = payment_helper::save_payment($payable->get_account_id(), $component, $paymentarea,
+                            $itemid, (int) $USER->id, $amount, $currency, 'payunity');
+
+                        // Store PayPal extra information.
+                        $record = new \stdClass();
+                        $record->paymentid = $paymentid;
+                        $record->pu_orderid = $orderid;
+
+                        $DB->insert_record('paygw_payunity', $record);
+
+                        payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $USER->id);
+                    } catch (\Exception $e) {
+                        debugging('Exception while trying to process payment: ' . $e->getMessage(), DEBUG_DEVELOPER);
                         $success = false;
-                        $message = get_string('paymentnotcleared', 'paygw_payunity');
+                        $message = get_string('internalerror', 'paygw_payunity');
                     }
                 } else {
                     $success = false;
                     $message = get_string('amountmismatch', 'paygw_payunity');
                 }
+
             } else {
                 $success = false;
                 $message = get_string('paymentnotcleared', 'paygw_payunity');
             }
+
         } else {
             // Could not capture authorization!
             $success = false;

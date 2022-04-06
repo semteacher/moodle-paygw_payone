@@ -52,8 +52,14 @@ class get_config_for_js extends external_api {
     }
 
 
-    public static function requestid(float $amount, string $currency, string $paymenttype, string $secret, string $entityid) {
-        $url = "https://eu-test.oppwa.com/v1/checkouts";
+    public static function requestid(float $amount, string $currency, string $paymenttype, string $secret, string $entityid, $environment) {
+        if ($environment === 'sandbox') {
+            $verify = false;
+            $url = "https://eu-test.oppwa.com/v1/checkouts";
+        } else {
+            $verify = true;
+            $url = "https://eu-prod.oppwa.com/v1/checkouts";
+        }
         $data = "entityId=" . $entityid . "&amount=" . $amount .
                     "&currency=" . $currency .
                     "&paymentType=" . $paymenttype;
@@ -64,7 +70,7 @@ class get_config_for_js extends external_api {
                        'Authorization:Bearer ' . $secret));
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);// this should be set to true in production
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verify);// this should be set to true in production
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $responsedata = curl_exec($ch);
         if (curl_errno($ch)) {
@@ -99,8 +105,9 @@ class get_config_for_js extends external_api {
         $secret = $config['secret'];
         $entityid = $config['clientid'];
         $root = $CFG->wwwroot;
+        $environment = $config['environment'];
 
-        $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid);
+        $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid, $environment );
         $data = json_decode($responsedata);
         $purchaseid = $data->id;
 
@@ -111,6 +118,7 @@ class get_config_for_js extends external_api {
             'currency' => $payable->get_currency(),
             'purchaseid' => $purchaseid,
             'rooturl' => $root,
+            'environment' => $environment
         ];
     }
 
@@ -127,6 +135,7 @@ class get_config_for_js extends external_api {
             'currency' => new external_value(PARAM_TEXT, 'Currency'),
             'purchaseid' => new external_value(PARAM_TEXT, 'Purchase Id'),
             'rooturl' => new external_value(PARAM_TEXT, 'Moodle Root URI'),
+            'environment' => new external_value(PARAM_TEXT, 'Prod or Sandbox')
         ]);
     }
 }

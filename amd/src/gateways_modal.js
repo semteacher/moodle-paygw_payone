@@ -58,28 +58,22 @@ export const process = (component, paymentArea, itemId, description) => {
         Repository.getConfigForJs(component, paymentArea, itemId),
     ])
     .then(([modal, payunityConfig]) => {
-        // modal.getRoot().on(ModalEvents.hidden, () => {
-        //     // Destroy when hidden.
-        //     modal.destroy();
-        // });
-
         return Promise.all([
             modal,
             payunityConfig,
-            loadSdk(payunityConfig.purchaseid),
+            loadSdk(payunityConfig.purchaseid, payunityConfig.environment),
         ]);
     })
     .then(([modal, payunityConfig]) => {
 
        const form = document.createElement('form');
        const resourcePath = `/v1/checkouts/${payunityConfig.purchaseid}/payment`;
-       const url = `${payunityConfig.rooturl}/payment/gateway/payunity/checkout.php?resourcepath=${resourcePath}&itemid=${itemId}&orderid=${payunityConfig.clientid}&component=${component}&paymentarea=${paymentArea}`;
-        const test = `http://localhost:8000/payment/gateway/payunity/checkout.php?resourcePath=/v1/checkouts/E89F4136CECEEBA9FF3708011BED4BE4.uat01-vm-tx03/payment&checkoutid=E89F4136CECEEBA9FF3708011BED4BE4.uat01-vm-tx03&itemid=13`;
+       const url = `${payunityConfig.rooturl}/payment/gateway/payunity/checkout.php?resourcepath=${resourcePath}&itemid=${itemId}&orderid=${payunityConfig.purchaseid}&component=${component}&paymentarea=${paymentArea}`;
        form.setAttribute('action', url);
        form.classList.add('paymentWidgets');
        form.setAttribute('data-brands', "VISA MASTER AMEX");
         modal.setBody(form);
-        //DO PURCHASE?
+        return '';
     }).then(x => new Promise(resolve => setTimeout(() => resolve(x), 100000))
     );
 };
@@ -87,12 +81,19 @@ export const process = (component, paymentArea, itemId, description) => {
 /**
  * Returns Form
  * @param {string} purchaseid Purchase Id
+ * @param {string} environment Environment
  * @returns {Promise}
  */
-const loadSdk = (purchaseid) => {
-    const sdkUrl = `https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId=${purchaseid}`;
+const loadSdk = (purchaseid, environment) => {
+    let base = '';
+    if (environment === 'sandbox') {
+    base = 'https://eu-test.oppwa.com/';
+    } else {
+    base = 'https://eu-prod.oppwa.com/';
+    }
+    const sdkUrl = `${base}v1/paymentWidgets.js?checkoutId=${purchaseid}`;
 
-    //Check to see if this file has already been loaded. If so just go straight to the func.
+    // Check to see if this file has already been loaded. If so just go straight to the func.
     if (loadSdk.currentlyloaded === sdkUrl) {
         return Promise.resolve();
     }
