@@ -31,7 +31,7 @@ $string['clientid'] = 'Client ID';
 $string['clientid_help'] = 'The client ID that PayUnity generated for your application.';
 $string['environment'] = 'Environment';
 $string['environment_help'] = 'You can set this to Sandbox if you are using sandbox accounts (for testing purpose only).';
-$string['gatewaydescription'] = 'PayUnity Description';
+$string['gatewaydescription'] = 'PayUnity is an authorised payment gateway provider for processing credit card transactions.';
 $string['gatewayname'] = 'PayUnity';
 $string['internalerror'] = 'An internal error has occurred. Please contact us.';
 $string['live'] = 'Live';
@@ -46,3 +46,6 @@ $string['secret_help'] = 'The secret that PayUnity generated for your applicatio
 
 $string['checkout'] = 'Checkout';
 $string['loading'] = 'Loading...';
+
+$string['payment_successful'] = 'Payment successful';
+$string['payment_error'] = 'An error occured during the payment with payunity.';
