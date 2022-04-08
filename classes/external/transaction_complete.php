@@ -26,11 +26,14 @@ declare(strict_types=1);
 
 namespace paygw_payunity\external;
 
+use context_system;
 use core_payment\helper;
 use external_api;
 use external_function_parameters;
 use external_value;
 use core_payment\helper as payment_helper;
+use paygw_payunity\event\payment_error;
+use paygw_payunity\event\payment_successful;
 use paygw_payunity\payunity_helper;
 
 defined('MOODLE_INTERNAL') || die();
@@ -100,7 +103,7 @@ class transaction_complete extends external_api {
                     $status = 'success';
                 } else {
                     // Not Approved.
-                    $status = 'nosuccess';
+                    $status = false;
                 }
             } else {
                 if ($orderdetails->result->code == '000.000.000') {
@@ -108,7 +111,7 @@ class transaction_complete extends external_api {
                     $status = 'success';
                 } else {
                     // Not Approved.
-                    $status = 'nosuccess';
+                    $status = false;
                 }
             }
 
@@ -129,9 +132,16 @@ class transaction_complete extends external_api {
                         $record->paymentid = $paymentid;
                         $record->pu_orderid = $orderid;
 
-                        $DB->insert_record('paygw_payunity', $record);
+                        // We trigger the payment_successful event.
+                        $context = context_system::instance();
+                        $event = payment_successful::create(array('context' => $context, 'other' => [
+                            'message' => $message,
+                            'objectid' => $orderid]));
+                        $event->trigger();
 
+                        // The order is delivered.
                         payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $USER->id);
+
                     } catch (\Exception $e) {
                         debugging('Exception while trying to process payment: ' . $e->getMessage(), DEBUG_DEVELOPER);
                         $success = false;
@@ -151,6 +161,16 @@ class transaction_complete extends external_api {
             // Could not capture authorization!
             $success = false;
             $message = get_string('cannotfetchorderdatails', 'paygw_payunity');
+        }
+
+        // If there is no success, we trigger this event.
+        if (!$success) {
+            // We trigger the payment_successful event.
+            $context = context_system::instance();
+            $event = payment_error::create(array('context' => $context, 'other' => [
+                    'message' => $message,
+                    'objectid' => $orderid]));
+            $event->trigger();
         }
 
         return [
