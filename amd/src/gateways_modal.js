@@ -61,7 +61,7 @@ export const process = (component, paymentArea, itemId, description) => {
         return Promise.all([
             modal,
             payunityConfig,
-            loadSdk(payunityConfig.purchaseid, payunityConfig.environment),
+            loadSdk(payunityConfig.purchaseid, payunityConfig.environment, payunityConfig.language),
         ]);
     })
     .then(([modal, payunityConfig]) => {
@@ -90,7 +90,7 @@ export const process = (component, paymentArea, itemId, description) => {
  * @param {string} environment Environment
  * @returns {Promise}
  */
-const loadSdk = (purchaseid, environment) => {
+const loadSdk = (purchaseid, environment, language) => {
     let base = '';
     if (environment === 'sandbox') {
     base = 'https://eu-test.oppwa.com/';
@@ -128,8 +128,13 @@ const loadSdk = (purchaseid, environment) => {
         }
 
         script.setAttribute('src', sdkUrl);
+        const optionscript = document.createElement('script');
+        optionscript.type = 'text/javascript';
+        const lang = language;
+        const code = `var wpwlOptions = { locale: '${lang}'}`;
+        optionscript.appendChild(document.createTextNode(code));
+        document.head.appendChild(optionscript);
         document.head.appendChild(script);
-
         loadSdk.currentlyloaded = sdkUrl;
     });
 };

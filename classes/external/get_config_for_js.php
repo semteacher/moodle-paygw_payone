@@ -89,7 +89,7 @@ class get_config_for_js extends external_api {
      * @return string[]
      */
     public static function execute(string $component, string $paymentarea, int $itemid): array {
-        GLOBAL $CFG;
+        GLOBAL $CFG, $USER, $SESSION;
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
             'paymentarea' => $paymentarea,
@@ -100,6 +100,7 @@ class get_config_for_js extends external_api {
         $payable = helper::get_payable($component, $paymentarea, $itemid);
         $surcharge = helper::get_gateway_surcharge('payunity');
 
+        $language = $SESSION->lang;
         $amount = $payable->get_amount();
         $currency = $payable->get_currency();
         $secret = $config['secret'];
@@ -118,7 +119,8 @@ class get_config_for_js extends external_api {
             'currency' => $payable->get_currency(),
             'purchaseid' => $purchaseid,
             'rooturl' => $root,
-            'environment' => $environment
+            'environment' => $environment,
+            'language' => $language,
         ];
     }
 
@@ -135,7 +137,8 @@ class get_config_for_js extends external_api {
             'currency' => new external_value(PARAM_TEXT, 'Currency'),
             'purchaseid' => new external_value(PARAM_TEXT, 'Purchase Id'),
             'rooturl' => new external_value(PARAM_TEXT, 'Moodle Root URI'),
-            'environment' => new external_value(PARAM_TEXT, 'Prod or Sandbox')
+            'environment' => new external_value(PARAM_TEXT, 'Prod or Sandbox'),
+            'language' => new external_value(PARAM_TEXT, 'Prod or Sandbox'),
         ]);
     }
 }

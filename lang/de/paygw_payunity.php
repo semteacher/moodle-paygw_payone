@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'paygw_payunity', language 'en'
+ * Strings for component 'paygw_payunity', language 'de'
  *
  * @package    paygw_payunity
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
