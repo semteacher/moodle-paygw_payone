@@ -33,20 +33,6 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
     global $DB;
 
-    $dbman = $DB->get_manager();
-
-    if ($oldversion < 2020121600) {
-        // Define key paymentid (foreign-unique) to be added to paygw_payunity.
-        $table = new xmldb_table('paygw_payunity');
-        $key = new xmldb_key('paymentid', XMLDB_KEY_FOREIGN_UNIQUE, ['paymentid'], 'payments', ['id']);
-
-        // Launch add key paymentid.
-        $dbman->add_key($table, $key);
-
-        // PayUnity savepoint reached.
-        upgrade_plugin_savepoint(true, 2020121600, 'paygw', 'payunity');
-    }
-
     // Automatically generated Moodle v3.11.0 release upgrade line.
     // Put any upgrade step following this.
 
