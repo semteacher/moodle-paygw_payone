@@ -88,6 +88,7 @@ export const process = (component, paymentArea, itemId, description) => {
  * Returns Form
  * @param {string} purchaseid Purchase Id
  * @param {string} environment Environment
+ * @param {string} language Session language
  * @returns {Promise}
  */
 const loadSdk = (purchaseid, environment, language) => {

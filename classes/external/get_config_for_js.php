@@ -112,6 +112,12 @@ class get_config_for_js extends external_api {
         $data = json_decode($responsedata);
         $purchaseid = $data->id;
 
+        // TODO CRONJOB
+        // Check after XX minutes
+        // string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath
+        // order ID == purchase id !
+        // resourcepath == const resourcePath = `/v1/checkouts/${payunityConfig.purchaseid}/payment`;
+
         return [
             'clientid' => $config['clientid'],
             'brandname' => $config['brandname'],
