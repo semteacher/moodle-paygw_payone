@@ -90,6 +90,7 @@ class transaction_complete extends external_api {
 
         $payunityhelper = new payunity_helper($config->clientid, $config->secret, $sandbox);
         $orderdetails = $payunityhelper->get_order_details($resourcepath);
+        // $orderdetails = null;
 
         $success = false;
         $message = '';

@@ -31,6 +31,8 @@ use external_api;
 use external_function_parameters;
 use external_value;
 use external_single_structure;
+use paygw_payunity\task\check_status;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -112,11 +114,25 @@ class get_config_for_js extends external_api {
         $data = json_decode($responsedata);
         $purchaseid = $data->id;
 
-        // TODO CRONJOB
-        // Check after XX minutes
-        // string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath
-        // order ID == purchase id !
-        // resourcepath == const resourcePath = `/v1/checkouts/${payunityConfig.purchaseid}/payment`;
+        // Create Task to check status after 30 minutes.
+        $userid = $USER->id;
+        $now = time();
+        $nextruntime = strtotime('+30 min', $now);
+
+        $taskdata = new stdClass();
+        $taskdata->orderid = $purchaseid;
+        $taskdata->amount = $amount;
+        $taskdata->currency = $currency;
+        $taskdata->resourcepath = "/v1/checkouts/$purchaseid/payment";
+        $taskdata->component = $component;
+        $taskdata->paymentarea = $paymentarea;
+        $taskdata->itemid = $itemid;
+
+        $checkstatustask = new check_status();
+        $checkstatustask->set_userid($userid);
+        $checkstatustask->set_next_run_time($nextruntime);
+        $checkstatustask->set_custom_data($taskdata);
+        \core\task\manager::reschedule_or_queue_adhoc_task($checkstatustask);
 
         return [
             'clientid' => $config['clientid'],
