@@ -46,3 +46,6 @@ $string['secret_help'] = 'The secret that PayUnity generated for your applicatio
 
 $string['checkout'] = 'Checkout';
 $string['loading'] = 'Loading...';
+
+$string['payment_successful'] = 'Payment successful';
+$string['payment_error'] = 'An error occured during the payment with payunity.';

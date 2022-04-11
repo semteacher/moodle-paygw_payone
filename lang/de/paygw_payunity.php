@@ -15,34 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'paygw_payunity', language 'de'
+ * Strings for component 'paygw_payunity', language 'en'
  *
  * @package    paygw_payunity
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['amountmismatch'] = 'The amount you attempted to pay does not match the required fee. Your account has not been debited.';
-$string['authorising'] = 'Authorising the payment. Please wait...';
-$string['brandname'] = 'Brand name';
-$string['brandname_help'] = 'An optional label that overrides the business name for the PayUnity account on the PayUnity site.';
-$string['cannotfetchorderdatails'] = 'Could not fetch payment details from PayUnity. Your account has not been debited.';
-$string['clientid'] = 'Client ID';
-$string['clientid_help'] = 'The client ID that PayUnity generated for your application.';
-$string['environment'] = 'Environment';
+$string['amountmismatch'] = 'Der Betrag, den Sie zu zahlen versuchen, entspricht nicht dem gespeicherten Betrag. Ihr Konto wurde nicht belastet.';
+$string['authorising'] = 'Authorisiere die Zahlung. Bitte warten...';
+$string['brandname'] = 'Markenname';
+$string['brandname_help'] = 'Ein optionaler Name der den Namen Payiunity auf der Zahlungsseite ersetzt.';
+$string['cannotfetchorderdatails'] = 'Konnte keine Zahlungsdetails von Payunity erhalten. Ihr Konto wurde nicht belastet.';
+$string['clientid'] = 'Kunden ID';
+$string['clientid_help'] = 'Die Kunden ID die PayUnity für Ihre Seite generiert hat.';
+$string['environment'] = 'Umgebung.';
 $string['environment_help'] = 'You can set this to Sandbox if you are using sandbox accounts (for testing purpose only).';
-$string['gatewaydescription'] = 'PayUnity is an authorised payment gateway provider for processing credit card transactions.';
+$string['gatewaydescription'] = 'PayUnity ist ein authorisierter Zahlungsanbieter um Ihre Kreditkartenzahlung abzuwickeln.';
 $string['gatewayname'] = 'PayUnity';
-$string['internalerror'] = 'An internal error has occurred. Please contact us.';
+$string['internalerror'] = 'Ein interner Fehler ist aufgetreten. Bitte kontaktieren Sie uns.';
 $string['live'] = 'Live';
-$string['paymentnotcleared'] = 'payment not cleared by PayUnity.';
+$string['paymentnotcleared'] = 'Zahlung wurde von PayUnity nicht akzeptiert.';
 $string['pluginname'] = 'PayUnity';
-$string['pluginname_desc'] = 'The PayUnity plugin allows you to receive payments via PayUnity.';
-$string['privacy:metadata'] = 'The PayUnity plugin does not store any personal data.';
-$string['repeatedorder'] = 'This order has already been processed earlier.';
+$string['pluginname_desc'] = 'Das PayUnity plugin erlaubt es, Zahlungen mittels PayUnity zu erhalten.';
+$string['privacy:metadata'] = 'Das PayUnity plugin speichert keine persönlichen Daten.';
+$string['repeatedorder'] = 'Der Auftrag wurde bereits früher bearbeitet.';
 $string['sandbox'] = 'Sandbox';
-$string['secret'] = 'Secret';
-$string['secret_help'] = 'The secret that PayUnity generated for your application.';
+$string['secret'] = 'Access Token';
+$string['secret_help'] = 'Der access Token den PayUnity für diese Anwednung bereitstellt.';
 
 $string['checkout'] = 'Checkout';
-$string['loading'] = 'Loading...';
+$string['loading'] = 'Laden...';
+
+$string['payment_successful'] = 'Payunity Zahlung erfolgreich.';
+$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit Payunity aufgetreten.';
