@@ -170,7 +170,10 @@ class transaction_complete extends external_api {
             $context = context_system::instance();
             $event = payment_error::create(array('context' => $context, 'other' => [
                     'message' => $message,
-                    'objectid' => $orderid]));
+                    'objectid' => $orderid,
+                    'itemid' => $itemid,
+                    'component' => $component,
+                    'paymentarea' => $paymentarea]));
             $event->trigger();
         }
 
