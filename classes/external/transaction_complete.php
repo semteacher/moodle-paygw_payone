@@ -133,11 +133,14 @@ class transaction_complete extends external_api {
                         $record->paymentid = $paymentid;
                         $record->pu_orderid = $orderid;
 
+
+                        $DB->insert_record('paygw_payunits', $record);
+
                         // We trigger the payment_successful event.
                         $context = context_system::instance();
                         $event = payment_successful::create(array('context' => $context, 'other' => [
                             'message' => $message,
-                            'objectid' => $orderid]));
+                            'orderid' => $orderid]));
                         $event->trigger();
 
                         // The order is delivered.
@@ -170,7 +173,7 @@ class transaction_complete extends external_api {
             $context = context_system::instance();
             $event = payment_error::create(array('context' => $context, 'other' => [
                     'message' => $message,
-                    'objectid' => $orderid]));
+                    'orderid' => $orderid]));
             $event->trigger();
         }
 
