@@ -134,7 +134,7 @@ class transaction_complete extends external_api {
                         $record->pu_orderid = $orderid;
 
 
-                        $DB->insert_record('paygw_payunits', $record);
+                        $DB->insert_record('paygw_payunity', $record);
 
                         // We trigger the payment_successful event.
                         $context = context_system::instance();
