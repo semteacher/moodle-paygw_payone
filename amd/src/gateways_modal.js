@@ -71,7 +71,8 @@ export const process = (component, paymentArea, itemId, description) => {
        const url = `${payunityConfig.rooturl}/payment/gateway/payunity/checkout.php?resourcepath=${resourcePath}&itemid=${itemId}&orderid=${payunityConfig.purchaseid}&component=${component}&paymentarea=${paymentArea}`;
        form.setAttribute('action', url);
        form.classList.add('paymentWidgets');
-       form.setAttribute('data-brands', "VISA MASTER AMEX");
+       form.setAttribute('data-brands', "EPS VISA MASTER");
+       form.setAttribute('merchantTransactionId', "test123");
         modal.setBody(form);
         return '';
     }).then(x => {

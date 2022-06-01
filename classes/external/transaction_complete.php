@@ -68,7 +68,7 @@ class transaction_complete extends external_api {
      * @return array
      */
     public static function execute(string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath): array {
-        global $USER, $DB;
+        global $USER, $DB, $CFG;
 
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
@@ -94,14 +94,18 @@ class transaction_complete extends external_api {
 
         $success = false;
         $message = '';
+        $successurl = helper::get_success_url($component, $paymentarea, $itemid)->__toString();
+        $serverurl = $CFG->wwwroot;
 
         if ($orderdetails) {
             $status = '';
+            $url = $serverurl;
             // SANDBOX OR PROD.
             if ($sandbox == true) {
                 if ($orderdetails->result->code == '000.100.110') {
                     // Approved.
                     $status = 'success';
+                    $message = get_string('payment_successful', 'paygw_payunity');
                 } else {
                     // Not Approved.
                     $status = false;
@@ -110,6 +114,7 @@ class transaction_complete extends external_api {
                 if ($orderdetails->result->code == '000.000.000') {
                     // Approved.
                     $status = 'success';
+                    $message = get_string('payment_successful', 'paygw_payunity');
                 } else {
                     // Not Approved.
                     $status = false;
@@ -117,6 +122,7 @@ class transaction_complete extends external_api {
             }
 
             if ($status == 'success') {
+                $url = $successurl;
                 // Get item from response.
                 $item['amount'] = $orderdetails->amount;
                 $item['currency'] = $orderdetails->currency;
@@ -132,7 +138,6 @@ class transaction_complete extends external_api {
                         $record = new \stdClass();
                         $record->paymentid = $paymentid;
                         $record->pu_orderid = $orderid;
-
 
                         $DB->insert_record('paygw_payunity', $record);
 
@@ -181,6 +186,7 @@ class transaction_complete extends external_api {
         }
 
         return [
+            'url' => $url,
             'success' => $success,
             'message' => $message,
         ];
@@ -193,6 +199,7 @@ class transaction_complete extends external_api {
      */
     public static function execute_returns() {
         return new external_function_parameters([
+            'url' => new external_value(PARAM_URL, 'Redirect URL.'),
             'success' => new external_value(PARAM_BOOL, 'Whether everything was successful or not.'),
             'message' => new external_value(PARAM_RAW, 'Message (usually the error message).'),
         ]);
