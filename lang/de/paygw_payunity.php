@@ -47,5 +47,15 @@ $string['secret_help'] = 'Der access Token den PayUnity für diese Anwednung ber
 $string['checkout'] = 'Checkout';
 $string['loading'] = 'Laden...';
 
-$string['payment_successful'] = 'Payunity Zahlung erfolgreich.';
-$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit Payunity aufgetreten.';
+$string['success'] = 'Erfolg';
+$string['error'] = 'Fehler';
+$string['proceed'] = 'Fortfahren';
+
+$string['payment_successful'] = 'Zahlung erfolgreich. Klicken sie auf Fortfahren um zu Ihrem Kurs weitergeleitet zu werden.';
+$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit mpay24 aufgetreten. Bitte versuchen sie es Später erneut.';
+
+$string['other_options'] = "Andere Zahlungsarten";
+$string['more'] = "Mehr";
+
+$string['quick_checkout'] = "Schneller Checkout";
+$string['paycredit'] = "Mit Kreditkarte zahlen";

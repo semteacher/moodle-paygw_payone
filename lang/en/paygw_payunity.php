@@ -47,5 +47,15 @@ $string['secret_help'] = 'The secret that PayUnity generated for your applicatio
 $string['checkout'] = 'Checkout';
 $string['loading'] = 'Loading...';
 
-$string['payment_successful'] = 'Payment successful';
-$string['payment_error'] = 'An error occured during the payment with payunity.';
+$string['payment_successful'] = 'Payment successful. Click to continue to your course.';
+$string['payment_error'] = 'An error occured during the payment. Please try again later.';
+
+$string['success'] = 'Success';
+$string['error'] = 'Error';
+$string['proceed'] = 'Proceed';
+
+$string['other_options'] = "Other payment options";
+$string['more'] = "More";
+
+$string['quick_checkout'] = "Quick checkout";
+$string['paycredit'] = "Pay with creditcard";

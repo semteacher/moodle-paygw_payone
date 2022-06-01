@@ -33,6 +33,7 @@ use external_value;
 use external_single_structure;
 use paygw_payunity\task\check_status;
 use stdClass;
+use DateTime;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -54,7 +55,8 @@ class get_config_for_js extends external_api {
     }
 
 
-    public static function requestid(float $amount, string $currency, string $paymenttype, string $secret, string $entityid, $environment) {
+    public static function requestid(float $amount, string $currency, string $paymenttype, string $secret, string $entityid
+    , $environment, $merchanttransactionid) {
         if ($environment === 'sandbox') {
             $verify = false;
             $url = "https://eu-test.oppwa.com/v1/checkouts";
@@ -64,7 +66,7 @@ class get_config_for_js extends external_api {
         }
         $data = "entityId=" . $entityid . "&amount=" . $amount .
                     "&currency=" . $currency .
-                    "&paymentType=" . $paymenttype;
+                    "&paymentType=" . $paymenttype . "&merchantTransactionId=" . $merchanttransactionid;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -72,7 +74,7 @@ class get_config_for_js extends external_api {
                        'Authorization:Bearer ' . $secret));
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verify);// this should be set to true in production
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verify);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $responsedata = curl_exec($ch);
         if (curl_errno($ch)) {
@@ -110,7 +112,12 @@ class get_config_for_js extends external_api {
         $root = $CFG->wwwroot;
         $environment = $config['environment'];
 
-        $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid, $environment );
+        $string = bin2hex(openssl_random_pseudo_bytes(8));
+        $now = new DateTime();
+        $timestamp = $now->getTimestamp();
+        $merchanttransactionid = $string . $timestamp;
+
+        $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid, $environment, $merchanttransactionid );
         $data = json_decode($responsedata);
         $purchaseid = $data->id;
 

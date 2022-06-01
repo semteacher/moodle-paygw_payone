@@ -22,6 +22,8 @@
  */
 
 import Ajax from 'core/ajax';
+import ModalFactory from 'core/modal_factory';
+import ModalEvents from 'core/modal_events';
 
 /**
  * Confirm checkout.
@@ -55,9 +57,57 @@ export const init = (orderid,
         },
         done: function(data) {
 
+
+            require(['jquery'], function($) {
+                require(['core/str'], function(str) {
+
+                    var strings = [
+                        {
+                            key: 'success',
+                            component: 'paygw_mpay24'
+                        },
+                        {
+                            key: 'error',
+                            component: 'paygw_mpay24'
+                        },
+                        {
+                            key: 'proceed',
+                            component: 'paygw_mpay24',
+                        }
+                    ];
+
+                    var localStrings = str.get_strings(strings);
+                    $.when(localStrings).done(function(localizedEditStrings) {
+
+                        ModalFactory.create({
+                            type: ModalFactory.types.CANCEL,
+                            title: data.success == true ? localizedEditStrings[0] : localizedEditStrings[1],
+                            body: data.message,
+                            buttons: {
+                                cancel: localizedEditStrings[2],
+                            },
+                        })
+                        .then(function(modal) {
+                            var root = modal.getRoot();
+                            root.on(ModalEvents.cancel, function() {
+                                location.href = data.url;
+                            });
+                            modal.show();
+                            return true;
+                        }).catch(e => {
+                            // eslint-disable-next-line no-console
+                            console.log(e);
+                        });
+
+                    });
+                });
+            });
+
+
             // eslint-disable-next-line no-console
-            console.log(data, successurl);
-            location.href = successurl;
+            console.log(data, data.url);
+
+
         },
         fail: function(ex) {
             // eslint-disable-next-line no-console
