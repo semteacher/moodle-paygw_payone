@@ -24,6 +24,7 @@
 
 namespace paygw_payunity\task;
 
+use core\message\message;
 use paygw_payunity\external\transaction_complete;
 
 defined('MOODLE_INTERNAL') || die();
@@ -63,11 +64,15 @@ class check_status extends \core\task\adhoc_task {
 
         $userid = $this->get_userid();
 
-        $result = transaction_complete::execute($taskdata->component,
+        try {
+            $result = transaction_complete::execute($taskdata->component,
                                                 $taskdata->paymentarea,
                                                 $taskdata->itemid,
                                                 $taskdata->orderid,
                                                 $taskdata->resourcepath);
+        } catch (\Exception $e) {
+            return true;
+        }
 
         mtrace('Update Status ' . $taskdata->itemid . ' from ' . $taskdata->componentname . ' for user .' . $userid);
 
