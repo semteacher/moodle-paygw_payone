@@ -39,12 +39,9 @@ export const init = (orderid,
                     paymentarea,
                     component,
                     resourcePath,
+                    // eslint-disable-next-line no-unused-vars
                     successurl) => {
 
-    // eslint-disable-next-line no-console
-    console.log('orderid', orderid, successurl);
-    // eslint-disable-next-line no-console
-    console.log('checkoutid', orderid, itemid, paymentarea, component, resourcePath);
 
     Ajax.call([{
         methodname: "paygw_payunity_create_transaction_complete",
@@ -94,9 +91,9 @@ export const init = (orderid,
                             });
                             modal.show();
                             return true;
-                        }).catch(e => {
+                        }).catch({
                             // eslint-disable-next-line no-console
-                            console.log(e);
+                            // console.log(e);
                         });
 
                     });
@@ -104,14 +101,10 @@ export const init = (orderid,
             });
 
 
-            // eslint-disable-next-line no-console
-            console.log(data, data.url);
-
-
         },
-        fail: function(ex) {
+        fail: function() {
             // eslint-disable-next-line no-console
-            console.log("ex:" + ex);
+            // console.log("ex:" + ex);
         },
     }]);
 
