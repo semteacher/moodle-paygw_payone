@@ -42,7 +42,7 @@ $string['privacy:metadata'] = 'Das PayUnity plugin speichert keine persönlichen
 $string['repeatedorder'] = 'Der Auftrag wurde bereits früher bearbeitet.';
 $string['sandbox'] = 'Sandbox';
 $string['secret'] = 'Access Token';
-$string['secret_help'] = 'Der access Token den PayUnity für diese Anwednung bereitstellt.';
+$string['secret_help'] = 'Der access Token den PayUnity für diese Anwendung bereitstellt.';
 
 $string['checkout'] = 'Checkout';
 $string['loading'] = 'Laden...';
@@ -51,8 +51,8 @@ $string['success'] = 'Erfolg';
 $string['error'] = 'Fehler';
 $string['proceed'] = 'Fortfahren';
 
-$string['payment_successful'] = 'Zahlung erfolgreich. Klicken sie auf Fortfahren um zu Ihrem Kurs weitergeleitet zu werden.';
-$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit payunity aufgetreten. Bitte versuchen sie es Später erneut.';
+$string['payment_successful'] = 'Zahlung erfolgreich. Klicken sie auf "Fortfahren" um zu Ihrem Kurs weitergeleitet zu werden.';
+$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit PayUnity aufgetreten. Bitte versuchen sie es später erneut.';
 
 $string['other_options'] = "Andere Zahlungsarten";
 $string['more'] = "Mehr";
