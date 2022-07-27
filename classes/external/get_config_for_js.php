@@ -54,8 +54,7 @@ class get_config_for_js extends external_api {
         ]);
     }
 
-
-    public static function requestid(float $amount, string $currency, string $paymenttype, string $secret, string $entityid
+    public static function requestid(string $amount, string $currency, string $paymenttype, string $secret, string $entityid
     , $environment, $merchanttransactionid) {
         if ($environment === 'sandbox') {
             $verify = false;
@@ -105,7 +104,7 @@ class get_config_for_js extends external_api {
         $surcharge = helper::get_gateway_surcharge('payunity');
 
         $language = $SESSION->lang;
-        $amount = $payable->get_amount();
+        $amount = number_format($payable->get_amount(), 2);
         $currency = $payable->get_currency();
         $secret = $config['secret'];
         $entityid = $config['clientid'];
