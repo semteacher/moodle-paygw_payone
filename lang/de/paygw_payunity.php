@@ -52,7 +52,7 @@ $string['error'] = 'Fehler';
 $string['proceed'] = 'Fortfahren';
 
 $string['payment_successful'] = 'Zahlung erfolgreich. Klicken sie auf Fortfahren um zu Ihrem Kurs weitergeleitet zu werden.';
-$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit mpay24 aufgetreten. Bitte versuchen sie es Später erneut.';
+$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit payunity aufgetreten. Bitte versuchen sie es Später erneut.';
 
 $string['other_options'] = "Andere Zahlungsarten";
 $string['more'] = "Mehr";

@@ -58,14 +58,67 @@ export const process = (component, paymentArea, itemId, description) => {
         Repository.getConfigForJs(component, paymentArea, itemId),
     ])
     .then(([modal, payunityConfig]) => {
+        if (payunityConfig.purchaseid === null) {
+        return Promise.all([
+            modal, payunityConfig
+        ]
+        );
+        } else {
         return Promise.all([
             modal,
             payunityConfig,
             loadSdk(payunityConfig.purchaseid, payunityConfig.environment, payunityConfig.language),
         ]);
+         }
     })
     .then(([modal, payunityConfig]) => {
 
+        if (payunityConfig.purchaseid === null) {
+
+            require(['jquery'], function($) {
+                require(['core/str'], function(str) {
+
+                    var strings = [
+                        {
+                            key: 'error',
+                            component: 'paygw_payunity'
+                        },
+                        {
+                            key: 'payment_error',
+                            component: 'paygw_payunity',
+                        },
+                        {
+                            key: 'proceed',
+                            component: 'paygw_payunity',
+                        }
+                    ];
+                    var localStrings = str.get_strings(strings);
+                    $.when(localStrings).done(function(localizedEditStrings) {
+                        ModalFactory.create({
+                            type: ModalFactory.types.CANCEL,
+                            title: localizedEditStrings[0],
+                            body: localizedEditStrings[1],
+                            buttons: {
+                                cancel: localizedEditStrings[2],
+                            },
+                        })
+                        .then(function(modal) {
+                            var root = modal.getRoot();
+                            // eslint-disable-next-line max-nested-callbacks
+                            root.on(ModalEvents.cancel, function() {
+                                location.href = payunityConfig.rooturl;
+                            });
+                            modal.show();
+                            return '';
+                        }).catch({
+                            // eslint-disable-next-line no-console
+                            // console.log(e);
+                        });
+                    });
+
+                    });
+            });
+        } else {
        const form = document.createElement('form');
        const resourcePath = `/v1/checkouts/${payunityConfig.purchaseid}/payment`;
        const url = `${payunityConfig.rooturl}/payment/gateway/payunity/checkout.php?resourcepath=${resourcePath}&itemid=${itemId}&orderid=${payunityConfig.purchaseid}&component=${component}&paymentarea=${paymentArea}`;
@@ -74,6 +127,8 @@ export const process = (component, paymentArea, itemId, description) => {
        form.setAttribute('data-brands', "EPS VISA MASTER");
        form.setAttribute('merchantTransactionId', "test123");
         modal.setBody(form);
+        return '';
+        }
         return '';
     }).then(x => {
         const promise = new Promise(resolve => {

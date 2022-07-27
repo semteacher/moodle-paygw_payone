@@ -61,15 +61,15 @@ export const init = (orderid,
                     var strings = [
                         {
                             key: 'success',
-                            component: 'paygw_mpay24'
+                            component: 'paygw_payunity'
                         },
                         {
                             key: 'error',
-                            component: 'paygw_mpay24'
+                            component: 'paygw_payunity'
                         },
                         {
                             key: 'proceed',
-                            component: 'paygw_mpay24',
+                            component: 'paygw_payunity',
                         }
                     ];
 

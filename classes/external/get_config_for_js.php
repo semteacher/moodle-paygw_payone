@@ -119,27 +119,31 @@ class get_config_for_js extends external_api {
 
         $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid, $environment, $merchanttransactionid );
         $data = json_decode($responsedata);
-        $purchaseid = $data->id;
 
-        // Create Task to check status after 30 minutes.
-        $userid = $USER->id;
-        $now = time();
-        $nextruntime = strtotime('+30 min', $now);
+        if ($data->id !== null) {
+            $purchaseid = $data->id;
 
-        $taskdata = new stdClass();
-        $taskdata->orderid = $purchaseid;
-        $taskdata->amount = $amount;
-        $taskdata->currency = $currency;
-        $taskdata->resourcepath = "/v1/checkouts/$purchaseid/payment";
-        $taskdata->component = $component;
-        $taskdata->paymentarea = $paymentarea;
-        $taskdata->itemid = $itemid;
+            // Create Task to check status after 30 minutes.
+            $userid = $USER->id;
+            $now = time();
+            $nextruntime = strtotime('+30 min', $now);
 
-        $checkstatustask = new check_status();
-        $checkstatustask->set_userid($userid);
-        $checkstatustask->set_next_run_time($nextruntime);
-        $checkstatustask->set_custom_data($taskdata);
-        \core\task\manager::reschedule_or_queue_adhoc_task($checkstatustask);
+            $taskdata = new stdClass();
+            $taskdata->orderid = $purchaseid;
+            $taskdata->amount = $amount;
+            $taskdata->currency = $currency;
+            $taskdata->resourcepath = "/v1/checkouts/$purchaseid/payment";
+            $taskdata->component = $component;
+            $taskdata->paymentarea = $paymentarea;
+            $taskdata->itemid = $itemid;
+
+            $checkstatustask = new check_status();
+            $checkstatustask->set_userid($userid);
+            $checkstatustask->set_next_run_time($nextruntime);
+            $checkstatustask->set_custom_data($taskdata);
+            \core\task\manager::reschedule_or_queue_adhoc_task($checkstatustask);
+
+        }
 
         return [
             'clientid' => $config['clientid'],
