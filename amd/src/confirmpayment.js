@@ -55,14 +55,12 @@ export const init = (orderid,
         done: function(data) {
 
 
+            if (data.success !== true) {
+
             require(['jquery'], function($) {
                 require(['core/str'], function(str) {
 
                     var strings = [
-                        {
-                            key: 'success',
-                            component: 'paygw_payunity'
-                        },
                         {
                             key: 'error',
                             component: 'paygw_payunity'
@@ -78,10 +76,10 @@ export const init = (orderid,
 
                         ModalFactory.create({
                             type: ModalFactory.types.CANCEL,
-                            title: data.success == true ? localizedEditStrings[0] : localizedEditStrings[1],
+                            title: localizedEditStrings[0] ,
                             body: data.message,
                             buttons: {
-                                cancel: localizedEditStrings[2],
+                                cancel: localizedEditStrings[1],
                             },
                         })
                         .then(function(modal) {
@@ -99,7 +97,9 @@ export const init = (orderid,
                     });
                 });
             });
-
+        } else {
+            location.href = data.url;
+        }
 
         },
         fail: function() {
