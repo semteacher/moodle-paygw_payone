@@ -69,6 +69,7 @@ class transaction_complete extends external_api {
      */
     public static function execute(string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath): array {
         global $USER, $DB, $CFG;
+        $stringman = get_string_manager();
 
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
@@ -90,7 +91,6 @@ class transaction_complete extends external_api {
 
         $payunityhelper = new payunity_helper($config->clientid, $config->secret, $sandbox);
         $orderdetails = $payunityhelper->get_order_details($resourcepath);
-        // $orderdetails = null;
 
         $success = false;
         $message = '';
@@ -138,6 +138,16 @@ class transaction_complete extends external_api {
                         $record = new \stdClass();
                         $record->paymentid = $paymentid;
                         $record->pu_orderid = $orderid;
+
+                        // Store Brand in DB.
+                        if (get_string_manager()->string_exists($orderdetails->paymentBrand, 'paygw_payunity')) {
+                            $record->paymentbrand = get_string($orderdetails->paymentBrand, 'paygw_payunity');
+                        } else {
+                            $record->paymentbrand = get_string('unknownbrand', 'paygw_payunity');
+                        }
+
+                        // Store original value.
+                        $record->pboriginal = $orderdetails->paymentBrand;
 
                         $DB->insert_record('paygw_payunity', $record);
 

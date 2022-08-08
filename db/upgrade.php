@@ -32,9 +32,40 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
     global $DB;
+    $dbman = $DB->get_manager();
 
     // Automatically generated Moodle v3.11.0 release upgrade line.
     // Put any upgrade step following this.
+
+    if ($oldversion < 2022080801) {
+
+        // Define field paymentbrand to be added to paygw_payunity.
+        $table = new xmldb_table('paygw_payunity');
+        $field = new xmldb_field('paymentbrand', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'pu_orderid');
+
+        // Conditionally launch add field paymentbrand.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Payunity savepoint reached.
+        upgrade_plugin_savepoint(true, 2022080801, 'paygw', 'payunity');
+    }
+
+    if ($oldversion < 2022080802) {
+
+        // Define field pboriginal to be added to paygw_payunity.
+        $table = new xmldb_table('paygw_payunity');
+        $field = new xmldb_field('pboriginal', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'paymentbrand');
+
+        // Conditionally launch add field pboriginal.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Payunity savepoint reached.
+        upgrade_plugin_savepoint(true, 2022080802, 'paygw', 'payunity');
+    }
 
     return true;
 }
