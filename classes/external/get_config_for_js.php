@@ -111,10 +111,13 @@ class get_config_for_js extends external_api {
         $root = $CFG->wwwroot;
         $environment = $config['environment'];
 
-        $string = bin2hex(openssl_random_pseudo_bytes(8));
-        $now = new DateTime();
-        $timestamp = $now->getTimestamp();
-        $merchanttransactionid = $string . $timestamp;
+        /*
+        Important for SAP daily sums: We need the $itemid here first.
+        After that we currently also add userid.
+        */
+        $randomhex = bin2hex(openssl_random_pseudo_bytes(2));
+        $merchanttransactionid = "$itemid userid:$USER->id " .
+            "firstname:$USER->firstname lastname:$USER->lastname randomhex:$randomhex";
 
         $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid, $environment, $merchanttransactionid );
         $data = json_decode($responsedata);
