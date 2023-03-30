@@ -96,4 +96,54 @@ class payunity_helper {
         curl_close($ch);
         return json_decode($responsedata);
     }
+
+    public function get_transaction_record(string $merchanttransactionid) {
+        $url = $this->baseurl . "/v1/query";
+        $url .= "?entityId={$this->clientid}";
+        $url .= "&merchantTransactionId=" . $merchanttransactionid;
+
+        if ($this->sandbox == true) {
+            $verify = false;
+        } else {
+            $verify = true;
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        "Authorization:Bearer {$this->secret}"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verify);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responsedata = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        return json_decode($responsedata);
+    }
+
+
+    public function get_transaction_record_exetrnal_id(string $purchaseid) {
+        $url = $this->baseurl . "/v1/query/" . $purchaseid;
+        $url .= "?entityId={$this->clientid}";
+
+        if ($this->sandbox == true) {
+            $verify = false;
+        } else {
+            $verify = true;
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        "Authorization:Bearer {$this->secret}"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verify);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responsedata = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        return json_decode($responsedata);
+    }
 }

@@ -66,6 +66,30 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
         // Payunity savepoint reached.
         upgrade_plugin_savepoint(true, 2022080802, 'paygw', 'payunity');
     }
+    if ($oldversion < 2023032101) {
+
+        // Define table paygw_payunity_openorders to be created.
+        $table = new xmldb_table('paygw_payunity_openorders');
+
+        // Adding fields to table paygw_payunity_openorders.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('tid', XMLDB_TYPE_CHAR, '30', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('itemid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('price', XMLDB_TYPE_NUMBER, '10, 2', null, null, null, null);
+        $table->add_field('status', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table paygw_payunity_openorders.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for paygw_payunity_openorders.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Payunity savepoint reached.
+        upgrade_plugin_savepoint(true, 2023032101, 'paygw', 'payunity');
+    }
 
     return true;
 }

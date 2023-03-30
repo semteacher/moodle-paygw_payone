@@ -67,9 +67,13 @@ class transaction_complete extends external_api {
      * @param string $orderid PayUnity order ID
      * @return array
      */
-    public static function execute(string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath): array {
+    public static function execute(string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath, int $userid = 0): array {
         global $USER, $DB, $CFG;
         $stringman = get_string_manager();
+
+        if ($userid == 0) {
+            $userid = $USER->id;
+        }
 
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
@@ -91,6 +95,21 @@ class transaction_complete extends external_api {
 
         $payunityhelper = new payunity_helper($config->clientid, $config->secret, $sandbox);
         $orderdetails = $payunityhelper->get_order_details($resourcepath);
+
+        // If something went wrong with first check_status -> try again with our internal id.
+        // If resourcepath is '' we are coming from transactionlist.
+        if ($orderdetails || $resourcepath === '') {
+            if ($orderdetails->results->code === '700.400.580' || $orderdetails->results->code === '200.300.404' || $resourcepath === '') {
+                // In this case we try to use internal id.
+                $payments = $payunityhelper->get_transaction_record($orderid);
+                $orderdetails = $payments->payments[0];
+                // Fallback for Fallback -> should never happen.
+                if ($orderdetails->results->code === '700.400.580' || $orderdetails->results->code === '200.300.404') {
+                    $payments = $payunityhelper->get_transaction_record_exetrnal_id($orderid);
+                    $orderdetails = $payments->payments[0];
+                }
+            }
+        }
 
         $success = false;
         $message = '';
@@ -126,13 +145,17 @@ class transaction_complete extends external_api {
                 // Get item from response.
                 $item['amount'] = $orderdetails->amount;
                 $item['currency'] = $orderdetails->currency;
+                if (is_null( $item['amount'])) {
+                    $item['amount'] = $orderdetails->payments[0]->amount;
+                    $item['currency'] = $orderdetails->payments[0]->currency;
+                }
 
                 if ($item['amount'] == $amount && $item['currency'] == $currency) {
                     $success = true;
 
                     try {
                         $paymentid = payment_helper::save_payment($payable->get_account_id(), $component, $paymentarea,
-                            $itemid, (int) $USER->id, $amount, $currency, 'payunity');
+                            $itemid, (int) $userid, $amount, $currency, 'payunity');
 
                         // Store PayUnity extra information.
                         $record = new \stdClass();
@@ -151,6 +174,13 @@ class transaction_complete extends external_api {
 
                         $DB->insert_record('paygw_payunity', $record);
 
+                        // Set status in open_orders to complete.
+                        if ($existingrecord = $DB->get_record('paygw_payunity_openorders',
+                         ['tid' => $orderdetails->merchantTransactionId])) {
+                            $existingrecord->status = 3;
+                            $DB->update_record('paygw_payunity_openorders', $existingrecord);
+                        }
+
                         // We trigger the payment_successful event.
                         $context = context_system::instance();
                         $event = payment_successful::create(array('context' => $context, 'other' => [
@@ -159,7 +189,7 @@ class transaction_complete extends external_api {
                         $event->trigger();
 
                         // The order is delivered.
-                        payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $USER->id);
+                        payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $userid);
 
                     } catch (\Exception $e) {
                         debugging('Exception while trying to process payment: ' . $e->getMessage(), DEBUG_DEVELOPER);

@@ -92,7 +92,7 @@ class get_config_for_js extends external_api {
      * @return string[]
      */
     public static function execute(string $component, string $paymentarea, int $itemid): array {
-        GLOBAL $CFG, $USER, $SESSION;
+        GLOBAL $CFG, $DB, $USER, $SESSION;
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
             'paymentarea' => $paymentarea,
@@ -111,19 +111,31 @@ class get_config_for_js extends external_api {
         $root = $CFG->wwwroot;
         $environment = $config['environment'];
 
-        /*
-        Important for SAP daily sums: We need the $itemid here first.
-        After that we currently also add userid.
-        */
-        $randomhex = bin2hex(openssl_random_pseudo_bytes(2));
-        $merchanttransactionid = "$itemid userid:$USER->id " .
-            "firstname:$USER->firstname lastname:$USER->lastname randomhex:$randomhex";
+        $string = bin2hex(openssl_random_pseudo_bytes(8));
+        $now = new DateTime();
+        $timestamp = $now->getTimestamp();
+        $merchanttransactionid = $string . $timestamp;
 
         $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid, $environment, $merchanttransactionid );
         $data = json_decode($responsedata);
 
         if ($data->id !== null) {
             $purchaseid = $data->id;
+            // TODO: Store every transaction in Table.
+
+            // Pepare db item.
+            $record = new \stdClass();
+            $record->tid = $merchanttransactionid;
+            $record->itemid = $itemid;
+            $record->userid = intval($USER->id);
+            $record->price = $amount;
+            $record->status = 0;
+
+            // Check for duplicate.
+            if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['tid' => $merchanttransactionid])) {
+                $DB->insert_record('paygw_payunity_openorders', $record);
+            }
+            // Status: 0 pending, 1 canceled, 2 delivered.
 
             // Create Task to check status after 30 minutes.
             $userid = $USER->id;
@@ -131,7 +143,9 @@ class get_config_for_js extends external_api {
             $nextruntime = strtotime('+30 min', $now);
 
             $taskdata = new stdClass();
-            $taskdata->orderid = $purchaseid;
+            // Internal Id now!
+            $taskdata->orderid = $merchanttransactionid;
+
             $taskdata->amount = $amount;
             $taskdata->currency = $currency;
             $taskdata->resourcepath = "/v1/checkouts/$purchaseid/payment";
