@@ -67,7 +67,8 @@ class transaction_complete extends external_api {
      * @param string $orderid PayUnity order ID
      * @return array
      */
-    public static function execute(string $component, string $paymentarea, int $itemid, string $orderid, string $resourcepath, int $userid = 0): array {
+    public static function execute(string $component, string $paymentarea, int $itemid, string $orderid,
+        string $resourcepath, int $userid = 0): array {
         global $USER, $DB, $CFG;
         $stringman = get_string_manager();
 
@@ -99,7 +100,8 @@ class transaction_complete extends external_api {
         // If something went wrong with first check_status -> try again with our internal id.
         // If resourcepath is '' we are coming from transactionlist.
         if ($orderdetails || $resourcepath === '') {
-            if ($orderdetails->results->code === '700.400.580' || $orderdetails->results->code === '200.300.404' || $resourcepath === '') {
+            if ($orderdetails->results->code === '700.400.580' || $orderdetails->results->code === '200.300.404'
+                || $resourcepath === '') {
                 // In this case we try to use internal id.
                 $payments = $payunityhelper->get_transaction_record($orderid);
                 $orderdetails = $payments->payments[0];
