@@ -32,6 +32,7 @@ use external_api;
 use external_function_parameters;
 use external_value;
 use core_payment\helper as payment_helper;
+use paygw_payunity\event\payment_completed;
 use paygw_payunity\event\payment_error;
 use paygw_payunity\event\payment_successful;
 use paygw_payunity\payunity_helper;
@@ -181,6 +182,17 @@ class transaction_complete extends external_api {
                          ['tid' => $orderdetails->merchantTransactionId])) {
                             $existingrecord->status = 3;
                             $DB->update_record('paygw_payunity_openorders', $existingrecord);
+
+                            // We trigger the payment_completed event.
+                            $context = context_system::instance();
+                            $event = payment_completed::create([
+                                'context' => $context,
+                                'userid' => $USER->id,
+                                'other' => [
+                                    'orderid' => $orderdetails->merchantTransactionId
+                                ]
+                            ]);
+                            $event->trigger();
                         }
 
                         // We trigger the payment_successful event.

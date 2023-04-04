@@ -48,6 +48,7 @@ $string['checkout'] = 'Checkout';
 $string['loading'] = 'Loading...';
 
 $string['payment_added'] = 'Payment transaction was started. (Open order was added.)';
+$string['payment_completed'] = 'Payment transaction was completed.';
 $string['payment_successful'] = 'Payment successful. Click to continue to your course.';
 $string['payment_error'] = 'An error occured during the payment. Please try again later.';
 

@@ -52,6 +52,7 @@ $string['error'] = 'Fehler';
 $string['proceed'] = 'Fortfahren';
 
 $string['payment_added'] = 'Zahlungstransaktion wurde gestartet. (Offener Auftrag wurde angelegt.)';
+$string['payment_completed'] = 'Zahlungstransaktion wurde abgeschlossen.';
 $string['payment_successful'] = 'Zahlung erfolgreich. Klicken sie auf "Fortfahren" um zu Ihrem Kurs weitergeleitet zu werden.';
 $string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit PayUnity aufgetreten. Bitte versuchen sie es später erneut.';
 
