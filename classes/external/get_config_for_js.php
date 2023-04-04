@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace paygw_payunity\external;
 
+use context_system;
 use core_payment\helper;
 use external_api;
 use external_function_parameters;
@@ -34,6 +35,7 @@ use external_single_structure;
 use paygw_payunity\task\check_status;
 use stdClass;
 use DateTime;
+use paygw_payunity\event\payment_added;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -134,6 +136,17 @@ class get_config_for_js extends external_api {
             // Check for duplicate.
             if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['tid' => $merchanttransactionid])) {
                 $DB->insert_record('paygw_payunity_openorders', $record);
+
+                // We trigger the payment_added event.
+                $context = context_system::instance();
+                $event = payment_added::create([
+                    'context' => $context,
+                    'userid' => $USER->id,
+                    'other' => [
+                        'orderid' => $merchanttransactionid
+                    ]
+                ]);
+                $event->trigger();
             }
             // Status: 0 pending, 1 canceled, 2 delivered.
 
@@ -158,7 +171,6 @@ class get_config_for_js extends external_api {
             $checkstatustask->set_next_run_time($nextruntime);
             $checkstatustask->set_custom_data($taskdata);
             \core\task\manager::reschedule_or_queue_adhoc_task($checkstatustask);
-
         }
 
         return [

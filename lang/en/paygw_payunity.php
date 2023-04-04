@@ -47,6 +47,7 @@ $string['secret_help'] = 'The secret that PayUnity generated for your applicatio
 $string['checkout'] = 'Checkout';
 $string['loading'] = 'Loading...';
 
+$string['payment_added'] = 'Payment transaction was started. (Open order was added.)';
 $string['payment_successful'] = 'Payment successful. Click to continue to your course.';
 $string['payment_error'] = 'An error occured during the payment. Please try again later.';
 
