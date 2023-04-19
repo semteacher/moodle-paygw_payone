@@ -91,5 +91,18 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2023032101, 'paygw', 'payunity');
     }
 
+    if ($oldversion < 2023041000) {
+
+        // Changing type of field tid on table paygw_payunity_openorders to char.
+        $table = new xmldb_table('paygw_payunity_openorders');
+        $field = new xmldb_field('tid', XMLDB_TYPE_CHAR, '256', null, XMLDB_NOTNULL, null, null, 'id');
+
+        // Launch change of type for field tid.
+        $dbman->change_field_type($table, $field);
+
+        // Payunity savepoint reached.
+        upgrade_plugin_savepoint(true, 2023041000, 'paygw', 'payunity');
+    }
+
     return true;
 }

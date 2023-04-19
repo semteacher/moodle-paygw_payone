@@ -35,6 +35,7 @@ use external_single_structure;
 use paygw_payunity\task\check_status;
 use stdClass;
 use DateTime;
+use local_shopping_cart\shopping_cart_history;
 use paygw_payunity\event\payment_added;
 
 defined('MOODLE_INTERNAL') || die();
@@ -116,7 +117,30 @@ class get_config_for_js extends external_api {
         $string = bin2hex(openssl_random_pseudo_bytes(8));
         $now = new DateTime();
         $timestamp = $now->getTimestamp();
-        $merchanttransactionid = $string . $timestamp;
+
+        if ( $component == 'local_shopping_cart' && class_exists('mod_booking\booking')) {
+            $cartitems = shopping_cart_history::return_data_via_identifier($itemid, intval($USER->id));
+
+            $cartitemsonlyoptions = array_filter((array) $cartitems,
+            function($item) {
+                return $item->area == 'option';
+            }
+            );
+            $merchanttransactionid = $itemid . '_' .  $USER->id;
+            foreach ($cartitemsonlyoptions as $item) {
+                $explode = explode(' - ', $item->itemname);
+                $course = $explode[0];
+
+                $subtring = '_' . $course . '_' . $item->price;
+                $merchanttransactionid .= $subtring;
+
+            }
+            $pricestring = '_' . $amount;
+            $merchanttransactionid .= $pricestring . '_' . $timestamp;
+
+        } else {
+            $merchanttransactionid = $string . $timestamp;
+        }
 
         $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid, $environment, $merchanttransactionid );
         $data = json_decode($responsedata);
