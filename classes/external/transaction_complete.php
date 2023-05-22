@@ -32,6 +32,7 @@ use external_api;
 use external_function_parameters;
 use external_value;
 use core_payment\helper as payment_helper;
+use paygw_payunity\event\delivery_error;
 use paygw_payunity\event\payment_completed;
 use paygw_payunity\event\payment_error;
 use paygw_payunity\event\payment_successful;
@@ -101,13 +102,16 @@ class transaction_complete extends external_api {
         // If something went wrong with first check_status -> try again with our internal id.
         // If resourcepath is '' we are coming from transactionlist.
         if ($orderdetails || $resourcepath === '') {
-            if ($orderdetails->results->code === '700.400.580' || $orderdetails->results->code === '200.300.404'
+            $code = $orderdetails->results->code ?? $orderdetails->result->code ?? '';
+            if ($code === '700.400.580'
+                || $code === '200.300.404'
                 || $resourcepath === '') {
                 // In this case we try to use internal id.
                 $payments = $payunityhelper->get_transaction_record($orderid);
-                $orderdetails = $payments->payments[0];
+                $orderdetails = $payments->payments[0] ?? null;
                 // Fallback for Fallback -> should never happen.
-                if ($orderdetails->results->code === '700.400.580' || $orderdetails->results->code === '200.300.404') {
+                $code = $orderdetails->results ?? $orderdetails->result ?? null;
+                if ($code === '700.400.580' || $code === '200.300.404') {
                     $payments = $payunityhelper->get_transaction_record_exetrnal_id($orderid);
                     $orderdetails = $payments->payments[0];
                 }
@@ -202,9 +206,15 @@ class transaction_complete extends external_api {
                             'orderid' => $orderid]));
                         $event->trigger();
 
-                        // The order is delivered.
-                        payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $userid);
+                        // If the delivery was not successful, we trigger an event.
+                        if (!$deliverysuccess = payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $USER->id)) {
 
+                            $context = context_system::instance();
+                            $event = delivery_error::create(array('context' => $context, 'other' => [
+                                'message' => $message,
+                                'orderid' => $orderid]));
+                            $event->trigger();
+                        }
                     } catch (\Exception $e) {
                         debugging('Exception while trying to process payment: ' . $e->getMessage(), DEBUG_DEVELOPER);
                         $success = false;
