@@ -131,7 +131,7 @@ class get_config_for_js extends external_api {
                 $explode = explode(' - ', $item->itemname);
                 $course = $explode[0];
 
-                $subtring = '_' . $course . '_' . $item->price;
+                $subtring = '_K' . $course . '_' . $item->price;
                 $merchanttransactionid .= $subtring;
 
             }
