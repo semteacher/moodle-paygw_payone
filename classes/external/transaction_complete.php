@@ -238,7 +238,7 @@ class transaction_complete extends external_api {
 
         // If there is no success, we trigger this event.
         if (!$success) {
-            // We trigger the payment_successful event.
+            // We trigger the payment_error event.
             $context = context_system::instance();
             $event = payment_error::create(array('context' => $context, 'other' => [
                     'message' => $message,
@@ -250,7 +250,7 @@ class transaction_complete extends external_api {
         }
 
         return [
-            'url' => $url,
+            'url' => $url ?? '',
             'success' => $success,
             'message' => $message,
         ];
