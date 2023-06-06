@@ -126,7 +126,7 @@ class get_config_for_js extends external_api {
                 return $item->area == 'option';
             }
             );
-            $merchanttransactionid = $itemid . '_' .  $USER->id;
+            $merchanttransactionid = $itemid . ' ' .  $USER->id;
             foreach ($cartitemsonlyoptions as $item) {
                 $explode = explode(' - ', $item->itemname);
                 $course = $explode[0];

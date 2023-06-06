@@ -100,7 +100,7 @@ class payunity_helper {
     public function get_transaction_record(string $merchanttransactionid) {
         $url = $this->baseurl . "/v1/query";
         $url .= "?entityId={$this->clientid}";
-        $url .= "&merchantTransactionId=" . $merchanttransactionid;
+        $url .= "&merchantTransactionId=" . urlencode($merchanttransactionid);
 
         if ($this->sandbox == true) {
             $verify = false;
