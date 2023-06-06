@@ -131,12 +131,12 @@ class get_config_for_js extends external_api {
                 $explode = explode(' - ', $item->itemname);
                 $course = $explode[0];
 
-                $subtring = '_K' . $course . '_' . $item->price;
-                $merchanttransactionid .= $subtring;
+                $substring = ' K' . $course . ' ' . $item->price;
+                $merchanttransactionid .= $substring;
 
             }
-            $pricestring = '_' . $amount;
-            $merchanttransactionid .= $pricestring . '_' . $timestamp;
+            $pricestring = ' ' . $amount;
+            $merchanttransactionid .= $pricestring . ' ' . $timestamp;
 
         } else {
             $merchanttransactionid = $string . $timestamp;
