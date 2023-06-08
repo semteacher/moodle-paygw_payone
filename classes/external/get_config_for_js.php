@@ -158,7 +158,8 @@ class get_config_for_js extends external_api {
             $record->status = 0;
 
             // Check for duplicate.
-            if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['tid' => $merchanttransactionid])) {
+            // if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['tid' => $merchanttransactionid])) {
+            if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['itemid' => $itemid, 'userid' => $USER->id])) {
                 $DB->insert_record('paygw_payunity_openorders', $record);
 
                 // We trigger the payment_added event.
@@ -171,6 +172,10 @@ class get_config_for_js extends external_api {
                     ]
                 ]);
                 $event->trigger();
+            } else {
+                // If we already have an entry with the exact same itemid and userid, we actually will use the same merchant id.
+                // This will prevent a successful payment and we thus avoid duplicate entries in DB.
+                $merchanttransactionid = $existingrecord->tid;
             }
             // Status: 0 pending, 1 canceled, 2 delivered.
 
