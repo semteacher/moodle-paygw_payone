@@ -158,7 +158,6 @@ class get_config_for_js extends external_api {
             $record->status = 0;
 
             // Check for duplicate.
-            // if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['tid' => $merchanttransactionid])) {
             if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['itemid' => $itemid, 'userid' => $USER->id])) {
                 $DB->insert_record('paygw_payunity_openorders', $record);
 
@@ -179,10 +178,17 @@ class get_config_for_js extends external_api {
             }
             // Status: 0 pending, 1 canceled, 2 delivered.
 
-            // Create Task to check status after 30 minutes.
+            // Create task to check status.
+            // We have to check 1 minute before item gets deleted from cache.
             $userid = $USER->id;
             $now = time();
-            $nextruntime = strtotime('+30 min', $now);
+            if (get_config('local_shopping_cart', 'expirationtime') && get_config('local_shopping_cart', 'expirationtime') > 2) {
+                $expirationminutes = get_config('local_shopping_cart', 'expirationtime') - 1;
+                $nextruntime = strtotime('+' . $expirationminutes . ' min', $now);
+            } else {
+                // Fallback.
+                $nextruntime = strtotime('+30 min', $now);
+            }
 
             $taskdata = new stdClass();
             // Internal Id now!
