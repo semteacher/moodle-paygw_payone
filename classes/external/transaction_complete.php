@@ -99,9 +99,18 @@ class transaction_complete extends external_api {
         $payunityhelper = new payunity_helper($config->clientid, $config->secret, $sandbox);
         $orderdetails = $payunityhelper->get_order_details($resourcepath);
 
+        // If there is already an entry in the payments table, we know that the payment went through successfully.
         // If something went wrong with first check_status -> try again with our internal id.
         // If resourcepath is '' we are coming from transactionlist.
-        if ($orderdetails || $resourcepath === '') {
+        if (!$DB->get_records('payments', [
+                'component' => $component,
+                'paymentarea' => $paymentarea,
+                'itemid' => $itemid,
+                'userid' => $userid,
+                'gateway' => 'payunity',
+            ]) &&
+            ($orderdetails || $resourcepath === '')) {
+
             $code = $orderdetails->results->code ?? $orderdetails->result->code ?? '';
             if ($code === '700.400.580'
                 || $code === '200.300.404'
