@@ -207,7 +207,7 @@ class transaction_complete extends external_api {
                         $event->trigger();
 
                         // If the delivery was not successful, we trigger an event.
-                        if (!$deliverysuccess = payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $USER->id)) {
+                        if (!payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $USER->id)) {
 
                             $context = context_system::instance();
                             $event = delivery_error::create(array('context' => $context, 'other' => [
@@ -233,7 +233,7 @@ class transaction_complete extends external_api {
         } else {
             // Could not capture authorization!
             $success = false;
-            $message = get_string('cannotfetchorderdatails', 'paygw_payunity');
+            $message = get_string('cannotfetchorderdetails', 'paygw_payunity');
         }
 
         // If there is no success, we trigger this event.
