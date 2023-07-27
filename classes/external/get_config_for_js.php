@@ -156,6 +156,8 @@ class get_config_for_js extends external_api {
             $record->userid = intval($USER->id);
             $record->price = $amount;
             $record->status = 0;
+            $record->timecreated = time();
+            $record->timemodified = time();
 
             // Check for duplicate.
             if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['itemid' => $itemid, 'userid' => $USER->id])) {

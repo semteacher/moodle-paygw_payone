@@ -54,8 +54,11 @@ class transaction_complete extends external_api {
             'component' => new external_value(PARAM_COMPONENT, 'The component name'),
             'paymentarea' => new external_value(PARAM_AREA, 'Payment area in the component'),
             'itemid' => new external_value(PARAM_INT, 'The item id in the context of the component area'),
-            'orderid' => new external_value(PARAM_TEXT, 'The order id coming back from PayUnity'),
-            'resourcePath' => new external_value(PARAM_TEXT, 'The order id coming back from PayUnity'),
+            'tid' => new external_value(PARAM_TEXT, 'unique transaction id'),
+            'token' => new external_value(PARAM_RAW, 'Purchase token', VALUE_DEFAULT, ''),
+            'customer' => new external_value(PARAM_RAW, 'Customer Id', VALUE_DEFAULT, ''),
+            'ischeckstatus' => new external_value(PARAM_BOOL, 'If initial purchase or cron execution', VALUE_DEFAULT, false),
+            'resourcepath' => new external_value(PARAM_TEXT, 'The order id coming back from PayUnity', VALUE_DEFAULT, ''),
         ]);
     }
 
@@ -69,8 +72,8 @@ class transaction_complete extends external_api {
      * @param string $orderid PayUnity order ID
      * @return array
      */
-    public static function execute(string $component, string $paymentarea, int $itemid, string $orderid,
-        string $resourcepath, int $userid = 0): array {
+    public static function execute(string $component, string $paymentarea, int $itemid, string $tid, string $token = '0',
+     string $customer = '0', bool $ischeckstatus = false, string $resourcepath = '', int $userid = 0): array {
         global $USER, $DB, $CFG;
         $stringman = get_string_manager();
 
@@ -78,12 +81,15 @@ class transaction_complete extends external_api {
             $userid = $USER->id;
         }
 
-        self::validate_parameters(self::execute_parameters(), [
+        $result = self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
             'paymentarea' => $paymentarea,
             'itemid' => $itemid,
-            'orderid' => $orderid,
-            'resourcePath' => $resourcepath
+            'tid' => $tid,
+            'token' => $token,
+            'customer' => $customer,
+            'ischeckstatus' => $ischeckstatus,
+            'resourcepath' => $resourcepath,
         ]);
 
         $config = (object)helper::get_gateway_configuration($component, $paymentarea, $itemid, 'payunity');
@@ -116,12 +122,12 @@ class transaction_complete extends external_api {
                 || $code === '200.300.404'
                 || $resourcepath === '') {
                 // In this case we try to use internal id.
-                $payments = $payunityhelper->get_transaction_record($orderid);
+                $payments = $payunityhelper->get_transaction_record($tid);
                 $orderdetails = $payments->payments[0] ?? null;
                 // Fallback for Fallback -> should never happen.
                 $code = $orderdetails->results ?? $orderdetails->result ?? null;
                 if ($code === '700.400.580' || $code === '200.300.404') {
-                    $payments = $payunityhelper->get_transaction_record_exetrnal_id($orderid);
+                    $payments = $payunityhelper->get_transaction_record_exetrnal_id($tid);
                     $orderdetails = $payments->payments[0];
                 }
             }
@@ -176,7 +182,7 @@ class transaction_complete extends external_api {
                         // Store PayUnity extra information.
                         $record = new \stdClass();
                         $record->paymentid = $paymentid;
-                        $record->pu_orderid = $orderid;
+                        $record->pu_orderid = $tid;
 
                         // Store Brand in DB.
                         if (get_string_manager()->string_exists($orderdetails->paymentBrand, 'paygw_payunity')) {
@@ -200,7 +206,7 @@ class transaction_complete extends external_api {
                             $context = context_system::instance();
                             $event = payment_completed::create([
                                 'context' => $context,
-                                'userid' => $USER->id,
+                                'userid' => $userid,
                                 'other' => [
                                     'orderid' => $orderdetails->merchantTransactionId
                                 ]
@@ -212,16 +218,16 @@ class transaction_complete extends external_api {
                         $context = context_system::instance();
                         $event = payment_successful::create(array('context' => $context, 'other' => [
                             'message' => $message,
-                            'orderid' => $orderid]));
+                            'orderid' => $tid]));
                         $event->trigger();
 
                         // If the delivery was not successful, we trigger an event.
-                        if (!payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $USER->id)) {
+                        if (!payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $userid)) {
 
                             $context = context_system::instance();
                             $event = delivery_error::create(array('context' => $context, 'other' => [
                                 'message' => $message,
-                                'orderid' => $orderid]));
+                                'orderid' => $tid]));
                             $event->trigger();
                         }
                     } catch (\Exception $e) {
@@ -251,7 +257,7 @@ class transaction_complete extends external_api {
             $context = context_system::instance();
             $event = payment_error::create(array('context' => $context, 'other' => [
                     'message' => $message,
-                    'orderid' => $orderid,
+                    'orderid' => $tid,
                     'itemid' => $itemid,
                     'component' => $component,
                     'paymentarea' => $paymentarea]));

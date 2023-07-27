@@ -48,9 +48,12 @@ export const init = (orderid,
         args: {
             component,
             paymentarea,
-            orderid,
             itemid,
-            resourcePath,
+            tid: orderid,
+            token: 0,
+            customer: 0,
+            ischeckstatus: false,
+            resourcepath: resourcePath,
         },
         done: function(data) {
 

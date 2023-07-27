@@ -104,5 +104,35 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2023041000, 'paygw', 'payunity');
     }
 
+    if ($oldversion < 2023072701 ) {
+
+        // Define field timemodified to be added to paygw_payunity_openorders.
+        $table = new xmldb_table('paygw_payunity_openorders');
+        $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'timecreated');
+
+        // Conditionally launch add field timemodified.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // payunity savepoint reached.
+        upgrade_plugin_savepoint(true, 2023072701 , 'paygw', 'payunity');
+    }
+
+    if ($oldversion < 2023072701   ) {
+
+        // Define field timecreated to be added to paygw_payunity_openorders.
+        $table = new xmldb_table('paygw_payunity_openorders');
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'status');
+
+        // Conditionally launch add field timecreated.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // payunity savepoint reached.
+        upgrade_plugin_savepoint(true, 2023072701 , 'paygw', 'payunity');
+    }
+
     return true;
 }
