@@ -63,13 +63,18 @@ class check_status extends \core\task\adhoc_task {
         $taskdata = $this->get_custom_data();
 
         $userid = $this->get_userid();
-
         try {
-            $result = transaction_complete::execute($taskdata->component,
-                                                $taskdata->paymentarea,
-                                                $taskdata->itemid,
-                                                $taskdata->orderid,
-                                                $taskdata->resourcepath);
+            $result = transaction_complete::execute(
+                $taskdata->component,
+                $taskdata->paymentarea,
+                $taskdata->itemid,
+                $taskdata->tid,
+                $taskdata->token,
+                $taskdata->customer,
+                $taskdata->ischeckstatus,
+                $taskdata->resourcepath,
+                $taskdata->userid,
+                                            );
         } catch (\Exception $e) {
             return true;
         }

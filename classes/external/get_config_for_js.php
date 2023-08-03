@@ -193,15 +193,15 @@ class get_config_for_js extends external_api {
             }
 
             $taskdata = new stdClass();
-            // Internal Id now!
-            $taskdata->orderid = $merchanttransactionid;
-
-            $taskdata->amount = $amount;
-            $taskdata->currency = $currency;
-            $taskdata->resourcepath = "/v1/checkouts/$purchaseid/payment";
+            $taskdata->token = '';
+            $taskdata->itemid = $itemid;
+            $taskdata->customer = '';
             $taskdata->component = $component;
             $taskdata->paymentarea = $paymentarea;
-            $taskdata->itemid = $itemid;
+            $taskdata->tid = $merchanttransactionid;
+            $taskdata->ischeckstatus = false;
+            $taskdata->resourcepath = "/v1/checkouts/$purchaseid/payment";
+            $taskdata->userid = $USER->id;
 
             $checkstatustask = new check_status();
             $checkstatustask->set_userid($userid);
