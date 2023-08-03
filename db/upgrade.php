@@ -108,7 +108,7 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
 
         // Define field timemodified to be added to paygw_payunity_openorders.
         $table = new xmldb_table('paygw_payunity_openorders');
-        $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'timecreated');
+        $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'timecreated');
 
         // Conditionally launch add field timemodified.
         if (!$dbman->field_exists($table, $field)) {
@@ -123,7 +123,7 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
 
         // Define field timecreated to be added to paygw_payunity_openorders.
         $table = new xmldb_table('paygw_payunity_openorders');
-        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'status');
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'status');
 
         // Conditionally launch add field timecreated.
         if (!$dbman->field_exists($table, $field)) {
