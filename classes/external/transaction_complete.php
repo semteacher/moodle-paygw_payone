@@ -75,10 +75,27 @@ class transaction_complete extends external_api {
     public static function execute(string $component, string $paymentarea, int $itemid, string $tid, string $token = '0',
      string $customer = '0', bool $ischeckstatus = false, string $resourcepath = '', int $userid = 0): array {
         global $USER, $DB, $CFG;
-        $stringman = get_string_manager();
+
+        $success = false;
+        $message = '';
+        $successurl = helper::get_success_url($component, $paymentarea, $itemid)->__toString();
+        $serverurl = $CFG->wwwroot;
 
         if ($userid == 0) {
             $userid = $USER->id;
+        }
+
+        // We need to prevent duplicates, so check if the payment already exists!
+        if ($DB->get_records('payments', [
+            'component' => 'local_shopping_cart',
+            'itemid' => $itemid,
+            'userid' => $userid,
+        ])) {
+            return [
+                'url' => $successurl ?? $serverurl,
+                'success' => true,
+                'message' => get_string('payment_alreadyexists', 'paygw_payunity'),
+            ];
         }
 
         $result = self::validate_parameters(self::execute_parameters(), [
@@ -132,11 +149,6 @@ class transaction_complete extends external_api {
                 }
             }
         }
-
-        $success = false;
-        $message = '';
-        $successurl = helper::get_success_url($component, $paymentarea, $itemid)->__toString();
-        $serverurl = $CFG->wwwroot;
 
         if ($orderdetails) {
             $status = '';
