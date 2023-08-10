@@ -47,7 +47,7 @@ class check_status extends \core\task\adhoc_task {
      * @throws \coding_exception
      */
     public function get_name() {
-        return get_string('modulename', 'paygw_payunity');
+        return get_string('pluginname', 'paygw_payunity');
     }
 
     /**
