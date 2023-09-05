@@ -73,7 +73,7 @@ class check_status extends \core\task\adhoc_task {
                 $taskdata->customer,
                 $taskdata->ischeckstatus,
                 $taskdata->resourcepath,
-                $taskdata->userid,
+                $userid,
                                             );
         } catch (\Exception $e) {
             return true;
