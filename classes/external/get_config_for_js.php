@@ -95,12 +95,16 @@ class get_config_for_js extends external_api {
      * @return string[]
      */
     public static function execute(string $component, string $paymentarea, int $itemid): array {
-        GLOBAL $CFG, $DB, $USER, $SESSION;
+        global $CFG, $DB, $USER, $SESSION;
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
             'paymentarea' => $paymentarea,
             'itemid' => $itemid,
         ]);
+
+        if (empty($USER->id)) {
+            return [];
+        }
 
         $config = helper::get_gateway_configuration($component, $paymentarea, $itemid, 'payunity');
         $payable = helper::get_payable($component, $paymentarea, $itemid);
@@ -153,7 +157,7 @@ class get_config_for_js extends external_api {
             $record = new \stdClass();
             $record->tid = $merchanttransactionid;
             $record->itemid = $itemid;
-            $record->userid = intval($USER->id);
+            $record->userid = (int) $USER->id;
             $record->price = $amount;
             $record->status = 0;
             $record->timecreated = time();
@@ -182,7 +186,6 @@ class get_config_for_js extends external_api {
 
             // Create task to check status.
             // We have to check 1 minute before item gets deleted from cache.
-            $userid = $USER->id;
             $now = time();
             if (get_config('local_shopping_cart', 'expirationtime') && get_config('local_shopping_cart', 'expirationtime') > 2) {
                 $expirationminutes = get_config('local_shopping_cart', 'expirationtime') - 1;
@@ -201,12 +204,11 @@ class get_config_for_js extends external_api {
             $taskdata->tid = $merchanttransactionid;
             $taskdata->ischeckstatus = false;
             $taskdata->resourcepath = "/v1/checkouts/$purchaseid/payment";
-            $taskdata->userid = $USER->id;
+            $taskdata->userid = (int) $USER->id;
 
             $checkstatustask = new check_status();
-            $checkstatustask->set_userid($userid);
-            $checkstatustask->set_next_run_time($nextruntime);
             $checkstatustask->set_custom_data($taskdata);
+            $checkstatustask->set_next_run_time($nextruntime);
             \core\task\manager::reschedule_or_queue_adhoc_task($checkstatustask);
         }
 
