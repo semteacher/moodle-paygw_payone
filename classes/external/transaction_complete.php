@@ -89,7 +89,6 @@ class transaction_complete extends external_api {
         if ($DB->get_records('payments', [
             'component' => 'local_shopping_cart',
             'itemid' => $itemid,
-            'userid' => $userid,
         ])) {
             return [
                 'url' => $successurl ?? $serverurl,
