@@ -62,9 +62,9 @@ class check_status extends \core\task\adhoc_task {
 
         $taskdata = $this->get_custom_data();
 
-        $userid = $this->get_userid();
+        $userid = (int) $this->get_userid();
         try {
-            $result = transaction_complete::execute(
+            transaction_complete::execute(
                 $taskdata->component,
                 $taskdata->paymentarea,
                 $taskdata->itemid,
