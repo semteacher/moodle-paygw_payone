@@ -45,6 +45,24 @@ require_once($CFG->libdir . '/externallib.php');
 class transaction_complete extends external_api {
 
     /**
+     * Returns description of method parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function execute_parameters() {
+        return new external_function_parameters([
+            'component' => new external_value(PARAM_COMPONENT, 'The component name'),
+            'paymentarea' => new external_value(PARAM_AREA, 'Payment area in the component'),
+            'itemid' => new external_value(PARAM_INT, 'The item id in the context of the component area'),
+            'tid' => new external_value(PARAM_TEXT, 'unique transaction id'),
+            'token' => new external_value(PARAM_RAW, 'Purchase token', VALUE_DEFAULT, ''),
+            'customer' => new external_value(PARAM_RAW, 'Customer Id', VALUE_DEFAULT, ''),
+            'ischeckstatus' => new external_value(PARAM_BOOL, 'If initial purchase or cron execution', VALUE_DEFAULT, false),
+            'resourcepath' => new external_value(PARAM_TEXT, 'The order id coming back from PayUnity', VALUE_DEFAULT, ''),
+        ]);
+    }
+
+    /**
      * Perform what needs to be done when a transaction is reported to be complete.
      * This function does not take cost as a parameter as we cannot rely on any provided value.
      *
@@ -78,6 +96,17 @@ class transaction_complete extends external_api {
                 'message' => get_string('payment_alreadyexists', 'paygw_payunity'),
             ];
         }
+
+        $result = self::validate_parameters(self::execute_parameters(), [
+            'component' => $component,
+            'paymentarea' => $paymentarea,
+            'itemid' => $itemid,
+            'tid' => $tid,
+            'token' => $token,
+            'customer' => $customer,
+            'ischeckstatus' => $ischeckstatus,
+            'resourcepath' => $resourcepath,
+        ]);
 
         $config = (object)helper::get_gateway_configuration($component, $paymentarea, $itemid, 'payunity');
         $sandbox = $config->environment == 'sandbox';
