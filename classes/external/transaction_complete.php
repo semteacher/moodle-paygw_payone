@@ -59,6 +59,7 @@ class transaction_complete extends external_api {
             'customer' => new external_value(PARAM_RAW, 'Customer Id', VALUE_DEFAULT, ''),
             'ischeckstatus' => new external_value(PARAM_BOOL, 'If initial purchase or cron execution', VALUE_DEFAULT, false),
             'resourcepath' => new external_value(PARAM_TEXT, 'The order id coming back from PayUnity', VALUE_DEFAULT, ''),
+            'userid' => new external_value(PARAM_INT, 'User ID', VALUE_DEFAULT, 0),
         ]);
     }
 
@@ -106,6 +107,7 @@ class transaction_complete extends external_api {
             'customer' => $customer,
             'ischeckstatus' => $ischeckstatus,
             'resourcepath' => $resourcepath,
+            'userid' => $userid,
         ]);
 
         $config = (object)helper::get_gateway_configuration($component, $paymentarea, $itemid, 'payunity');
