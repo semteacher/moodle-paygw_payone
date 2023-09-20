@@ -62,6 +62,12 @@ class check_status extends \core\task\adhoc_task {
 
         $taskdata = $this->get_custom_data();
 
+        $userid = $taskdata->userid;
+
+        if (empty($userid)) {
+            $userid = $this->get_userid();
+        }
+
         try {
             transaction_complete::execute(
                 $taskdata->component,
@@ -72,7 +78,7 @@ class check_status extends \core\task\adhoc_task {
                 $taskdata->customer,
                 $taskdata->ischeckstatus,
                 $taskdata->resourcepath,
-                (int) $taskdata->userid,
+                $userid,
             );
         } catch (\Exception $e) {
             return true;

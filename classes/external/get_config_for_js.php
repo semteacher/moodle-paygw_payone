@@ -207,6 +207,7 @@ class get_config_for_js extends external_api {
             $taskdata->userid = (int) $USER->id;
 
             $checkstatustask = new check_status();
+            $checkstatustask->set_userid($taskdata->userid);
             $checkstatustask->set_custom_data($taskdata);
             $checkstatustask->set_next_run_time($nextruntime);
             \core\task\manager::reschedule_or_queue_adhoc_task($checkstatustask);
