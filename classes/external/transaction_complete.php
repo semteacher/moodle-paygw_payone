@@ -229,33 +229,44 @@ class transaction_complete extends external_api {
 
                         // We trigger the payment_successful event.
                         $context = context_system::instance();
-                        $event = payment_successful::create(array('context' => $context, 'other' => [
-                            'message' => $message,
-                            'orderid' => $tid]));
+                        $event = payment_successful::create(array(
+                            'context' => $context,
+                            'userid' => $userid,
+                            'other' => [
+                                'message' => $message,
+                                'orderid' => $tid
+                            ]));
                         $event->trigger();
 
                         // If the delivery was not successful, we trigger an event.
                         if (!payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $userid)) {
 
                             $context = context_system::instance();
-                            $event = delivery_error::create(array('context' => $context, 'other' => [
-                                'message' => $message,
-                                'orderid' => $tid]));
+                            $event = delivery_error::create(array(
+                                'context' => $context,
+                                'userid' => $userid,
+                                'other' => [
+                                    'message' => $message,
+                                    'orderid' => $tid,
+                                ]));
                             $event->trigger();
                         }
                     } catch (\Exception $e) {
                         debugging('Exception while trying to process payment: ' . $e->getMessage(), DEBUG_DEVELOPER);
                         $success = false;
-                        $message = get_string('internalerror', 'paygw_payunity');
+                        $message = get_string('internalerror', 'paygw_payunity')
+                        . " resultcode: " . $orderdetails->result->code ?? ' noresultcode';
                     }
                 } else {
                     $success = false;
-                    $message = get_string('amountmismatch', 'paygw_payunity');
+                    $message = get_string('amountmismatch', 'paygw_payunity')
+                    . " resultcode: " . $orderdetails->result->code ?? ' noresultcode';
                 }
 
             } else {
                 $success = false;
-                $message = get_string('paymentnotcleared', 'paygw_payunity');
+                $message = get_string('paymentnotcleared', 'paygw_payunity')
+                    . " resultcode: " . $orderdetails->result->code ?? ' noresultcode';
             }
 
         } else {
@@ -268,12 +279,15 @@ class transaction_complete extends external_api {
         if (!$success) {
             // We trigger the payment_error event.
             $context = context_system::instance();
-            $event = payment_error::create(array('context' => $context, 'other' => [
-                    'message' => $message,
-                    'orderid' => $tid,
-                    'itemid' => $itemid,
-                    'component' => $component,
-                    'paymentarea' => $paymentarea]));
+            $event = payment_error::create(array(
+                'context' => $context,
+                'userid' => $userid,
+                'other' => [
+                        'message' => $message,
+                        'orderid' => $tid,
+                        'itemid' => $itemid,
+                        'component' => $component,
+                        'paymentarea' => $paymentarea]));
             $event->trigger();
         }
 
