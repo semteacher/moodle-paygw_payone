@@ -291,7 +291,7 @@ class transaction_complete extends external_api {
         } else {
             // Could not capture authorization!
             $success = false;
-            $message = get_string('cannotfetchorderdetails', 'paygw_payunity');
+            $message = get_string('cannotfetchorderdetails', 'paygw_payunity') . " code: " . $payments->result->code ?? "nocodefound";
         }
 
         // If there is no success, we trigger this event.
