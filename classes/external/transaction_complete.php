@@ -82,8 +82,27 @@ class transaction_complete extends external_api {
         $successurl = helper::get_success_url($component, $paymentarea, $itemid)->__toString();
         $serverurl = $CFG->wwwroot;
 
-        if ($userid == 0) {
-            $userid = $USER->id;
+        if (empty($userid)) {
+            if (!$userid = $DB->get_field('paygw_payunity_openorders', 'userid', ['itemid' => $itemid])) {
+                $userid = $USER->id;
+            }
+        }
+
+        // We need a hard stop. If for any reason we can't find out the userid, we log it and stop.
+        if (empty($userid)) {
+            // We trigger the payment_error event.
+            $context = context_system::instance();
+            $event = payment_error::create(array(
+                'context' => $context,
+                'userid' => $userid,
+                'other' => [
+                        'message' => $message,
+                        'orderid' => $tid,
+                        'itemid' => $itemid,
+                        'component' => $component,
+                        'paymentarea' => $paymentarea]));
+            $event->trigger();
+            throw new \moodle_exception('nouseridintransactioncomplete', 'paygw_payunity');
         }
 
         // We need to prevent duplicates, so check if the payment already exists!
@@ -175,7 +194,7 @@ class transaction_complete extends external_api {
                 }
             }
 
-            if ($status == 'success') {
+            if ($status === 'success') {
                 $url = $successurl;
                 // Get item from response.
                 $item['amount'] = $orderdetails->amount;
