@@ -83,26 +83,26 @@ class transaction_complete extends external_api {
         $serverurl = $CFG->wwwroot;
 
         if (empty($userid)) {
-            if (!$userid = $DB->get_field('paygw_payunity_openorders', 'userid', ['itemid' => $itemid])) {
-                $userid = $USER->id;
+            $userid = $USER->id;
+            // Fallback: If it's the system user 0, we need to get the REAL user from openorders table!
+            if (empty($userid)) {
+                if (!$userid = $DB->get_field('paygw_payunity_openorders', 'userid', ['itemid' => $itemid])) {
+                    // We need a hard stop. If for any reason we can't find out the userid, we log it and stop.
+                    // We trigger the payment_error event.
+                    $context = context_system::instance();
+                    $event = payment_error::create(array(
+                        'context' => $context,
+                        'userid' => $userid,
+                        'other' => [
+                                'message' => 'nouseridintransactioncomplete',
+                                'orderid' => $tid,
+                                'itemid' => $itemid,
+                                'component' => $component,
+                                'paymentarea' => $paymentarea]));
+                    $event->trigger();
+                    throw new \moodle_exception('nouseridintransactioncomplete', 'paygw_payunity');
+                }
             }
-        }
-
-        // We need a hard stop. If for any reason we can't find out the userid, we log it and stop.
-        if (empty($userid)) {
-            // We trigger the payment_error event.
-            $context = context_system::instance();
-            $event = payment_error::create(array(
-                'context' => $context,
-                'userid' => $userid,
-                'other' => [
-                        'message' => $message,
-                        'orderid' => $tid,
-                        'itemid' => $itemid,
-                        'component' => $component,
-                        'paymentarea' => $paymentarea]));
-            $event->trigger();
-            throw new \moodle_exception('nouseridintransactioncomplete', 'paygw_payunity');
         }
 
         // We need to prevent duplicates, so check if the payment already exists!
