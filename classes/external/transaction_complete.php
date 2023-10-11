@@ -204,6 +204,16 @@ class transaction_complete extends external_api {
                     $item['currency'] = $orderdetails->payments[0]->currency;
                 }
 
+                /* The amount from payable might not take into account credit payment if cache was deleted.
+                Therefore, we check the amount from openorders table to make sure we don't abort a successful payment
+                because of an amount mismatch. */
+                if ($item['amount'] != $amount) {
+                    $pricefromopenorders = (float) $DB->get_field('paygw_payunity_openorders', 'price', ['tid' => $tid]);
+                    if (!empty($pricefromopenorders)) {
+                        $amount = helper::get_rounded_cost($pricefromopenorders, $currency, $surcharge);
+                    }
+                }
+
                 if ($item['amount'] == $amount && $item['currency'] == $currency) {
                     $success = true;
 
@@ -291,7 +301,8 @@ class transaction_complete extends external_api {
         } else {
             // Could not capture authorization!
             $success = false;
-            $message = get_string('cannotfetchorderdetails', 'paygw_payunity') . " code: " . $payments->result->code ?? "nocodefound";
+            $message = get_string('cannotfetchorderdetails', 'paygw_payunity') . " code: " .
+                $payments->result->code ?? "nocodefound";
         }
 
         // If there is no success, we trigger this event.
