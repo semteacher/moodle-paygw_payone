@@ -68,9 +68,14 @@ class transaction_complete extends external_api {
      * This function does not take cost as a parameter as we cannot rely on any provided value.
      *
      * @param string $component Name of the component that the itemid belongs to
-     * @param string $paymentarea
+     * @param string $paymentarea payment area
      * @param int $itemid An internal identifier that is used by the component
-     * @param string $orderid PayUnity order ID
+     * @param string $tid unique transaction id
+     * @param string $token
+     * @param string $customer
+     * @param bool $ischeckstatus
+     * @param string $resourcepath
+     * @param int $userid
      * @return array
      */
     public static function execute(string $component, string $paymentarea, int $itemid, string $tid, string $token = '0',
@@ -117,7 +122,7 @@ class transaction_complete extends external_api {
             ];
         }
 
-        $result = self::validate_parameters(self::execute_parameters(), [
+        self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
             'paymentarea' => $paymentarea,
             'itemid' => $itemid,
