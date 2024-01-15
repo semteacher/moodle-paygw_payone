@@ -18,13 +18,13 @@
  * Version information
  *
  * @package    paygw_payunity
- * @copyright  2023 Wunderbyte Gmbh <info@wunderbyte.at>
+ * @copyright  2024 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->release = 'v0.1.9';
-$plugin->version   = 2023101200;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->release = 'v0.2.0';
+$plugin->version   = 2024011500;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021051100;        // Requires this Moodle version.
 $plugin->component = 'paygw_payunity';       // Full name of the plugin (used for diagnostics).
