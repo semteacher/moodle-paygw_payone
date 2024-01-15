@@ -28,9 +28,9 @@ namespace paygw_payunity\external;
 
 use context_system;
 use core_payment\helper;
-use core_external\external_api;
-use core_external\external_function_parameters;
-use core_external\external_value;
+use external_api;
+use external_function_parameters;
+use external_value;
 use core_payment\helper as payment_helper;
 use paygw_payunity\event\delivery_error;
 use paygw_payunity\event\payment_completed;
@@ -39,6 +39,10 @@ use paygw_payunity\event\payment_successful;
 use paygw_payunity\payunity_helper;
 use local_shopping_cart\interfaces\interface_transaction_complete;
 use paygw_payunity\interfaces\interface_transaction_complete as pu_interface_transaction_complete;
+
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->libdir . '/externallib.php');
 
 if (!interface_exists(interface_transaction_complete::class)) {
     class_alias(pu_interface_transaction_complete::class, interface_transaction_complete::class);
