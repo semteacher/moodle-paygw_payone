@@ -17,7 +17,7 @@
 /**
  * This file contains the definition for the renderable classes for the booking instance
  *
- * @package   local_musi
+ * @package   paygw_payunity
  * @copyright 2021 Georg Maißer {@link http://www.wunderbyte.at}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -45,14 +45,12 @@ class checkout implements renderable, templatable {
     /**
      * In the Constructor, we gather all the data we need ans store it in the data property.
      */
-    public function __construct($orderid, $itemid, $paymentarea, $component, $resourcepath) {
+    public function __construct($hostedcheckoutid, $paymentarea, $component, $itemid) {
 
-        $this->data['orderid'] = $orderid;
-        $this->data['itemid'] = $itemid;
+        $this->data['orderid'] = $hostedcheckoutid;
         $this->data['paymentarea'] = $paymentarea;
         $this->data['component'] = $component;
-        $this->data['resourcePath'] = $resourcepath;
-        $this->data['successurl'] = helper::get_success_url($component, $paymentarea, $itemid);
+        $this->data['itemid'] = $itemid;
     }
 
     /**

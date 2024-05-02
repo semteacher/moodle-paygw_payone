@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'user/thirdparty',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'be65a500942f6ce99673a8df0625f75d6553bf82',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        'online-payments/sdk-php' => array(
+            'pretty_version' => '5.15.0',
+            'version' => '5.15.0.0',
+            'reference' => '6c22644dbe0947a708fc38c8df169d722fdfc0c4',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../online-payments/sdk-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'robtimus/multipart' => array(
+            'pretty_version' => '1.0.1',
+            'version' => '1.0.1.0',
+            'reference' => '98977024f1261185d139c9df0aaecbf28cb131f4',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../robtimus/multipart',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'user/thirdparty' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'be65a500942f6ce99673a8df0625f75d6553bf82',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);

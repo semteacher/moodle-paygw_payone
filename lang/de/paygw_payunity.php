@@ -68,3 +68,20 @@ $string['unknownbrand'] = "UK";
 $string['MASTER'] = "MC";
 $string['VISA'] = "VC";
 $string['EPS'] = "EP";
+
+
+$string['5405'] = "Alipay";
+$string['2'] = "American Express";
+$string['302'] = "Apple Pay";
+$string['5408'] = "Bank transfer by Worldline";
+$string['132'] = "Diners Club";
+$string['5406'] = "EPS";
+$string['320'] = "Google Pay";
+$string['809'] = "iDEAL";
+$string['3306'] = "Klarna";
+$string['117'] = "Maestro";
+$string['3'] = "Mastercard";
+$string['3124'] = "P24";
+$string['840'] = "Paypal";
+$string['1'] = "Visa";
+$string['5404'] = "WeChat Pay";

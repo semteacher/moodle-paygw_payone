@@ -28,5 +28,13 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('paygw_payunity_settings', '', get_string('pluginname_desc', 'paygw_payunity')));
 
+    // $settings->add(new admin_setting_configtext(
+    //     'paygw_payunity/keysecret',
+    //     get_string('keysecret', 'paygw_payunity'),
+    //     '',
+    //     '',
+    //     PARAM_TEXT
+    // ));
+
     \core_payment\helper::add_common_gateway_settings($settings, 'paygw_payunity');
 }

@@ -1,0 +1,12 @@
+{
+    "name": "user/thirdparty",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "User\\Thirdparty\\": "src/"
+        }
+    },
+    "require": {
+        "online-payments/sdk-php": "^5.15"
+    }
+}

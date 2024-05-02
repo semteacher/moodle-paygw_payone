@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<libraries>
+    <library>
+        <location>thirdparty/vendor/online-payments/sdk-php</location>
+        <name>payone</name>
+        <version>5.15.0</version>
+        <license>MIT</license>
+        <licenseversion>1</licenseversion>
+    </library>
+</libraries>

@@ -37,6 +37,7 @@ use stdClass;
 use DateTime;
 use local_shopping_cart\shopping_cart_history;
 use paygw_payunity\event\payment_added;
+use paygw_payunity\payone_sdk;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -73,7 +74,7 @@ class get_config_for_js extends external_api {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                       'Authorization:Bearer ' . $secret));
+                    'Authorization:Bearer ' . $secret));
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verify);
@@ -117,6 +118,7 @@ class get_config_for_js extends external_api {
         $entityid = $config['clientid'];
         $root = $CFG->wwwroot;
         $environment = $config['environment'];
+        $sandbox = $environment == 'sandbox' ? true : false;
 
         $string = bin2hex(openssl_random_pseudo_bytes(8));
         $now = new DateTime();
@@ -146,16 +148,22 @@ class get_config_for_js extends external_api {
             $merchanttransactionid = $string . $timestamp;
         }
 
-        $responsedata = self::requestid($amount, $currency, 'DB', $secret, $entityid, $environment, $merchanttransactionid );
-        $data = json_decode($responsedata);
+        $sdk = new payone_sdk($config['clientid'], $config['secret'], $config['brandname'], $sandbox );
 
-        if ($data->id !== null) {
-            $purchaseid = $data->id;
-            // TODO: Store every transaction in Table.
+        $paymentdata = new \stdClass();
+        $paymentdata->tid = $merchanttransactionid;
+        $paymentdata->amount = helper::get_rounded_cost($payable->get_amount(), $payable->get_currency(), $surcharge);
+        $paymentdata->currency = $payable->get_currency();
+        $paymentdata->redirecturl = $root . "/payment/gateway/payunity/checkout.php?itemid=" . $itemid . "&component=" .
+        $component . "&paymentarea=" . $paymentarea;
+        $responsedata = $sdk->get_redirect_link_for_payment($paymentdata);
+
+        if ($responsedata->getHostedCheckoutId() !== null) {
+            $purchaseid = $responsedata->getMerchantReference();
 
             // Pepare db item.
             $record = new \stdClass();
-            $record->tid = $merchanttransactionid;
+            $record->tid = $responsedata->getHostedCheckoutId();
             $record->itemid = $itemid;
             $record->userid = (int) $USER->id;
             $record->price = $amount;
@@ -173,8 +181,8 @@ class get_config_for_js extends external_api {
                     'context' => $context,
                     'userid' => $USER->id,
                     'other' => [
-                        'orderid' => $merchanttransactionid
-                    ]
+                        'orderid' => $merchanttransactionid,
+                    ],
                 ]);
                 $event->trigger();
             } else {
@@ -186,6 +194,7 @@ class get_config_for_js extends external_api {
 
             // Create task to check status.
             // We have to check 1 minute before item gets deleted from cache.
+            $redirecturl = $responsedata->getRedirectUrl();
             $now = time();
             if (get_config('local_shopping_cart', 'expirationtime') && get_config('local_shopping_cart', 'expirationtime') > 2) {
                 $expirationminutes = get_config('local_shopping_cart', 'expirationtime') - 1;
@@ -203,7 +212,7 @@ class get_config_for_js extends external_api {
             $taskdata->paymentarea = $paymentarea;
             $taskdata->tid = $merchanttransactionid;
             $taskdata->ischeckstatus = false;
-            $taskdata->resourcepath = "/v1/checkouts/$purchaseid/payment";
+            $taskdata->resourcepath = "";
             $taskdata->userid = (int) $USER->id;
 
             $checkstatustask = new check_status();
@@ -219,7 +228,7 @@ class get_config_for_js extends external_api {
             'cost' => helper::get_rounded_cost($payable->get_amount(), $payable->get_currency(), $surcharge),
             'currency' => $payable->get_currency(),
             'purchaseid' => $purchaseid,
-            'rooturl' => $root,
+            'rooturl' => $redirecturl,
             'environment' => $environment,
             'language' => $language,
         ];

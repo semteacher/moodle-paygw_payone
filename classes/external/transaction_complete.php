@@ -39,6 +39,7 @@ use paygw_payunity\event\payment_successful;
 use paygw_payunity\payunity_helper;
 use local_shopping_cart\interfaces\interface_transaction_complete;
 use paygw_payunity\interfaces\interface_transaction_complete as pu_interface_transaction_complete;
+use paygw_payunity\payone_sdk;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -89,6 +90,7 @@ class transaction_complete extends external_api implements interface_transaction
         global $USER, $DB, $CFG;
 
         $success = false;
+        $setfailed = false;
         $message = '';
         $successurl = helper::get_success_url($component, $paymentarea, $itemid)->__toString();
         $serverurl = $CFG->wwwroot;
@@ -150,55 +152,34 @@ class transaction_complete extends external_api implements interface_transaction
         $surcharge = helper::get_gateway_surcharge('payunity');
         $amount = helper::get_rounded_cost($payable->get_amount(), $currency, $surcharge);
 
-        $payunityhelper = new payunity_helper($config->clientid, $config->secret, $sandbox);
-        $orderdetails = $payunityhelper->get_order_details($resourcepath);
-
-        // If there is already an entry in the payments table, we know that the payment went through successfully.
-        // If something went wrong with first check_status -> try again with our internal id.
-        // If resourcepath is '' we are coming from transactionlist.
-        if (!$DB->get_records('payments', [
-                'component' => $component,
-                'paymentarea' => $paymentarea,
-                'itemid' => $itemid,
-                'userid' => $userid,
-                'gateway' => 'payunity',
-            ]) &&
-            ($orderdetails || $resourcepath === '')) {
-
-            $code = $orderdetails->results->code ?? $orderdetails->result->code ?? '';
-            if ($code === '700.400.580'
-                || $code === '200.300.404'
-                || $resourcepath === '') {
-                // In this case we try to use internal id.
-                $payments = $payunityhelper->get_transaction_record($tid);
-                $orderdetails = $payments->payments[0] ?? null;
-                // Fallback for Fallback -> should never happen.
-                $code = $orderdetails->results ?? $orderdetails->result ?? null;
-                if ($code === '700.400.580' || $code === '200.300.404') {
-                    $payments = $payunityhelper->get_transaction_record_exetrnal_id($tid);
-                    $orderdetails = $payments->payments[0];
-                }
-            }
-        }
-
-        if ($orderdetails) {
+        $sdk = new payone_sdk($config->clientid, $config->secret, $config->brandname, $sandbox );
+        $orderdetails = $sdk->check_status($tid);
+        $statusorder = $orderdetails->getStatus();
+        if ($orderdetails && $statusorder == 'PAYMENT_CREATED') {
             $status = '';
             $url = $serverurl;
             // SANDBOX OR PROD.
+            $statuspayment = $orderdetails->getCreatedPaymentOutput()->getPaymentStatusCategory();
             if ($sandbox == true) {
-                if ($orderdetails->result->code == '000.100.110') {
+                if ($statuspayment == 'SUCCESSFUL') {
                     // Approved.
                     $status = 'success';
                     $message = get_string('payment_successful', 'paygw_payunity');
+                } else if ($statuspayment == 'REJECTED' || $orderdetails->getCreatedPaymentOutput()->getPayment() == null) {
+                    $status = false;
+                    $setfailed = true;
                 } else {
                     // Not Approved.
                     $status = false;
                 }
             } else {
-                if ($orderdetails->result->code == '000.000.000') {
+                if ($statuspayment == 'SUCCESSFUL') {
                     // Approved.
                     $status = 'success';
                     $message = get_string('payment_successful', 'paygw_payunity');
+                } else if ($statuspayment == 'REJECTED') {
+                    $status = false;
+                    $setfailed = true;
                 } else {
                     // Not Approved.
                     $status = false;
@@ -208,12 +189,10 @@ class transaction_complete extends external_api implements interface_transaction
             if ($status === 'success') {
                 $url = $successurl;
                 // Get item from response.
-                $item['amount'] = $orderdetails->amount;
-                $item['currency'] = $orderdetails->currency;
-                if (is_null( $item['amount'])) {
-                    $item['amount'] = $orderdetails->payments[0]->amount;
-                    $item['currency'] = $orderdetails->payments[0]->currency;
-                }
+                $item['amount'] = $orderdetails->getCreatedPaymentOutput()
+                    ->getPayment()->getPaymentOutput()->getAmountOfMoney()->getAmount() / 100;
+                $item['currency'] = $orderdetails->getCreatedPaymentOutput()
+                    ->getPayment()->getPaymentOutput()->getAmountOfMoney()->getCurrencyCode();
 
                 /* The amount from payable might not take into account credit payment if cache was deleted.
                 Therefore, we check the amount from openorders table to make sure we don't abort a successful payment
@@ -237,21 +216,24 @@ class transaction_complete extends external_api implements interface_transaction
                         $record->paymentid = $paymentid;
                         $record->pu_orderid = $tid;
 
+                        $brandcode = $orderdetails->getCreatedPaymentOutput()
+                            ->getPayment()->getPaymentOutput()->getRedirectPaymentMethodSpecificOutput()->getPaymentProductId();
+
                         // Store Brand in DB.
-                        if (get_string_manager()->string_exists($orderdetails->paymentBrand, 'paygw_payunity')) {
-                            $record->paymentbrand = get_string($orderdetails->paymentBrand, 'paygw_payunity');
+                        if (get_string_manager()->string_exists($brandcode, 'paygw_payunity')) {
+                            $record->paymentbrand = get_string($brandcode, 'paygw_payunity');
                         } else {
                             $record->paymentbrand = get_string('unknownbrand', 'paygw_payunity');
                         }
 
                         // Store original value.
-                        $record->pboriginal = $orderdetails->paymentBrand;
+                        $record->pboriginal = (string) $brandcode;
 
                         $DB->insert_record('paygw_payunity', $record);
 
                         // Set status in open_orders to complete.
                         if ($existingrecord = $DB->get_record('paygw_payunity_openorders',
-                         ['tid' => $orderdetails->merchantTransactionId])) {
+                        ['tid' => $tid])) {
                             $existingrecord->status = 3;
                             $DB->update_record('paygw_payunity_openorders', $existingrecord);
 
@@ -261,8 +243,8 @@ class transaction_complete extends external_api implements interface_transaction
                                 'context' => $context,
                                 'userid' => $userid,
                                 'other' => [
-                                    'orderid' => $orderdetails->merchantTransactionId
-                                ]
+                                    'orderid' => $tid,
+                                ],
                             ]);
                             $event->trigger();
                         }
@@ -274,7 +256,7 @@ class transaction_complete extends external_api implements interface_transaction
                             'userid' => $userid,
                             'other' => [
                                 'message' => $message,
-                                'orderid' => $tid
+                                'orderid' => $tid,
                             ]));
                         $event->trigger();
 
@@ -295,29 +277,44 @@ class transaction_complete extends external_api implements interface_transaction
                         debugging('Exception while trying to process payment: ' . $e->getMessage(), DEBUG_DEVELOPER);
                         $success = false;
                         $message = get_string('internalerror', 'paygw_payunity')
-                        . " resultcode: " . $orderdetails->result->code ?? ' noresultcode';
+                        . " resultcode: " . $orderdetails->getCreatedPaymentOutput()
+                            ->getPayment()->getStatusOutput()->getStatusCode() ?? ' noresultcode';
                     }
                 } else {
                     $success = false;
                     $message = get_string('amountmismatch', 'paygw_payunity')
-                    . " resultcode: " . $orderdetails->result->code ?? ' noresultcode';
+                    . " resultcode: " . $orderdetails->getCreatedPaymentOutput()
+                        ->getPayment()->getStatusOutput()->getStatusCode() ?? ' noresultcode';
                 }
 
             } else {
                 $success = false;
-                $message = get_string('paymentnotcleared', 'paygw_payunity')
-                    . " resultcode: " . $orderdetails->result->code ?? ' noresultcode';
+                // Get the payment output only once to avoid multiple calls.
+                $paymentoutput = $orderdetails->getCreatedPaymentOutput();
+                $payment = $paymentoutput ? $paymentoutput->getPayment() : null;
+                $statuscode = $payment ? $payment->getStatusOutput()->getStatusCode() : 'noresultcode';
+
+                $message = get_string('paymentnotcleared', 'paygw_payunity') . " resultcode: " . $statuscode;
+
             }
 
         } else {
             // Could not capture authorization!
             $success = false;
             $message = get_string('cannotfetchorderdetails', 'paygw_payunity') . " code: " .
-                $payments->result->code ?? "nocodefound";
+                $statusorder ?? "nocodefound";
         }
 
         // If there is no success, we trigger this event.
         if (!$success) {
+
+            if ($setfailed) {
+                if ($existingrecord = $DB->get_record('paygw_payunity_openorders',
+                ['tid' => $tid])) {
+                    $existingrecord->status = 2;
+                    $DB->update_record('paygw_payunity_openorders', $existingrecord);
+                }
+            }
             // We trigger the payment_error event.
             $context = context_system::instance();
             $event = payment_error::create(array(
