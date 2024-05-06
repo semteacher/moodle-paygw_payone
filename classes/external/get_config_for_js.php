@@ -210,7 +210,7 @@ class get_config_for_js extends external_api {
             $taskdata->customer = '';
             $taskdata->component = $component;
             $taskdata->paymentarea = $paymentarea;
-            $taskdata->tid = $merchanttransactionid;
+            $taskdata->tid = $responsedata->getHostedCheckoutId();
             $taskdata->ischeckstatus = false;
             $taskdata->resourcepath = "";
             $taskdata->userid = (int) $USER->id;
