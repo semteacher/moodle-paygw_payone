@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for paygw_payunity.
+ * Privacy Subsystem implementation for paygw_payone.
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @category   privacy
  * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace paygw_payunity\privacy;
+namespace paygw_payone\privacy;
 
 use core_payment\privacy\paygw_provider;
 use core_privacy\local\request\writer;
 
 /**
- * Privacy Subsystem implementation for paygw_payunity.
+ * Privacy Subsystem implementation for paygw_payone.
  *
  * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -56,8 +56,8 @@ class provider implements \core_privacy\local\metadata\null_provider, paygw_prov
     public static function export_payment_data(\context $context, array $subcontext, \stdClass $payment) {
         global $DB;
 
-        $subcontext[] = get_string('gatewayname', 'paygw_payunity');
-        $record = $DB->get_record('paygw_payunity', ['paymentid' => $payment->id]);
+        $subcontext[] = get_string('gatewayname', 'paygw_payone');
+        $record = $DB->get_record('paygw_payone', ['paymentid' => $payment->id]);
 
         $data = (object) [
             'orderid' => $record->pp_orderid,
@@ -77,6 +77,6 @@ class provider implements \core_privacy\local\metadata\null_provider, paygw_prov
     public static function delete_data_for_payment_sql(string $paymentsql, array $paymentparams) {
         global $DB;
 
-        $DB->delete_records_select('paygw_payunity', "paymentid IN ({$paymentsql})", $paymentparams);
+        $DB->delete_records_select('paygw_payone', "paymentid IN ({$paymentsql})", $paymentparams);
     }
 }

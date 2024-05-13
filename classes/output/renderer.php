@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace paygw_payunity\output;
+namespace paygw_payone\output;
 use plugin_renderer_base;
 
 
@@ -34,7 +34,7 @@ class renderer extends plugin_renderer_base {
     public function render_checkout($data) {
         $o = '';
         $data = $data->export_for_template($this);
-        $o .= $this->render_from_template('paygw_payunity/checkout', $data);
+        $o .= $this->render_from_template('paygw_payone/checkout', $data);
         return $o;
     }
 

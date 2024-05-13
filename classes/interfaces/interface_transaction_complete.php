@@ -17,13 +17,13 @@
 /**
  * Interface for transaction_complete class used in several payment gateways.
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2024 Wunderbyte GmbH <info@wunderbyte.at>
  * @author     Bernhard Fischer-Sengseis
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace paygw_payunity\interfaces;
+namespace paygw_payone\interfaces;
 
 use external_function_parameters;
 
@@ -34,7 +34,7 @@ require_once($CFG->libdir . '/externallib.php');
 /**
  * Interface for transaction_complete class used in several payment gateways.
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2024 Wunderbyte GmbH <info@wunderbyte.at>
  * @author     Bernhard Fischer-Sengseis
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

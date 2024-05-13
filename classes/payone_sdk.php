@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Contains helper class to work with PayUnity REST API.
+ * Contains helper class to work with payone REST API.
  *
- * @package   paygw_payunity
+ * @package   paygw_payone
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace paygw_payunity;
+namespace paygw_payone;
 
 use curl;
 use OnlinePayments\Sdk\Client;
@@ -41,7 +41,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->libdir . '/filelib.php');
-require_once($CFG->dirroot . '/payment/gateway/payunity/thirdparty/vendor/autoload.php');
+require_once($CFG->dirroot . '/payment/gateway/payone/thirdparty/vendor/autoload.php');
 
 
 class payone_sdk {
@@ -57,12 +57,12 @@ class payone_sdk {
     private $clientid;
 
     /**
-     * @var string PayUnity App secret
+     * @var string payone App secret
      */
     private $secret;
 
     /**
-     * @var string PayUnity Brandname
+     * @var string payone Brandname
      */
     private $brandname;
 
@@ -80,7 +80,7 @@ class payone_sdk {
      * helper constructor.
      *
      * @param string $clientid The client id.
-     * @param string $secret PayUnity secret.
+     * @param string $secret payone secret.
      * @param bool $sandbox Whether we are working with the sandbox environment or not.
      */
     public function __construct(string $clientid, string $secret, string $brandname, bool $sandbox) {

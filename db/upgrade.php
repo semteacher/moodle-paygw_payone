@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upgrade script for paygw_payunity.
+ * Upgrade script for paygw_payone.
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param int $oldversion the version we are upgrading from
  * @return bool always true
  */
-function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
+function xmldb_paygw_payone_upgrade(int $oldversion): bool {
     global $DB;
     $dbman = $DB->get_manager();
 
@@ -39,8 +39,8 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
 
     if ($oldversion < 2022080801) {
 
-        // Define field paymentbrand to be added to paygw_payunity.
-        $table = new xmldb_table('paygw_payunity');
+        // Define field paymentbrand to be added to paygw_payone.
+        $table = new xmldb_table('paygw_payone');
         $field = new xmldb_field('paymentbrand', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'pu_orderid');
 
         // Conditionally launch add field paymentbrand.
@@ -48,14 +48,14 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
             $dbman->add_field($table, $field);
         }
 
-        // Payunity savepoint reached.
-        upgrade_plugin_savepoint(true, 2022080801, 'paygw', 'payunity');
+        // payone savepoint reached.
+        upgrade_plugin_savepoint(true, 2022080801, 'paygw', 'payone');
     }
 
     if ($oldversion < 2022080802) {
 
-        // Define field pboriginal to be added to paygw_payunity.
-        $table = new xmldb_table('paygw_payunity');
+        // Define field pboriginal to be added to paygw_payone.
+        $table = new xmldb_table('paygw_payone');
         $field = new xmldb_field('pboriginal', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'paymentbrand');
 
         // Conditionally launch add field pboriginal.
@@ -63,15 +63,15 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
             $dbman->add_field($table, $field);
         }
 
-        // Payunity savepoint reached.
-        upgrade_plugin_savepoint(true, 2022080802, 'paygw', 'payunity');
+        // payone savepoint reached.
+        upgrade_plugin_savepoint(true, 2022080802, 'paygw', 'payone');
     }
     if ($oldversion < 2023032101) {
 
-        // Define table paygw_payunity_openorders to be created.
-        $table = new xmldb_table('paygw_payunity_openorders');
+        // Define table paygw_payone_openorders to be created.
+        $table = new xmldb_table('paygw_payone_openorders');
 
-        // Adding fields to table paygw_payunity_openorders.
+        // Adding fields to table paygw_payone_openorders.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('tid', XMLDB_TYPE_CHAR, '30', null, XMLDB_NOTNULL, null, null);
         $table->add_field('itemid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
@@ -79,51 +79,51 @@ function xmldb_paygw_payunity_upgrade(int $oldversion): bool {
         $table->add_field('price', XMLDB_TYPE_NUMBER, '10, 2', null, null, null, null);
         $table->add_field('status', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
-        // Adding keys to table paygw_payunity_openorders.
+        // Adding keys to table paygw_payone_openorders.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
-        // Conditionally launch create table for paygw_payunity_openorders.
+        // Conditionally launch create table for paygw_payone_openorders.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
 
-        // Payunity savepoint reached.
-        upgrade_plugin_savepoint(true, 2023032101, 'paygw', 'payunity');
+        // payone savepoint reached.
+        upgrade_plugin_savepoint(true, 2023032101, 'paygw', 'payone');
     }
 
     if ($oldversion < 2023041000) {
 
-        // Changing type of field tid on table paygw_payunity_openorders to char.
-        $table = new xmldb_table('paygw_payunity_openorders');
+        // Changing type of field tid on table paygw_payone_openorders to char.
+        $table = new xmldb_table('paygw_payone_openorders');
         $field = new xmldb_field('tid', XMLDB_TYPE_CHAR, '256', null, XMLDB_NOTNULL, null, null, 'id');
 
         // Launch change of type for field tid.
         $dbman->change_field_type($table, $field);
 
-        // Payunity savepoint reached.
-        upgrade_plugin_savepoint(true, 2023041000, 'paygw', 'payunity');
+        // payone savepoint reached.
+        upgrade_plugin_savepoint(true, 2023041000, 'paygw', 'payone');
     }
 
     if ($oldversion < 2023072702) {
 
-        $table = new xmldb_table('paygw_payunity_openorders');
+        $table = new xmldb_table('paygw_payone_openorders');
 
-        // Define field timecreated to be added to paygw_payunity_openorders.
+        // Define field timecreated to be added to paygw_payone_openorders.
         $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'status');
         // Conditionally launch add field timecreated.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        // Define field timemodified to be added to paygw_payunity_openorders.
+        // Define field timemodified to be added to paygw_payone_openorders.
         $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'timecreated');
         // Conditionally launch add field timemodified.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        // Payunity savepoint reached.
-        upgrade_plugin_savepoint(true, 2023072702, 'paygw', 'payunity');
+        // payone savepoint reached.
+        upgrade_plugin_savepoint(true, 2023072702, 'paygw', 'payone');
     }
 
     return true;

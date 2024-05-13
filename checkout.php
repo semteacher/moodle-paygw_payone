@@ -21,7 +21,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use paygw_payunity\output\checkout;
+use paygw_payone\output\checkout;
 
 require_once(__DIR__ . '/../../../config.php');
 
@@ -39,18 +39,18 @@ if (!$context = context_system::instance()) {
 // Check if optionid is valid.
 $PAGE->set_context($context);
 
-$title = get_string('checkout', 'paygw_payunity');
+$title = get_string('checkout', 'paygw_payone');
 
-$PAGE->set_url('/payment/gateway/payunity/checkout.php');
+$PAGE->set_url('/payment/gateway/payone/checkout.php');
 $PAGE->navbar->add($title);
 $PAGE->set_title(format_string($title));
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('standard');
-$PAGE->add_body_class('paygw_payunity_checkout');
+$PAGE->add_body_class('paygw_payone_checkout');
 
 echo $OUTPUT->header();
 
-$output = $PAGE->get_renderer('paygw_payunity');
+$output = $PAGE->get_renderer('paygw_payone');
 $data = new checkout($hostedcheckoutid, $paymentarea, $component, $itemid);
 
 echo $output->render_checkout($data);

@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * External functions and service definitions for the PayUnity payment gateway plugin.
+ * External functions and service definitions for the payone payment gateway plugin.
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,17 +25,17 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-    'paygw_payunity_get_config_for_js' => [
-        'classname'   => 'paygw_payunity\external\get_config_for_js',
+    'paygw_payone_get_config_for_js' => [
+        'classname'   => 'paygw_payone\external\get_config_for_js',
         'classpath'   => '',
         'description' => 'Returns the configuration settings to be used in js',
         'type'        => 'read',
         'ajax'        => true,
     ],
-    'paygw_payunity_create_transaction_complete' => [
-        'classname'   => 'paygw_payunity\external\transaction_complete',
+    'paygw_payone_create_transaction_complete' => [
+        'classname'   => 'paygw_payone\external\transaction_complete',
         'classpath'   => '',
-        'description' => 'Takes care of what needs to be done when a PayUnity transaction comes back as complete.',
+        'description' => 'Takes care of what needs to be done when a payone transaction comes back as complete.',
         'type'        => 'write',
         'ajax'        => true,
         'loginrequired' => false,

@@ -14,9 +14,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * PayPal repository module to encapsulate all of the AJAX requests that can be sent for PayUnity.
+ * PayPal repository module to encapsulate all of the AJAX requests that can be sent for payone.
  *
- * @module     paygw_payunity/repository
+ * @module     paygw_payone/repository
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,7 +34,7 @@ import Ajax from 'core/ajax';
  */
 export const getConfigForJs = (component, paymentArea, itemId) => {
     const request = {
-        methodname: 'paygw_payunity_get_config_for_js',
+        methodname: 'paygw_payone_get_config_for_js',
         args: {
             component,
             paymentarea: paymentArea,

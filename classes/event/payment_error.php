@@ -22,7 +22,7 @@
  * @copyright 2014 David Bogner, http://www.edulabs.org
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace paygw_payunity\event;
+namespace paygw_payone\event;
 
 /**
  * The payment_successful event class.
@@ -40,7 +40,7 @@ class payment_error extends \core\event\base {
     }
 
     public static function get_name() {
-        return get_string('payment_error', 'paygw_payunity');
+        return get_string('payment_error', 'paygw_payone');
     }
 
     public function get_description() {
@@ -48,6 +48,6 @@ class payment_error extends \core\event\base {
     }
 
     public function get_url() {
-        return new \moodle_url('/payment/gateway/payunity/checkout.php');
+        return new \moodle_url('/payment/gateway/payone/checkout.php');
     }
 }

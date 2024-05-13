@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="payment/gateway/payunity/db" VERSION="20201216" COMMENT="XMLDB file for PayUnity payment gateway plugin"
+<XMLDB PATH="payment/gateway/payone/db" VERSION="20201216" COMMENT="XMLDB file for payone payment gateway plugin"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="paygw_payunity" COMMENT="Stores PayUnity related information">
+    <TABLE NAME="paygw_payone" COMMENT="Stores payone related information">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="paymentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="pu_orderid" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="The ID of the order in Payunity" SEQUENCE="false"/>
+        <FIELD NAME="pu_orderid" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="The ID of the order in payone" SEQUENCE="false"/>
         <FIELD NAME="paymentbrand" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Stores PaymentBrand for each transaction"/>
         <FIELD NAME="pboriginal" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Original Brand String from Provider"/>
       </FIELDS>
@@ -17,7 +17,7 @@
         <KEY NAME="paymentid" TYPE="foreign-unique" FIELDS="paymentid" REFTABLE="payments" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="paygw_payunity_openorders" COMMENT="Stores data about every started trancaction">
+    <TABLE NAME="paygw_payone_openorders" COMMENT="Stores data about every started trancaction">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="tid" TYPE="char" LENGTH="256" NOTNULL="true" SEQUENCE="false"/>

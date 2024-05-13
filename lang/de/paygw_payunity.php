@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'paygw_payunity', language 'en'
+ * Strings for component 'paygw_payone', language 'en'
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,23 +26,23 @@ $string['amountmismatch'] = 'Der Betrag, den Sie zu zahlen versuchen, entspricht
 $string['authorising'] = 'Authorisiere die Zahlung. Bitte warten...';
 $string['brandname'] = 'Markenname';
 $string['brandname_help'] = 'Ein optionaler Name der den Namen Payiunity auf der Zahlungsseite ersetzt.';
-$string['cannotfetchorderdetails'] = 'Konnte keine Zahlungsdetails von Payunity erhalten. Ihr Konto wurde nicht belastet.';
+$string['cannotfetchorderdetails'] = 'Konnte keine Zahlungsdetails von payone erhalten. Ihr Konto wurde nicht belastet.';
 $string['clientid'] = 'Kunden ID';
-$string['clientid_help'] = 'Die Kunden ID die PayUnity für Ihre Seite generiert hat.';
+$string['clientid_help'] = 'Die Kunden ID die payone für Ihre Seite generiert hat.';
 $string['environment'] = 'Umgebung.';
 $string['environment_help'] = 'You can set this to Sandbox if you are using sandbox accounts (for testing purpose only).';
-$string['gatewaydescription'] = 'PayUnity ist ein authorisierter Zahlungsanbieter um Ihre Kreditkartenzahlung abzuwickeln.';
-$string['gatewayname'] = 'PayUnity';
+$string['gatewaydescription'] = 'payone ist ein authorisierter Zahlungsanbieter um Ihre Kreditkartenzahlung abzuwickeln.';
+$string['gatewayname'] = 'payone';
 $string['internalerror'] = 'Ein interner Fehler ist aufgetreten. Bitte kontaktieren Sie uns.';
 $string['live'] = 'Live';
-$string['paymentnotcleared'] = 'Zahlung wurde von PayUnity nicht akzeptiert.';
-$string['pluginname'] = 'PayUnity';
-$string['pluginname_desc'] = 'Das PayUnity plugin erlaubt es, Zahlungen mittels PayUnity zu erhalten.';
-$string['privacy:metadata'] = 'Das PayUnity plugin speichert keine persönlichen Daten.';
+$string['paymentnotcleared'] = 'Zahlung wurde von payone nicht akzeptiert.';
+$string['pluginname'] = 'payone';
+$string['pluginname_desc'] = 'Das payone plugin erlaubt es, Zahlungen mittels payone zu erhalten.';
+$string['privacy:metadata'] = 'Das payone plugin speichert keine persönlichen Daten.';
 $string['repeatedorder'] = 'Der Auftrag wurde bereits früher bearbeitet.';
 $string['sandbox'] = 'Sandbox';
 $string['secret'] = 'Access Token';
-$string['secret_help'] = 'Der access Token den PayUnity für diese Anwendung bereitstellt.';
+$string['secret_help'] = 'Der access Token den payone für diese Anwendung bereitstellt.';
 
 $string['checkout'] = 'Checkout';
 $string['loading'] = 'Laden...';
@@ -54,7 +54,7 @@ $string['proceed'] = 'Fortfahren';
 $string['payment_added'] = 'Zahlungstransaktion wurde gestartet. (Offener Auftrag wurde angelegt.)';
 $string['payment_completed'] = 'Zahlungstransaktion wurde abgeschlossen.';
 $string['payment_successful'] = 'Zahlung erfolgreich. Klicken sie auf "Fortfahren" um zu Ihrem Kurs weitergeleitet zu werden.';
-$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit PayUnity aufgetreten. Bitte versuchen sie es später erneut.';
+$string['payment_error'] = 'Ein Fehler ist bei der Zahlung mit payone aufgetreten. Bitte versuchen sie es später erneut.';
 $string['payment_alreadyexists'] = 'Zahlung nicht bearbeitet, da sie bereits existiert.';
 $string['delivery_error'] = 'Die Zahlung war erfolgreich, aber bei der Auslieferung gab es ein Problem. Bitte wenden Sie sich an den Support.';
 

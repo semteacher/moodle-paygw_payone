@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template paygw_payunity/checkout
+    @template paygw_payone/checkout
 
     Classes required for JS:
     * none
@@ -33,13 +33,13 @@
 <div class="spinner-border" role="status">
     <span class="sr-only">
         {{#str}}
-            loading, paygw_payunity
+            loading, paygw_payone
         {{/str}}
     </span>
 </div>
 
 {{#js}}
-    require(['paygw_payunity/confirmpayment'], function(confirmpayment) {
+    require(['paygw_payone/confirmpayment'], function(confirmpayment) {
     confirmpayment.init('{{orderid}}',
                         '{{itemid}}',
                         '{{paymentarea}}',

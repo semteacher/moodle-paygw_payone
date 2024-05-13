@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Settings for the PayUnity payment gateway
+ * Settings for the payone payment gateway
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,15 +26,15 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
-    $settings->add(new admin_setting_heading('paygw_payunity_settings', '', get_string('pluginname_desc', 'paygw_payunity')));
+    $settings->add(new admin_setting_heading('paygw_payone_settings', '', get_string('pluginname_desc', 'paygw_payone')));
 
     // $settings->add(new admin_setting_configtext(
-    //     'paygw_payunity/keysecret',
-    //     get_string('keysecret', 'paygw_payunity'),
+    //     'paygw_payone/keysecret',
+    //     get_string('keysecret', 'paygw_payone'),
     //     '',
     //     '',
     //     PARAM_TEXT
     // ));
 
-    \core_payment\helper::add_common_gateway_settings($settings, 'paygw_payunity');
+    \core_payment\helper::add_common_gateway_settings($settings, 'paygw_payone');
 }

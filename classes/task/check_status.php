@@ -17,15 +17,15 @@
 /**
  * Adhoc Task to remove expired items from the shopping cart.
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2022 Georg Maißer <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace paygw_payunity\task;
+namespace paygw_payone\task;
 
 use core\message\message;
-use paygw_payunity\external\transaction_complete;
+use paygw_payone\external\transaction_complete;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -34,7 +34,7 @@ global $CFG;
 /**
  * Adhoc Task to remove expired items from the shopping cart.
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2022 Georg Maißer <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -47,7 +47,7 @@ class check_status extends \core\task\adhoc_task {
      * @throws \coding_exception
      */
     public function get_name() {
-        return get_string('pluginname', 'paygw_payunity');
+        return get_string('pluginname', 'paygw_payone');
     }
 
     /**

@@ -17,17 +17,17 @@
 /**
  * The payment_added event.
  *
- * @package     paygw_payunity
+ * @package     paygw_payone
  * @copyright   2023 Wunderbyte GmbH <info@wunderbyte.at>
  * @author      Bernhard Fischer
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace paygw_payunity\event;
+namespace paygw_payone\event;
 
 /**
  * The payment_added event.
  *
- * @package     paygw_payunity
+ * @package     paygw_payone
  * @copyright   2023 Wunderbyte GmbH <info@wunderbyte.at>
  * @author      Bernhard Fischer
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -37,11 +37,11 @@ class payment_added extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
-        $this->data['objecttable'] = 'paygw_payunity_openorders';
+        $this->data['objecttable'] = 'paygw_payone_openorders';
     }
 
     public static function get_name() {
-        return get_string('payment_added', 'paygw_payunity');
+        return get_string('payment_added', 'paygw_payone');
     }
 
     public function get_description() {
@@ -50,6 +50,6 @@ class payment_added extends \core\event\base {
     }
 
     public function get_url() {
-        return new \moodle_url('/payment/gateway/payunity/checkout.php');
+        return new \moodle_url('/payment/gateway/payone/checkout.php');
     }
 }

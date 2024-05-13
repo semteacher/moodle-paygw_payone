@@ -16,9 +16,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This module is responsible for PayUnity content in the gateways modal.
+ * This module is responsible for payone content in the gateways modal.
  *
- * @module     paygw_payunity/gateway_modal
+ * @module     paygw_payone/gateway_modal
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -37,7 +37,7 @@ import {get_string as getString} from 'core/str';
  */
 const showModalWithPlaceholder = async() => {
     const modal = await ModalFactory.create({
-        body: await Templates.render('paygw_payunity/payunity_button_placeholder', {})
+        body: await Templates.render('paygw_payone/payone_button_placeholder', {})
     });
     modal.show();
     return modal;
@@ -57,10 +57,10 @@ export const process = (component, paymentArea, itemId, description) => {
         showModalWithPlaceholder(),
         Repository.getConfigForJs(component, paymentArea, itemId),
     ])
-    .then(([modal, payunityConfig]) => {
+    .then(([modal, payoneConfig]) => {
 
-        if (payunityConfig.purchaseid !== null) {
-            window.location = payunityConfig.rooturl;
+        if (payoneConfig.purchaseid !== null) {
+            window.location = payoneConfig.rooturl;
         }
         return '';
         })

@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This class contains a list of webservice functions related to the PayUnity payment gateway.
+ * This class contains a list of webservice functions related to the payone payment gateway.
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 declare(strict_types=1);
 
-namespace paygw_payunity\external;
+namespace paygw_payone\external;
 
 use context_system;
 use core_payment\helper;
@@ -32,12 +32,12 @@ use external_api;
 use external_function_parameters;
 use external_value;
 use external_single_structure;
-use paygw_payunity\task\check_status;
+use paygw_payone\task\check_status;
 use stdClass;
 use DateTime;
 use local_shopping_cart\shopping_cart_history;
-use paygw_payunity\event\payment_added;
-use paygw_payunity\payone_sdk;
+use paygw_payone\event\payment_added;
+use paygw_payone\payone_sdk;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -88,7 +88,7 @@ class get_config_for_js extends external_api {
     }
 
     /**
-     * Returns the config values required by the PayUnity JavaScript SDK.
+     * Returns the config values required by the payone JavaScript SDK.
      *
      * @param string $component
      * @param string $paymentarea
@@ -107,9 +107,9 @@ class get_config_for_js extends external_api {
             return [];
         }
 
-        $config = helper::get_gateway_configuration($component, $paymentarea, $itemid, 'payunity');
+        $config = helper::get_gateway_configuration($component, $paymentarea, $itemid, 'payone');
         $payable = helper::get_payable($component, $paymentarea, $itemid);
-        $surcharge = helper::get_gateway_surcharge('payunity');
+        $surcharge = helper::get_gateway_surcharge('payone');
 
         $language = $SESSION->lang;
         $amount = number_format($payable->get_amount(), 2, '.', '');
@@ -154,7 +154,7 @@ class get_config_for_js extends external_api {
         $paymentdata->tid = $merchanttransactionid;
         $paymentdata->amount = helper::get_rounded_cost($payable->get_amount(), $payable->get_currency(), $surcharge);
         $paymentdata->currency = $payable->get_currency();
-        $paymentdata->redirecturl = $root . "/payment/gateway/payunity/checkout.php?itemid=" . $itemid . "&component=" .
+        $paymentdata->redirecturl = $root . "/payment/gateway/payone/checkout.php?itemid=" . $itemid . "&component=" .
         $component . "&paymentarea=" . $paymentarea;
         $responsedata = $sdk->get_redirect_link_for_payment($paymentdata);
 
@@ -172,14 +172,15 @@ class get_config_for_js extends external_api {
             $record->timemodified = time();
 
             // Check for duplicate.
-            if (!$existingrecord = $DB->get_record('paygw_payunity_openorders', ['itemid' => $itemid, 'userid' => $USER->id])) {
-                $DB->insert_record('paygw_payunity_openorders', $record);
+            if (!$existingrecord = $DB->get_record('paygw_payone_openorders', ['itemid' => $itemid, 'userid' => $USER->id])) {
+                $id = $DB->insert_record('paygw_payone_openorders', $record);
 
                 // We trigger the payment_added event.
                 $context = context_system::instance();
                 $event = payment_added::create([
                     'context' => $context,
                     'userid' => $USER->id,
+                    'objectid' => $id,
                     'other' => [
                         'orderid' => $merchanttransactionid,
                     ],
@@ -241,7 +242,7 @@ class get_config_for_js extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'clientid' => new external_value(PARAM_TEXT, 'PayUnity client ID'),
+            'clientid' => new external_value(PARAM_TEXT, 'payone client ID'),
             'brandname' => new external_value(PARAM_TEXT, 'Brand name'),
             'cost' => new external_value(PARAM_FLOAT, 'Cost with gateway surcharge'),
             'currency' => new external_value(PARAM_TEXT, 'Currency'),

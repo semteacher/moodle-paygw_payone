@@ -14,9 +14,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * PayUnity repository module to encapsulate all of the AJAX requests that can be sent for PayUnity.
+ * payone repository module to encapsulate all of the AJAX requests that can be sent for payone.
  *
- * @module     paygw_payunity/confirmpayment
+ * @module     paygw_payone/confirmpayment
  * @copyright  2022 Georg Maißer <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -44,7 +44,7 @@ export const init = (orderid,
 
 
     Ajax.call([{
-        methodname: "paygw_payunity_create_transaction_complete",
+        methodname: "paygw_payone_create_transaction_complete",
         args: {
             component,
             paymentarea,
@@ -66,11 +66,11 @@ export const init = (orderid,
                     var strings = [
                         {
                             key: 'error',
-                            component: 'paygw_payunity'
+                            component: 'paygw_payone'
                         },
                         {
                             key: 'proceed',
-                            component: 'paygw_payunity',
+                            component: 'paygw_payone',
                         }
                     ];
 

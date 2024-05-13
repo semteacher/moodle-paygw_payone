@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'paygw_payunity', language 'en'
+ * Strings for component 'paygw_payone', language 'en'
  *
- * @package    paygw_payunity
+ * @package    paygw_payone
  * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,24 +25,24 @@
 $string['amountmismatch'] = 'The amount you attempted to pay does not match the required fee. Your account has not been debited.';
 $string['authorising'] = 'Authorising the payment. Please wait...';
 $string['brandname'] = 'Brand name';
-$string['brandname_help'] = 'An optional label that overrides the business name for the PayUnity account on the PayUnity site.';
-$string['cannotfetchorderdetails'] = 'Could not fetch payment details from PayUnity. Your account has not been debited.';
+$string['brandname_help'] = 'An optional label that overrides the business name for the payone account on the payone site.';
+$string['cannotfetchorderdetails'] = 'Could not fetch payment details from payone. Your account has not been debited.';
 $string['clientid'] = 'Client ID';
-$string['clientid_help'] = 'The client ID that PayUnity generated for your application.';
+$string['clientid_help'] = 'The client ID that payone generated for your application.';
 $string['environment'] = 'Environment';
 $string['environment_help'] = 'You can set this to Sandbox if you are using sandbox accounts (for testing purpose only).';
-$string['gatewaydescription'] = 'PayUnity is an authorised payment gateway provider for processing credit card transactions.';
-$string['gatewayname'] = 'PayUnity';
+$string['gatewaydescription'] = 'payone is an authorised payment gateway provider for processing credit card transactions.';
+$string['gatewayname'] = 'payone';
 $string['internalerror'] = 'An internal error has occurred. Please contact us.';
 $string['live'] = 'Live';
-$string['paymentnotcleared'] = 'payment not cleared by PayUnity.';
-$string['pluginname'] = 'PayUnity';
-$string['pluginname_desc'] = 'The PayUnity plugin allows you to receive payments via PayUnity.';
-$string['privacy:metadata'] = 'The PayUnity plugin does not store any personal data.';
+$string['paymentnotcleared'] = 'payment not cleared by payone.';
+$string['pluginname'] = 'payone';
+$string['pluginname_desc'] = 'The payone plugin allows you to receive payments via payone.';
+$string['privacy:metadata'] = 'The payone plugin does not store any personal data.';
 $string['repeatedorder'] = 'This order has already been processed earlier.';
 $string['sandbox'] = 'Sandbox';
 $string['secret'] = 'Secret';
-$string['secret_help'] = 'The secret that PayUnity generated for your application.';
+$string['secret_help'] = 'The secret that payone generated for your application.';
 
 $string['checkout'] = 'Checkout';
 $string['loading'] = 'Loading...';

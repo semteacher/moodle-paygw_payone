@@ -17,12 +17,12 @@
 /**
  * This file contains the definition for the renderable classes for the booking instance
  *
- * @package   paygw_payunity
+ * @package   paygw_payone
  * @copyright 2021 Georg Maißer {@link http://www.wunderbyte.at}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace paygw_payunity\output;
+namespace paygw_payone\output;
 
 use renderer_base;
 use renderable;
@@ -33,7 +33,7 @@ use core_payment\helper;
 /**
  * This class prepares data for displaying a booking option instance
  *
- * @package paygw_payunity
+ * @package paygw_payone
  * @copyright 2022 Georg Maißer {@link http://www.wunderbyte.at}
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
