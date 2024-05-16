@@ -133,8 +133,9 @@ class get_config_for_js extends external_api {
             }
             );
             $merchanttransactionid = $itemid . ' ' .  $USER->id;
+
             foreach ($cartitemsonlyoptions as $item) {
-                $explode = explode(' - ', $item->itemname);
+                $explode = explode(' - ', $item->itemid);
                 $course = $explode[0];
 
                 $substring = ' K' . $course . ' ' . $item->price;
@@ -143,7 +144,13 @@ class get_config_for_js extends external_api {
             }
             $pricestring = ' ' . $amount;
             $merchanttransactionid .= $pricestring . ' ' . $timestamp;
-
+            // Payment provider accepts max string length of 40 characters.
+            if (strlen($merchanttransactionid) >= 39) {
+                $merchanttransactionid = $itemid . ' ' .  $USER->id . ' ' . $amount . ' ' . $timestamp;
+            }
+            if (strlen($merchanttransactionid) >= 39) {
+                $merchanttransactionid = $string . $timestamp;
+            }
         } else {
             $merchanttransactionid = $string . $timestamp;
         }
