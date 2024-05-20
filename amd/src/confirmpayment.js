@@ -107,7 +107,7 @@ export const init = (orderid,
         },
         fail: function(ex) {
             // eslint-disable-next-line no-console
-            console.log("ex:" + ex);
+            console.log(ex);
         },
     }]);
 
