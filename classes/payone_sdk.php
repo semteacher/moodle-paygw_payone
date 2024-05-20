@@ -81,6 +81,7 @@ class payone_sdk {
      *
      * @param string $clientid The client id.
      * @param string $secret payone secret.
+     * @param string $brandname payone brandname.
      * @param bool $sandbox Whether we are working with the sandbox environment or not.
      */
     public function __construct(string $clientid, string $secret, string $brandname, bool $sandbox) {

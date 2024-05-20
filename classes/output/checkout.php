@@ -44,6 +44,11 @@ class checkout implements renderable, templatable {
 
     /**
      * In the Constructor, we gather all the data we need ans store it in the data property.
+     *
+     * @param int $hostedcheckoutid The client id.
+     * @param string $paymentarea payone secret.
+     * @param string $component payone brandname.
+     * @param int $itemid The client id.
      */
     public function __construct($hostedcheckoutid, $paymentarea, $component, $itemid) {
 
