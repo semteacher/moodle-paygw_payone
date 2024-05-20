@@ -73,8 +73,8 @@ class get_config_for_js extends external_api {
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'Authorization:Bearer ' . $secret));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization:Bearer ' . $secret]);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verify);
