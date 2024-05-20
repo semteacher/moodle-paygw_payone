@@ -7,4 +7,18 @@
         <license>MIT</license>
         <licenseversion>1</licenseversion>
     </library>
+    <library>
+        <location>thirdparty/vendor/composer</location>
+        <name>composer</name>
+        <version>2.6.0</version>
+        <license>MIT</license>
+        <licenseversion>1</licenseversion>
+    </library>
+    <library>
+        <location>thirdparty/vendor/robtimus/multipart</location>
+        <name>multipart</name>
+        <version>1.0.1</version>
+        <license>Apache</license>
+        <licenseversion>2</licenseversion>
+    </library>
 </libraries>
