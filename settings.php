@@ -28,6 +28,7 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('paygw_payone_settings', '', get_string('pluginname_desc', 'paygw_payone')));
 
+    // phpcs:disable
     // $settings->add(new admin_setting_configtext(
     // 'paygw_payone/keysecret',
     // get_string('keysecret', 'paygw_payone'),
@@ -35,6 +36,7 @@ if ($ADMIN->fulltree) {
     // '',
     // PARAM_TEXT
     // ));
+    // phpcs:enable
 
     \core_payment\helper::add_common_gateway_settings($settings, 'paygw_payone');
 }

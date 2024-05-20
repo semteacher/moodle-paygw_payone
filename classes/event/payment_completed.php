@@ -34,20 +34,44 @@ namespace paygw_payone\event;
  */
 class payment_completed extends \core\event\base {
 
+    /**
+     * Init.
+     *
+     * @return void
+     *
+     */
     protected function init() {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * Get name.
+     *
+     * @return string
+     *
+     */
     public static function get_name() {
         return get_string('payment_completed', 'paygw_payone');
     }
 
+    /**
+     * Get description.
+     *
+     * @return string
+     *
+     */
     public function get_description() {
         return "The user with the id {$this->userid} has completed the payment transaction with this orderid: " .
             $this->other['orderid'];
     }
 
+    /**
+     * Get url.
+     *
+     * @return \moodle_url
+     *
+     */
     public function get_url() {
         return new \moodle_url('/payment/gateway/payone/checkout.php');
     }

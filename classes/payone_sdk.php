@@ -43,7 +43,13 @@ require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->libdir . '/filelib.php');
 require_once($CFG->dirroot . '/payment/gateway/payone/thirdparty/vendor/autoload.php');
 
-
+/**
+ * Helper class to work with payone REST API.
+ *
+ * @package   paygw_payone
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class payone_sdk {
 
     /**
@@ -72,7 +78,7 @@ class payone_sdk {
     private $token;
 
     /**
-     * @var boolean sandbox
+     * @var bool sandbox
      */
     private $sandbox;
 

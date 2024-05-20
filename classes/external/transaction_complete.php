@@ -49,6 +49,13 @@ if (!interface_exists(interface_transaction_complete::class)) {
     class_alias(pu_interface_transaction_complete::class, interface_transaction_complete::class);
 }
 
+/**
+ * Class contains a list of webservice functions related to the payone payment gateway.
+ *
+ * @package    paygw_payone
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class transaction_complete extends external_api implements interface_transaction_complete {
 
     /**

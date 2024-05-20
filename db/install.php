@@ -22,6 +22,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * Installer script.
+ */
 function xmldb_paygw_payone_install() {
     global $CFG;
 

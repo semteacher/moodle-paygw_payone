@@ -18,9 +18,9 @@
 /**
  * The payment_successful event.
  *
- * @package mod_booking
- * @copyright 2014 David Bogner, http://www.edulabs.org
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   paygw_payone
+ * @copyright  2022 Wunderbyte Gmbh <info@wunderbyte.at>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace paygw_payone\event;
 
@@ -28,25 +28,50 @@ namespace paygw_payone\event;
  * The delivery_event class.
  *
  * @property-read array $other { Extra information about event. }
- * @since Moodle 3.11
- * @copyright 2022 Georg Maißer <georg.maisser@wunderbyte.at>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   paygw_payone
+ * @copyright  2024 Wunderbyte Gmbh <info@wunderbyte.at>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class delivery_error extends \core\event\base {
 
+    /**
+     * Init.
+     *
+     * @return void
+     *
+     */
     protected function init() {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * Get name.
+     *
+     * @return string
+     *
+     */
     public static function get_name() {
         return get_string('delivery_error', 'paygw_payone');
     }
 
+    /**
+     * Get description.
+     *
+     * @return string
+     *
+     */
     public function get_description() {
-        return "The user with the id {$this->userid} has tried to pay, but an error occured on delivery: " . $this->other['message'];
+        return "The user with the id {$this->userid} has tried to pay, but an error occured on delivery: ".
+                $this->other['message'];
     }
 
+    /**
+     * Get url.
+     *
+     * @return \moodle_url
+     *
+     */
     public function get_url() {
         return new \moodle_url('/payment/gateway/payone/checkout.php');
     }

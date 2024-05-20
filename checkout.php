@@ -16,7 +16,7 @@
 /**
  * Add dates to option.
  *
- * @package local_musi
+ * @package paygw_payone
  * @copyright 2022 Georg Maißer <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -24,6 +24,8 @@
 use paygw_payone\output\checkout;
 
 require_once(__DIR__ . '/../../../config.php');
+
+require_login();
 
 global $DB, $PAGE, $OUTPUT, $USER;
 

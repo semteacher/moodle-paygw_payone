@@ -17,17 +17,19 @@
 namespace paygw_payone\output;
 use plugin_renderer_base;
 
-
 /**
  * A custom renderer class that extends the plugin_renderer_base and is used by the booking module.
  *
- * @package local_musi
- * @copyright 2022 Georg Maißer
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     paygw_payone
+ * @copyright   2023 Wunderbyte GmbH <info@wunderbyte.at>
+ * @author      Bernhard Fischer
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
 
-    /** Function to render the dashboard
+    /**
+     * Function to render the dashboard.
+     *
      * @param stdClass $data
      * @return string
      */

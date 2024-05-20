@@ -33,9 +33,10 @@ use core_payment\helper;
 /**
  * This class prepares data for displaying a booking option instance
  *
- * @package paygw_payone
- * @copyright 2022 Georg Maißer {@link http://www.wunderbyte.at}
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     paygw_payone
+ * @copyright   2023 Wunderbyte GmbH <info@wunderbyte.at>
+ * @author      Bernhard Fischer
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class checkout implements renderable, templatable {
 
@@ -59,6 +60,8 @@ class checkout implements renderable, templatable {
     }
 
     /**
+     * Export for template.
+     *
      * @param renderer_base $output
      * @return array
      */

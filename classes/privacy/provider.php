@@ -17,10 +17,11 @@
 /**
  * Privacy Subsystem implementation for paygw_payone.
  *
- * @package    paygw_payone
- * @category   privacy
- * @copyright  2020 Shamim Rezaie <shamim@moodle.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     paygw_payone
+ * @category    privacy
+ * @copyright   2023 Wunderbyte GmbH <info@wunderbyte.at>
+ * @author      Bernhard Fischer
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace paygw_payone\privacy;
@@ -42,7 +43,7 @@ class provider implements \core_privacy\local\metadata\null_provider, paygw_prov
      *
      * @return  string
      */
-    public static function get_reason() : string {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 

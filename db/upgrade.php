@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Upgrade the plugin.
  *
@@ -48,7 +46,7 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
             $dbman->add_field($table, $field);
         }
 
-        // payone savepoint reached.
+        // Payone savepoint reached.
         upgrade_plugin_savepoint(true, 2022080801, 'paygw', 'payone');
     }
 
@@ -63,7 +61,7 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
             $dbman->add_field($table, $field);
         }
 
-        // payone savepoint reached.
+        // Payone savepoint reached.
         upgrade_plugin_savepoint(true, 2022080802, 'paygw', 'payone');
     }
     if ($oldversion < 2023032101) {
@@ -87,7 +85,7 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
             $dbman->create_table($table);
         }
 
-        // payone savepoint reached.
+        // Payone savepoint reached.
         upgrade_plugin_savepoint(true, 2023032101, 'paygw', 'payone');
     }
 
@@ -100,7 +98,7 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
         // Launch change of type for field tid.
         $dbman->change_field_type($table, $field);
 
-        // payone savepoint reached.
+        // Payone savepoint reached.
         upgrade_plugin_savepoint(true, 2023041000, 'paygw', 'payone');
     }
 
@@ -122,7 +120,7 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
             $dbman->add_field($table, $field);
         }
 
-        // payone savepoint reached.
+        // Payone savepoint reached.
         upgrade_plugin_savepoint(true, 2023072702, 'paygw', 'payone');
     }
 
