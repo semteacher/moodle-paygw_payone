@@ -72,7 +72,7 @@ Feature: PayUnity basic configuration and useage by user
     And I click on "Send anyway" "text"
     And I wait to be redirected
     ## Workaround for transaction_complete brandcode error - test pass if 2 strings bellow are uncommented
-    And I reload the page
-    And I wait until the page is ready
+    ##And I reload the page
+    ##And I wait until the page is ready
     And I should see "my test item 1" in the ".payment-success ul.list-group" "css_element"
     And I should see "my test item 2" in the ".payment-success ul.list-group" "css_element"
