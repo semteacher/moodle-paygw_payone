@@ -79,7 +79,7 @@ export const init = (orderid,
 
                         ModalFactory.create({
                             type: ModalFactory.types.CANCEL,
-                            title: localizedEditStrings[0] ,
+                            title: localizedEditStrings[0],
                             body: data.message,
                             buttons: {
                                 cancel: localizedEditStrings[1],
@@ -92,10 +92,10 @@ export const init = (orderid,
                             });
                             modal.show();
                             return true;
-                        }).catch({
+                        }).catch((e) => {
                             // eslint-disable-next-line no-console
-                            // console.log(e);
-                        });
+                            console.log(e);
+                          });
 
                     });
                 });
@@ -105,9 +105,9 @@ export const init = (orderid,
         }
 
         },
-        fail: function() {
+        fail: function(ex) {
             // eslint-disable-next-line no-console
-            // console.log("ex:" + ex);
+            console.log("ex:" + ex);
         },
     }]);
 

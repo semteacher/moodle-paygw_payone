@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 // This file is part of Moodle - http://moodle.org/
 //
