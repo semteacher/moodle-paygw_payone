@@ -124,5 +124,20 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2023072702, 'paygw', 'payone');
     }
 
+    if ($oldversion < 2024052300) {
+
+        // Define field merchantref to be added to paygw_payone_openorders.
+        $table = new xmldb_table('paygw_payone_openorders');
+        $field = new xmldb_field('merchantref', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'timemodified');
+
+        // Conditionally launch add field merchantref.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Payone savepoint reached.
+        upgrade_plugin_savepoint(true, 2024052300, 'paygw', 'payone');
+    }
+
     return true;
 }

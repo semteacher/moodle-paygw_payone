@@ -165,6 +165,7 @@ class get_config_for_js extends external_api {
             }
             $pricestring = ' ' . $amount;
             $merchanttransactionid .= $pricestring . ' ' . $timestamp;
+            $longmtid = $merchanttransactionid;
             // Payment provider accepts max string length of 40 characters.
             if (strlen($merchanttransactionid) >= 39) {
                 $merchanttransactionid = $itemid . ' ' .  $USER->id . ' ' . $amount . ' ' . $timestamp;
@@ -174,6 +175,7 @@ class get_config_for_js extends external_api {
             }
         } else {
             $merchanttransactionid = $string . $timestamp;
+            $longmtid = $merchanttransactionid;
         }
 
         $sdk = new payone_sdk($config['clientid'], $config['secret'], $config['brandname'], $sandbox );
@@ -198,6 +200,7 @@ class get_config_for_js extends external_api {
             $record->status = 0;
             $record->timecreated = time();
             $record->timemodified = time();
+            $record->merchantref = $longmtid;
 
             // Check for duplicate.
             if (!$existingrecord = $DB->get_record('paygw_payone_openorders', ['itemid' => $itemid, 'userid' => $USER->id])) {
