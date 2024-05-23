@@ -124,7 +124,7 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2023072702, 'paygw', 'payone');
     }
 
-    if ($oldversion < 2024052300) {
+    if ($oldversion < 2024052301) {
 
         // Define field merchantref to be added to paygw_payone_openorders.
         $table = new xmldb_table('paygw_payone_openorders');
@@ -136,7 +136,7 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
         }
 
         // Payone savepoint reached.
-        upgrade_plugin_savepoint(true, 2024052300, 'paygw', 'payone');
+        upgrade_plugin_savepoint(true, 2024052301, 'paygw', 'payone');
     }
 
     return true;
