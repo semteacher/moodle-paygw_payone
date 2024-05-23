@@ -27,6 +27,7 @@
         <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Order created time"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Order modified time"/>
+        <FIELD NAME="merchantref" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Merchant reference can (according to settings) contain further information about the transaction (id, userid, item-ids &amp; prices, total amount, timestamp)"/>
      </FIELDS>
       <KEYS>
        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
