@@ -49,10 +49,13 @@ Feature: PayUnity basic configuration and useage by user
     And I should see "Cost: EUR" in the ".core_payment_fee_breakdown" "css_element"
     And I should see "30.30" in the ".core_payment_fee_breakdown" "css_element"
     And I press "Proceed"
+    And I wait to be redirected
     And I wait until the page is ready
     And I wait "2" seconds
     ##And I wait to be redirected
     ## The only way to deal with fields in the ifram is xpath
+    And I should see "wunderbyte"
+    And I should see "How would you like to pay"
     And I click on "Visa" "text"
     And I wait until the page is ready
     And I set the field "cardnumber" to "4111 1111 1111 1111"
@@ -72,7 +75,7 @@ Feature: PayUnity basic configuration and useage by user
     And I click on "Send anyway" "text"
     And I wait to be redirected
     ## Workaround for transaction_complete brandcode error - test pass if 2 strings bellow are uncommented
-    ##And I reload the page
+    And I reload the page
     ##And I wait until the page is ready
     And I should see "my test item 1" in the ".payment-success ul.list-group" "css_element"
     And I should see "my test item 2" in the ".payment-success ul.list-group" "css_element"
