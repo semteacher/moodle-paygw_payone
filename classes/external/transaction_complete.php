@@ -223,8 +223,12 @@ class transaction_complete extends external_api implements interface_transaction
                         $record->paymentid = $paymentid;
                         $record->pu_orderid = $tid;
 
-                        $brandcode = $orderdetails->getCreatedPaymentOutput()
-                            ->getPayment()->getPaymentOutput()->getRedirectPaymentMethodSpecificOutput()->getPaymentProductId();
+                        if ($redirectedmethod = $orderdetails->getCreatedPaymentOutput()
+                            ->getPayment()->getPaymentOutput()->getRedirectPaymentMethodSpecificOutput()) {
+                                $brandcode = $redirectedmethod->getPaymentProductId();
+                        } else {
+                            $brandcode = 'xxx'; // Will be replaced below.
+                        }
 
                         // Store Brand in DB.
                         if (get_string_manager()->string_exists($brandcode, 'paygw_payone')) {
