@@ -78,7 +78,7 @@ class paygw_payone_generator extends testing_module_generator {
         // Load the credentials from Github.
         $config->brandname = getenv('BRANDNAME');
         $config->clientid = getenv('CLIENTID');
-        $config->secret = getenv('PAYUNITY_SECRET');
+        $config->secret = getenv('PAYONE_SECRET');
 
         $record->config = json_encode($config);
 
