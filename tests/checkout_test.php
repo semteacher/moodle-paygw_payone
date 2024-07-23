@@ -78,7 +78,7 @@ final class checkout_test extends \advanced_testcase {
      * Test rule on paygw_payone checkput process.
      *
      * @covers \paygw_payone\gateway
-     * @covers\local_shopping_cart\payment\service_provider::get_payable()
+     * @covers \local_shopping_cart\payment\service_provider::get_payable()
      * @throws \coding_exception
      */
     public function test_checkout() {
