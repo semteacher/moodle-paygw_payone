@@ -134,8 +134,12 @@ final class checkout_test extends \advanced_testcase {
         $this->assertEquals($this->account->get('id'), $payable->get_account_id());
         $this->assertEquals(10, $payable->get_amount());
         $this->assertEquals('EUR', $payable->get_currency());
+        // Validate JS params for gateway modal dialog.
         $res = get_config_for_js::execute('local_shopping_cart', 'main', $data3['identifier']);
-        var_dump($res);
+        $this->assertEquals(10, $res['cost']);
+        $this->assertEquals('EUR', $res['currency']);
+        $this->assertEquals('sandbox', $res['environment']);
+        $this->assertStringContainsString('https://payment.preprod.payone.com/hostedcheckout/PaymentMethods/', $res['rooturl']);
     }
 
     /**
