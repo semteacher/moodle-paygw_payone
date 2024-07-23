@@ -73,8 +73,8 @@ Feature: PayUnity basic configuration and useage by user
     ##And I wait until the page is ready
     And I wait to be redirected
     ## Workaround for non-https dev env
-    And I click on "Send anyway" "text"
-    And I wait to be redirected
+    ## And I click on "Send anyway" "text"
+    ## And I wait to be redirected
     ## Workaround for transaction_complete brandcode error - test pass if 2 strings bellow are uncommented
     And I reload the page
     ##And I wait until the page is ready
