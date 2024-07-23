@@ -31,6 +31,7 @@ use local_shopping_cart\shopping_cart_history;
 use local_shopping_cart\local\cartstore;
 use local_shopping_cart\output\shoppingcart_history_list;
 use local_shopping_cart\local\pricemodifier\modifiers\checkout;
+use paygw_payone\external\get_config_for_js;
 use stdClass;
 
 /**
@@ -40,6 +41,7 @@ use stdClass;
  * @category   test
  * @copyright  2024 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @runTestsInSeparateProcesses
  */
 final class checkout_test extends \advanced_testcase {
 
@@ -86,7 +88,7 @@ final class checkout_test extends \advanced_testcase {
 
         // Create users.
         $student1 = $this->getDataGenerator()->create_user();
-
+        $this->setAdminUser();
         // Validate payment account if it has a config.
         $record1 = $DB->get_record('payment_accounts', ['id' => $this->account->get('id')]);
         $this->assertEquals('PayOne1', $record1->name);
@@ -117,6 +119,7 @@ final class checkout_test extends \advanced_testcase {
             'A'
         );
         $item1 = $itemobj->as_array();
+        $this->setUser($student1->id);
         // Clean shopping cart.
         shopping_cart::delete_all_items_from_cart($student1->id);
         // Put an item into the cart.
@@ -131,6 +134,8 @@ final class checkout_test extends \advanced_testcase {
         $this->assertEquals($this->account->get('id'), $payable->get_account_id());
         $this->assertEquals(10, $payable->get_amount());
         $this->assertEquals('EUR', $payable->get_currency());
+        $res = get_config_for_js::execute('local_shopping_cart', 'main', $data3['identifier']);
+        var_dump($res);
     }
 
     /**
