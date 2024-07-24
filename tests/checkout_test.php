@@ -83,7 +83,7 @@ final class checkout_test extends \advanced_testcase {
      * @covers \local_shopping_cart\payment\service_provider::get_payable()
      * @throws \coding_exception
      */
-    public function test_checkout() {
+    public function test_checkout(): void {
         global $DB;
 
         // Create users.
