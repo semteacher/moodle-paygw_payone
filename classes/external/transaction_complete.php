@@ -338,6 +338,9 @@ class transaction_complete extends external_api implements interface_transaction
                         'component' => $component,
                         'paymentarea' => $paymentarea]]);
             $event->trigger();
+
+            // We need to transform the success url to a "no success url".
+            $url = str_replace('success=1', 'success=0', $successurl);
         }
 
         return [
