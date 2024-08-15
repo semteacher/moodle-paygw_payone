@@ -52,7 +52,7 @@ $string['delivery_error'] = 'Die Zahlung war erfolgreich, aber bei der Ausliefer
 $string['environment'] = 'Umgebung.';
 $string['environment_help'] = 'You can set this to Sandbox if you are using sandbox accounts (for testing purpose only).';
 $string['error'] = 'Fehler';
-$string['gatewaydescription'] = 'payone ist ein authorisierter Zahlungsanbieter um Ihre Kreditkartenzahlung abzuwickeln.';
+$string['gatewaydescription'] = 'payone ist ein authorisierter Zahlungsanbieter um Ihre Kreditkartenzahlung abzuwickeln. <div><a href="https://www.payone.com/AT-de" target="_blank">Mehr Information</a></div>';
 $string['gatewayname'] = 'payone';
 $string['internalerror'] = 'Ein interner Fehler ist aufgetreten. Bitte kontaktieren Sie uns.';
 $string['live'] = 'Live';

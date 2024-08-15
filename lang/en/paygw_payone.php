@@ -37,7 +37,7 @@ $string['delivery_error'] = 'Your payment was successful, but there was an error
 $string['environment'] = 'Environment';
 $string['environment_help'] = 'You can set this to Sandbox if you are using sandbox accounts (for testing purpose only).';
 $string['error'] = 'Error';
-$string['gatewaydescription'] = 'payone is an authorised payment gateway provider for processing credit card transactions.';
+$string['gatewaydescription'] = 'payone is an authorised payment gateway provider for processing credit card transactions.<div><a href="https://www.payone.com/AT-de" target="_blank">More information</a></div>';
 $string['gatewayname'] = 'payone';
 $string['internalerror'] = 'An internal error has occurred. Please contact us.';
 $string['live'] = 'Live';
