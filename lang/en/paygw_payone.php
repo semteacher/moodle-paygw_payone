@@ -22,9 +22,21 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['EPS'] = "EP";
-$string['MASTER'] = "MC";
-$string['VISA'] = "VC";
+ $string['bc1'] = "Visa";
+ $string['bc117'] = "Maestro";
+ $string['bc132'] = "Diners Club";
+ $string['bc2'] = "American Express";
+ $string['bc3'] = "Mastercard";
+ $string['bc302'] = "Apple Pay";
+ $string['bc3124'] = "P24";
+ $string['bc320'] = "Google Pay";
+ $string['bc3306'] = "Klarna";
+ $string['bd5404'] = "WeChat Pay";
+ $string['bc5405'] = "Alipay";
+ $string['bc5406'] = "EPS";
+ $string['bc5408'] = "Bank transfer by Worldline";
+ $string['bc809'] = "iDEAL";
+ $string['bc840'] = "Paypal";
 $string['amountmismatch'] = 'The amount you attempted to pay does not match the required fee. Your account has not been debited.';
 $string['authorising'] = 'Authorising the payment. Please wait...';
 $string['brandname'] = 'Brand name';

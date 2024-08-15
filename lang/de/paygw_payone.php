@@ -22,24 +22,21 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['1'] = "Visa";
-$string['117'] = "Maestro";
-$string['132'] = "Diners Club";
-$string['2'] = "American Express";
-$string['3'] = "Mastercard";
-$string['302'] = "Apple Pay";
-$string['3124'] = "P24";
-$string['320'] = "Google Pay";
-$string['3306'] = "Klarna";
-$string['5404'] = "WeChat Pay";
-$string['5405'] = "Alipay";
-$string['5406'] = "EPS";
-$string['5408'] = "Bank transfer by Worldline";
-$string['809'] = "iDEAL";
-$string['840'] = "Paypal";
-$string['EPS'] = "EP";
-$string['MASTER'] = "MC";
-$string['VISA'] = "VC";
+$string['bc1'] = "Visa";
+$string['bc117'] = "Maestro";
+$string['bc132'] = "Diners Club";
+$string['bc2'] = "American Express";
+$string['bc3'] = "Mastercard";
+$string['bc302'] = "Apple Pay";
+$string['bc3124'] = "P24";
+$string['bc320'] = "Google Pay";
+$string['bc3306'] = "Klarna";
+$string['bd5404'] = "WeChat Pay";
+$string['bc5405'] = "Alipay";
+$string['bc5406'] = "EPS";
+$string['bc5408'] = "Bank transfer by Worldline";
+$string['bc809'] = "iDEAL";
+$string['bc840'] = "Paypal";
 $string['amountmismatch'] = 'Der Betrag, den Sie zu zahlen versuchen, entspricht nicht dem gespeicherten Betrag. Ihr Konto wurde nicht belastet.';
 $string['authorising'] = 'Authorisiere die Zahlung. Bitte warten...';
 $string['brandname'] = 'Markenname';
