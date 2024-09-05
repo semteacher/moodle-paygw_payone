@@ -223,9 +223,12 @@ class transaction_complete extends external_api implements interface_transaction
                         $record->paymentid = $paymentid;
                         $record->pu_orderid = $tid;
 
-                        if ($redirectedmethod = $orderdetails->getCreatedPaymentOutput()
-                            ->getPayment()->getPaymentOutput()->getRedirectPaymentMethodSpecificOutput()) {
+                        $paymentoutput = $orderdetails->getCreatedPaymentOutput()->getPayment()->getPaymentOutput();
+
+                        if ($redirectedmethod = $paymentoutput->getRedirectPaymentMethodSpecificOutput()) {
                                 $brandcode = $redirectedmethod->getPaymentProductId();
+                        } else if ($cardpaymentmethod = $paymentoutput->getCardPaymentMethodSpecificOutput()) {
+                            $brandcode = $cardpaymentmethod->getPaymentProductId();
                         } else {
                             $brandcode = 'xxx'; // Will be replaced below.
                         }
@@ -234,7 +237,7 @@ class transaction_complete extends external_api implements interface_transaction
                         if (get_string_manager()->string_exists('bc' . $brandcode, 'paygw_payone')) {
                             $record->paymentbrand = get_string('bc' . $brandcode, 'paygw_payone');
                         } else {
-                            $record->paymentbrand = get_string('unknownbrand', 'paygw_payone');
+                            $record->paymentbrand = $brandcode;
                         }
 
                         // Store original value.
