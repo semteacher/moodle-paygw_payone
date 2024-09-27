@@ -29,7 +29,7 @@ Feature: PayUnity basic configuration and useage by user
       | PayOne1 |
 
   @javascript
-  Scenario: PayOne: user select two items and pay via card using payunity
+  Scenario: PayOne: user select two items and pay via card using PayOne
     Given I log in as "user1"
     And Shopping cart has been cleaned for user "user1"
     And Testitem "1" has been put in shopping cart of user "user1"

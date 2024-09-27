@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['amountmismatch'] = 'Der Betrag, den Sie zu zahlen versuchen, entspricht nicht dem gespeicherten Betrag. Ihr Konto wurde nicht belastet.';
+$string['authorising'] = 'Authorisiere die Zahlung. Bitte warten...';
 $string['bc1'] = "Visa";
 $string['bc117'] = "Maestro";
 $string['bc132'] = "Diners Club";
@@ -31,14 +33,12 @@ $string['bc302'] = "Apple Pay";
 $string['bc3124'] = "P24";
 $string['bc320'] = "Google Pay";
 $string['bc3306'] = "Klarna";
-$string['bd5404'] = "WeChat Pay";
+$string['bc5404'] = "WeChat Pay";
 $string['bc5405'] = "Alipay";
 $string['bc5406'] = "EPS";
 $string['bc5408'] = "Bank transfer by Worldline";
 $string['bc809'] = "iDEAL";
 $string['bc840'] = "Paypal";
-$string['amountmismatch'] = 'Der Betrag, den Sie zu zahlen versuchen, entspricht nicht dem gespeicherten Betrag. Ihr Konto wurde nicht belastet.';
-$string['authorising'] = 'Authorisiere die Zahlung. Bitte warten...';
 $string['brandname'] = 'Markenname';
 $string['brandname_help'] = 'Ein optionaler Name der den Namen Payiunity auf der Zahlungsseite ersetzt.';
 $string['cannotfetchorderdetails'] = 'Konnte keine Zahlungsdetails von payone erhalten. Ihr Konto wurde nicht belastet.';

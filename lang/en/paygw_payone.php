@@ -22,23 +22,23 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- $string['bc1'] = "Visa";
- $string['bc117'] = "Maestro";
- $string['bc132'] = "Diners Club";
- $string['bc2'] = "American Express";
- $string['bc3'] = "Mastercard";
- $string['bc302'] = "Apple Pay";
- $string['bc3124'] = "P24";
- $string['bc320'] = "Google Pay";
- $string['bc3306'] = "Klarna";
- $string['bd5404'] = "WeChat Pay";
- $string['bc5405'] = "Alipay";
- $string['bc5406'] = "EPS";
- $string['bc5408'] = "Bank transfer by Worldline";
- $string['bc809'] = "iDEAL";
- $string['bc840'] = "Paypal";
 $string['amountmismatch'] = 'The amount you attempted to pay does not match the required fee. Your account has not been debited.';
 $string['authorising'] = 'Authorising the payment. Please wait...';
+$string['bc1'] = "Visa";
+$string['bc117'] = "Maestro";
+$string['bc132'] = "Diners Club";
+$string['bc2'] = "American Express";
+$string['bc3'] = "Mastercard";
+$string['bc302'] = "Apple Pay";
+$string['bc3124'] = "P24";
+$string['bc320'] = "Google Pay";
+$string['bc3306'] = "Klarna";
+$string['bc5404'] = "WeChat Pay";
+$string['bc5405'] = "Alipay";
+$string['bc5406'] = "EPS";
+$string['bc5408'] = "Bank transfer by Worldline";
+$string['bc809'] = "iDEAL";
+$string['bc840'] = "Paypal";
 $string['brandname'] = 'Brand name';
 $string['brandname_help'] = 'An optional label that overrides the business name for the payone account on the payone site.';
 $string['cannotfetchorderdetails'] = 'Could not fetch payment details from payone. Your account has not been debited.';
