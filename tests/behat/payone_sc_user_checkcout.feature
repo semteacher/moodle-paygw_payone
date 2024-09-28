@@ -37,9 +37,9 @@ Feature: PayUnity basic configuration and useage by user
     And I visit "/local/shopping_cart/checkout.php"
     And I wait until the page is ready
     And I should see "Your shopping cart"
-    And I should see "my test item 1" in the ".checkoutgrid.checkout #item-local_shopping_cart-main-1" "css_element"
+    And I should see "Test item 1" in the ".checkoutgrid.checkout #item-local_shopping_cart-main-1" "css_element"
     And I should see "10.00 EUR" in the ".checkoutgrid.checkout #item-local_shopping_cart-main-1 .item-price" "css_element"
-    And I should see "my test item 2" in the ".checkoutgrid.checkout #item-local_shopping_cart-main-2" "css_element"
+    And I should see "Test item 2" in the ".checkoutgrid.checkout #item-local_shopping_cart-main-2" "css_element"
     And I should see "20.30 EUR" in the ".checkoutgrid.checkout #item-local_shopping_cart-main-2 .item-price" "css_element"
     ## Price
     And I should see "30.30 EUR" in the ".sc_price_label" "css_element"
@@ -70,9 +70,11 @@ Feature: PayUnity basic configuration and useage by user
     And I wait until the page is ready
     And I should see "Authorised"
     And I click on "Continue" "text"
-    And I wait "1" seconds
-    ## Workaround for non-https dev env (uncomment for local testing)
+    ## Workaround for non-https dev env (uncomment line below for local testing)
     ## And I click on "Send anyway" "text"
-    ## And I wait to be redirected
-    And I should see "my test item 1" in the ".payment-success ul.list-group" "css_element"
-    And I should see "my test item 2" in the ".payment-success ul.list-group" "css_element"
+    And I wait to be redirected
+    ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
+    And I reload the page
+    And I wait until the page is ready
+    And I should see "Test item 1" in the ".payment-success ul.list-group" "css_element"
+    And I should see "Test item 2" in the ".payment-success ul.list-group" "css_element"
