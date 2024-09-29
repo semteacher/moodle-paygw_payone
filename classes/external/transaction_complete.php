@@ -279,7 +279,7 @@ class transaction_complete extends external_api implements interface_transaction
                                 'orderid' => $tid,
                             ]]);
                         $event->trigger();
-
+var_dump($record);
                         // If the delivery was not successful, we trigger an event.
                         if (!payment_helper::deliver_order($component, $paymentarea, $itemid, $paymentid, (int) $userid)) {
 
