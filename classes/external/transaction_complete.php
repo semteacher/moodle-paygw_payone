@@ -137,6 +137,12 @@ class transaction_complete extends external_api implements interface_transaction
             ];
         }
 
+        // Context is important to avoid the error "An internal error has occurred. Please contact us. resultcode: 5".
+        // Caused by response "Coding error detected, it must be fixed by a programmer: $PAGE->context was not set....".
+        // From shopping_cart_history on creation class instance.
+        $systencontext = context_system::instance();
+        self::validate_context($systencontext);
+
         self::validate_parameters(self::execute_parameters(), [
             'component' => $component,
             'paymentarea' => $paymentarea,
