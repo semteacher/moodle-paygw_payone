@@ -70,6 +70,7 @@ Feature: PayUnity basic configuration and useage by user
     And I wait until the page is ready
     And I should see "Authorised"
     And I click on "Continue" "text"
+    And I wait "10" seconds
     ## Workaround for non-https dev env (uncomment line below for local testing)
     ## And I click on "Send anyway" "text"
     And I wait to be redirected
