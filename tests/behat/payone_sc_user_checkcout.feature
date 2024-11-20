@@ -72,7 +72,7 @@ Feature: PayUnity basic configuration and useage by user
     And I click on "Continue" "text"
     ## Workaround for non-https dev env (uncomment line below for local testing)
     ## And I click on "Send anyway" "text"
-    And I wait to be redirected
+    ##And I wait to be redirected
     ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
     And I reload the page
     And I wait until the page is ready
