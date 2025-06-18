@@ -171,6 +171,7 @@ class payone_sdk {
         $cardspecifcheckoutinput->setAuthorizationMode('SALE');
 
         $hostedcheckoutspecificinput->setReturnUrl($data->redirecturl);
+        $hostedcheckoutspecificinput->setLocale($data->locale);
 
         $createhostedcheckoutrequest->setOrder($order);
         $createhostedcheckoutrequest->setHostedCheckoutSpecificInput($hostedcheckoutspecificinput);

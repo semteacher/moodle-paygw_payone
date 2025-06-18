@@ -187,6 +187,7 @@ class get_config_for_js extends external_api {
         $paymentdata->currency = $payable->get_currency();
         $paymentdata->redirecturl = $root . "/payment/gateway/payone/checkout.php?itemid=" . $itemid . "&component=" .
         $component . "&paymentarea=" . $paymentarea;
+        $paymentdata->locale = $language;
         $responsedata = $sdk->get_redirect_link_for_payment($paymentdata);
 
         if ($responsedata->getHostedCheckoutId() !== null) {
