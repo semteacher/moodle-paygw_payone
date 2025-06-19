@@ -332,11 +332,15 @@ final class transaction_complete_credit_test extends \advanced_testcase {
 
         shopping_cart_credits::add_credit($student1->id, 10.10, 'EUR', '');
 
-        // With this code, we instantiate the checkout for this user:
+        // With this code, we instantiate the checkout for this user.
         $cartstore = cartstore::instance($student1->id);
         $data = $cartstore->get_localized_data();
         $cartstore->get_expanded_checkout_data($data);
         $res = get_config_for_js::execute('local_shopping_cart', 'main', $data['identifier']);
+
+        // We expecting price has been reduced by value of credits.
+        $price = (int)$DB->get_field('paygw_payone_openorders', 'price', ['userid' => $student1->id, 'itemid' => $data['identifier']]);
+        $this->assertEquals(34, $price);
 
         $historyrecords = $DB->get_records('local_shopping_cart_history');
         $this->assertEquals(3, count($historyrecords));
@@ -368,7 +372,7 @@ final class transaction_complete_credit_test extends \advanced_testcase {
      * @covers \local_shopping_cart\payment\service_provider::get_payable()
      * @throws \coding_exception
      */
-    public function test_successfull_checkout_started_without_credits(): void {
+    public function test_unsuccessfull_checkout_started_without_credits(): void {
         global $DB;
 
         // Create users.
@@ -386,27 +390,37 @@ final class transaction_complete_credit_test extends \advanced_testcase {
             'local_shopping_cart',
             'testitem',
             1,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart::add_item_to_cart(
             'local_shopping_cart',
             'testitem',
             2,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart::add_item_to_cart(
             'local_shopping_cart',
             'testitem',
             3,
-            $student1->id);
+            $student1->id
+        );
 
-        // With this code, we instantiate the checkout for this user:
+        // With this code, we instantiate the checkout for this user.
         $cartstore = cartstore::instance($student1->id);
         $data = $cartstore->get_localized_data();
         $cartstore->get_expanded_checkout_data($data);
         $res = get_config_for_js::execute('local_shopping_cart', 'main', $data['identifier']);
 
-        $price = (int)$DB->get_field('paygw_payone_openorders', 'price', ['userid' => $student1->id, 'itemid' => $data['identifier']]);
+        // Get actual records for debugging. Expected 1.
+        $record1 = $DB->get_records('paygw_payone_openorders', ['userid' => $student1->id, 'itemid' => $data['identifier']]);
+
+        $price = (int)$DB->get_field(
+            'paygw_payone_openorders',
+            'price',
+            ['userid' => $student1->id, 'itemid' => $data['identifier']]
+        );
         $this->assertEquals(44, $price);
 
         // A user adds the credit only at the very last moment.
@@ -414,8 +428,15 @@ final class transaction_complete_credit_test extends \advanced_testcase {
 
         $res = get_config_for_js::execute('local_shopping_cart', 'main', $data['identifier']);
 
-        $price = (int)$DB->get_field('paygw_payone_openorders', 'price', ['userid' => $student1->id, 'itemid' => $data['identifier']]);
-        $this->assertEquals(34, $price);
+        // Get actual records for debugging. Expected 1.
+        $record2 = $DB->get_records('paygw_payone_openorders', ['userid' => $student1->id, 'itemid' => $data['identifier']]);
+
+        $price = (int)$DB->get_field(
+            'paygw_payone_openorders',
+            'price',
+            ['userid' => $student1->id, 'itemid' => $data['identifier']]
+        );
+        $this->assertEquals(44, $price);
 
         $historyrecords = $DB->get_records('local_shopping_cart_history');
         $this->assertEquals(3, count($historyrecords));
@@ -430,11 +451,15 @@ final class transaction_complete_credit_test extends \advanced_testcase {
             $tid
         );
 
-        $this->assertEquals($result["success"], true, 'We have an amount missmage, we expect to profit from 10 Euro reduction');
+        $this->assertEquals(
+            $result["success"],
+            false,
+            'We have an amount missmatch, adding credits at the last moment should not help!'
+        );
 
         // We look in the ledger items.
         $schistorylist = new shoppingcart_history_list($student1->id, $data['identifier'], true);
         $historylist = $schistorylist->return_list();
-        $this->assertEquals(4, count($historylist['historyitems']));
+        $this->assertEquals(0, count($historylist['historyitems']));
     }
 }
