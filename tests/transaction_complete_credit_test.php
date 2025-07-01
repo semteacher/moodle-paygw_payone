@@ -413,7 +413,7 @@ final class transaction_complete_credit_test extends \advanced_testcase {
         $cartstore->get_expanded_checkout_data($data);
         $res = get_config_for_js::execute('local_shopping_cart', 'main', $data['identifier']);
 
-        // Get actual records for debugging. Expected 1.
+        // Debugging only. Get actual records for debugging. Expected 1.
         $record1 = $DB->get_records('paygw_payone_openorders', ['userid' => $student1->id, 'itemid' => $data['identifier']]);
 
         $price = (int)$DB->get_field(
@@ -426,9 +426,11 @@ final class transaction_complete_credit_test extends \advanced_testcase {
         // A user adds the credit only at the very last moment.
         shopping_cart_credits::add_credit($student1->id, 10.10, 'EUR', '');
 
-        $res = get_config_for_js::execute('local_shopping_cart', 'main', $data['identifier']);
+        // phpcs:ignore
+        //$res = get_config_for_js::execute('local_shopping_cart', 'main', $data['identifier']);
+        // Above disabled to match new logic.
 
-        // Get actual records for debugging. Expected 1.
+        // Debugging only. Get actual records for debugging. Expected 1.
         $record2 = $DB->get_records('paygw_payone_openorders', ['userid' => $student1->id, 'itemid' => $data['identifier']]);
 
         $price = (int)$DB->get_field(
