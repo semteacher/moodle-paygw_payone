@@ -25,23 +25,16 @@
 
 namespace paygw_payone;
 
-use cache;
 use cache_helper;
-use local_shopping_cart\local\entities\cartitem;
 use local_shopping_cart\shopping_cart;
 use local_shopping_cart\shopping_cart_credits;
-use local_shopping_cart\shopping_cart_history;
 use local_shopping_cart\local\cartstore;
 use local_shopping_cart\output\shoppingcart_history_list;
-use local_shopping_cart\local\pricemodifier\modifiers\checkout;
 use OnlinePayments\Sdk\Domain\AmountOfMoney;
-use OnlinePayments\Sdk\Domain\CaptureOutput;
 use OnlinePayments\Sdk\Domain\CardInfo;
 use OnlinePayments\Sdk\Domain\CreatedPaymentOutput;
 use OnlinePayments\Sdk\Domain\CreateHostedCheckoutResponse;
-use OnlinePayments\Sdk\Domain\CreatePayoutRequest;
 use OnlinePayments\Sdk\Domain\GetHostedCheckoutResponse;
-use OnlinePayments\Sdk\Domain\Order;
 use OnlinePayments\Sdk\Domain\PaymentOutput;
 use OnlinePayments\Sdk\Domain\PaymentResponse;
 use OnlinePayments\Sdk\Domain\PaymentStatusOutput;
@@ -66,7 +59,6 @@ require_once($CFG->dirroot . '/payment/gateway/payone/thirdparty/vendor/autoload
  * @runTestsInSeparateProcesses
  */
 final class transaction_complete_credit_test extends \advanced_testcase {
-
     /** @var \core_payment\account account */
     private $account;
 
@@ -98,10 +90,10 @@ final class transaction_complete_credit_test extends \advanced_testcase {
 
         $accountgateway1 = \core_payment\helper::save_payment_gateway($record);
 
-        // Mock responsedata from payment gateway
+        // Mock responsedata from payment gateway.
         $responsedata = $this->createMock(CreateHostedCheckoutResponse::class);
         $responsedata->method('getHostedCheckoutId')
-            ->willReturnCallback(function() {
+            ->willReturnCallback(function () {
                 return str_pad(rand(1000000000, 9999999999), 10, '0', STR_PAD_LEFT);
             });
         $responsedata->method('getRedirectUrl')->willReturn('https://payment.preprod.payone.com/hostedcheckout/PaymentMethods/');
@@ -116,7 +108,7 @@ final class transaction_complete_credit_test extends \advanced_testcase {
         $redirectspecificoutput = $this->createMock(RedirectPaymentMethodSpecificOutput::class);
         $redirectspecificoutput->method('getPaymentProductId')->willReturn('VC');
 
-        // Mock orderdetails
+        // Mock orderdetails.
         $paymentoutput = $this->createMock(PaymentOutput::class);
         $paymentoutput->method('getAmountOfMoney')->willReturn($amoutofmoney);
         $paymentoutput->method('getRedirectPaymentMethodSpecificOutput')->willReturn($redirectspecificoutput);
@@ -138,22 +130,22 @@ final class transaction_complete_credit_test extends \advanced_testcase {
         $orderdetails->method('getCreatedPaymentOutput')->willReturn($createdpaymentoutput);
 
         // Create a PHPUnit mock for payone_sdk.
-        $sdkMock = $this->getMockBuilder(payone_sdk::class)
+        $sdkmock = $this->getMockBuilder(payone_sdk::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['get_redirect_link_for_payment', 'check_status'])
             ->getMock();
 
         // Define mock behavior.
-        $sdkMock->method('get_redirect_link_for_payment')
+        $sdkmock->method('get_redirect_link_for_payment')
             ->willReturn($responsedata);
 
         // Define mock behavior.
-        $sdkMock->method('check_status')
+        $sdkmock->method('check_status')
             ->willReturn($orderdetails);
 
-        // Override the factory to return our mock
-        payone_sdk::$factory = function () use ($sdkMock) {
-            return $sdkMock;
+        // Override the factory to return our mock.
+        payone_sdk::$factory = function () use ($sdkmock) {
+            return $sdkmock;
         };
     }
 
@@ -182,21 +174,24 @@ final class transaction_complete_credit_test extends \advanced_testcase {
             'local_shopping_cart',
             'testitem',
             1,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart::add_item_to_cart(
             'local_shopping_cart',
             'testitem',
             2,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart::add_item_to_cart(
             'local_shopping_cart',
             'testitem',
             3,
-            $student1->id);
+            $student1->id
+        );
 
-        // With this code, we instantiate the checkout for this user:
+        // With this code, we instantiate the checkout for this user.
         $cartstore = cartstore::instance($student1->id);
         $data = $cartstore->get_localized_data();
         $cartstore->get_expanded_checkout_data($data);
@@ -248,23 +243,26 @@ final class transaction_complete_credit_test extends \advanced_testcase {
             'local_shopping_cart',
             'testitem',
             1,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart::add_item_to_cart(
             'local_shopping_cart',
             'testitem',
             2,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart::add_item_to_cart(
             'local_shopping_cart',
             'testitem',
             3,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart_credits::add_credit($student1->id, 10.10, 'EUR', '');
 
-        // With this code, we instantiate the checkout for this user:
+        // With this code, we instantiate the checkout for this user.
         $cartstore = cartstore::instance($student1->id);
         $data = $cartstore->get_localized_data();
         $cartstore->get_expanded_checkout_data($data);
@@ -316,19 +314,22 @@ final class transaction_complete_credit_test extends \advanced_testcase {
             'local_shopping_cart',
             'testitem',
             1,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart::add_item_to_cart(
             'local_shopping_cart',
             'testitem',
             2,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart::add_item_to_cart(
             'local_shopping_cart',
             'testitem',
             3,
-            $student1->id);
+            $student1->id
+        );
 
         shopping_cart_credits::add_credit($student1->id, 10.10, 'EUR', '');
 
@@ -339,7 +340,11 @@ final class transaction_complete_credit_test extends \advanced_testcase {
         $res = get_config_for_js::execute('local_shopping_cart', 'main', $data['identifier']);
 
         // We expecting price has been reduced by value of credits.
-        $price = (int)$DB->get_field('paygw_payone_openorders', 'price', ['userid' => $student1->id, 'itemid' => $data['identifier']]);
+        $price = (int)$DB->get_field(
+            'paygw_payone_openorders',
+            'price',
+            ['userid' => $student1->id, 'itemid' => $data['identifier']]
+        );
         $this->assertEquals(34, $price);
 
         $historyrecords = $DB->get_records('local_shopping_cart_history');

@@ -79,8 +79,15 @@ class get_config_for_js extends external_api {
      * @return bool|string
      *
      */
-    public static function requestid(string $amount, string $currency, string $paymenttype, string $secret, string $entityid
-    , $environment, $merchanttransactionid) {
+    public static function requestid(
+        string $amount,
+        string $currency,
+        string $paymenttype,
+        string $secret,
+        string $entityid,
+        $environment,
+        $merchanttransactionid
+    ) {
         if ($environment === 'sandbox') {
             $verify = false;
             $url = "https://eu-test.oppwa.com/v1/checkouts";
@@ -145,19 +152,21 @@ class get_config_for_js extends external_api {
         $environment = $config['environment'];
         $sandbox = $environment == 'sandbox' ? true : false;
 
+        // phpcs:ignore
         // $string = bin2hex(openssl_random_pseudo_bytes(8));
         $now = new DateTime();
         $timestamp = $now->getTimestamp();
 
         $merchanttransactionid = $itemid;
 
-        if ( $component == 'local_shopping_cart' && class_exists('mod_booking\booking')) {
-            $cartitems = shopping_cart_history::return_data_via_identifier($itemid, intval($USER->id));
+        if ($component == 'local_shopping_cart' && class_exists('mod_booking\booking')) {
+            $cartitems = shopping_cart_history::return_data_via_identifier($itemid);
 
-            $cartitemsonlyoptions = array_filter((array) $cartitems,
-            function($item) {
-                return $item->area == 'option';
-            }
+            $cartitemsonlyoptions = array_filter(
+                (array) $cartitems,
+                function ($item) {
+                    return $item->area == 'option';
+                }
             );
             $longmtid = $itemid . ' ' .  $USER->id;
             foreach ($cartitemsonlyoptions as $item) {
@@ -170,10 +179,8 @@ class get_config_for_js extends external_api {
 
                 $substring = ' K' . $course;
                 $longmtid .= $substring;
-
             }
             // Payment provider accepts max string length of 40 characters.
-
         } else {
             $longmtid = $merchanttransactionid;
         }
