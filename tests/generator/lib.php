@@ -23,7 +23,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class paygw_payone_generator extends testing_module_generator {
-
     /**
      *
      * @var int keep track of how many booking options have been created.
@@ -54,17 +53,20 @@ class paygw_payone_generator extends testing_module_generator {
 
         if (!isset($record['accountid'])) {
             throw new coding_exception(
-                    'accountid must be present in phpunit_util::create_option() $record');
+                'accountid must be present in phpunit_util::create_option() $record'
+            );
         }
 
         if (!isset($record['gateway'])) {
             throw new coding_exception(
-                    'gateway must be present in phpunit_util::create_option() $record');
+                'gateway must be present in phpunit_util::create_option() $record'
+            );
         }
 
         if (!isset($record['enabled'])) {
             throw new coding_exception(
-                    'enabled must be present in phpunit_util::create_option() $record');
+                'enabled must be present in phpunit_util::create_option() $record'
+            );
         }
 
         $this->paymentgateway++;
@@ -73,7 +75,7 @@ class paygw_payone_generator extends testing_module_generator {
         $record->timecreated = time();
         $record->timemodified = time();
 
-        $config = new stdClass;
+        $config = new stdClass();
         $config->environment = 'sandbox';
         // Load the credentials from Github.
         $config->brandname = getenv('BRANDNAME');

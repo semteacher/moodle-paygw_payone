@@ -56,7 +56,6 @@ require_once($CFG->dirroot . '/payment/gateway/payone/thirdparty/vendor/autoload
  * @runTestsInSeparateProcesses
  */
 final class transaction_complete_test extends \advanced_testcase {
-
     /** @var \core_payment\account account */
     private $account;
 

@@ -33,7 +33,6 @@ namespace paygw_payone\event;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class delivery_error extends \core\event\base {
-
     /**
      * Init.
      *
@@ -62,7 +61,7 @@ class delivery_error extends \core\event\base {
      *
      */
     public function get_description() {
-        return "The user with the id {$this->userid} has tried to pay, but an error occured on delivery: ".
+        return "The user with the id {$this->userid} has tried to pay, but an error occured on delivery: " .
                 $this->other['message'];
     }
 

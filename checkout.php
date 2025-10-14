@@ -59,4 +59,3 @@ $data = new checkout($hostedcheckoutid, $paymentarea, $component, $itemid);
 echo $output->render_checkout($data);
 
 echo $OUTPUT->footer();
-

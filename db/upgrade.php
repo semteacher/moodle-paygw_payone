@@ -36,7 +36,6 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
     // Put any upgrade step following this.
 
     if ($oldversion < 2022080801) {
-
         // Define field paymentbrand to be added to paygw_payone.
         $table = new xmldb_table('paygw_payone');
         $field = new xmldb_field('paymentbrand', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'pu_orderid');
@@ -51,7 +50,6 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
     }
 
     if ($oldversion < 2022080802) {
-
         // Define field pboriginal to be added to paygw_payone.
         $table = new xmldb_table('paygw_payone');
         $field = new xmldb_field('pboriginal', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'paymentbrand');
@@ -65,7 +63,6 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
         upgrade_plugin_savepoint(true, 2022080802, 'paygw', 'payone');
     }
     if ($oldversion < 2023032101) {
-
         // Define table paygw_payone_openorders to be created.
         $table = new xmldb_table('paygw_payone_openorders');
 
@@ -90,7 +87,6 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
     }
 
     if ($oldversion < 2023041000) {
-
         // Changing type of field tid on table paygw_payone_openorders to char.
         $table = new xmldb_table('paygw_payone_openorders');
         $field = new xmldb_field('tid', XMLDB_TYPE_CHAR, '256', null, XMLDB_NOTNULL, null, null, 'id');
@@ -103,7 +99,6 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
     }
 
     if ($oldversion < 2023072702) {
-
         $table = new xmldb_table('paygw_payone_openorders');
 
         // Define field timecreated to be added to paygw_payone_openorders.
@@ -125,7 +120,6 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
     }
 
     if ($oldversion < 2024052301) {
-
         // Define field merchantref to be added to paygw_payone_openorders.
         $table = new xmldb_table('paygw_payone_openorders');
         $field = new xmldb_field('merchantref', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'timemodified');
@@ -140,7 +134,6 @@ function xmldb_paygw_payone_upgrade(int $oldversion): bool {
     }
 
     if ($oldversion < 2024120400) {
-
         // Define field customorderid to be added to paygw_payone_openorders.
         $table = new xmldb_table('paygw_payone_openorders');
         $field = new xmldb_field('customorderid', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'merchantref');

@@ -33,7 +33,6 @@ namespace paygw_payone\event;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class payment_completed extends \core\event\base {
-
     /**
      * Init.
      *

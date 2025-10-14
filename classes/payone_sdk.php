@@ -52,7 +52,6 @@ require_once($CFG->dirroot . '/payment/gateway/payone/thirdparty/vendor/autoload
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class payone_sdk {
-
     /**
      * @var string The base API URL
      */
@@ -200,5 +199,4 @@ class payone_sdk {
         $hostedcheckoutstatus = $client->merchant($this->brandname)->hostedCheckout()->getHostedCheckout($checkoutid);
         return $hostedcheckoutstatus;
     }
-
 }

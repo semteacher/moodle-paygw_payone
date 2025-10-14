@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-
     $settings->add(new admin_setting_heading('paygw_payone_settings', '', get_string('pluginname_desc', 'paygw_payone')));
 
     // phpcs:disable

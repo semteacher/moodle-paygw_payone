@@ -44,7 +44,6 @@ use stdClass;
  * @runTestsInSeparateProcesses
  */
 final class checkout_test extends \advanced_testcase {
-
     /** @var \core_payment\account account */
     private $account;
 
@@ -58,14 +57,14 @@ final class checkout_test extends \advanced_testcase {
         $generator = $this->getDataGenerator()->get_plugin_generator('core_payment');
         $this->account = $generator->create_payment_account(['name' => 'PayOne1']);
 
-        $record = new stdClass;
+        $record = new stdClass();
         $record->accountid = $this->account->get('id');
         $record->gateway = 'payone';
         $record->enabled = 1;
         $record->timecreated = time();
         $record->timemodified = time();
 
-        $config = new stdClass;
+        $config = new stdClass();
         $config->environment = 'sandbox';
         // Load the credentials from Github.
         $config->brandname = getenv('BRANDNAME');

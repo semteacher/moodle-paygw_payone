@@ -51,7 +51,6 @@ require_once($CFG->libdir . '/externallib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class get_config_for_js extends external_api {
-
     /**
      * Returns description of method parameters.
      *
@@ -185,7 +184,7 @@ class get_config_for_js extends external_api {
             $longmtid = $merchanttransactionid;
         }
 
-        $sdk = payone_sdk::create($config['clientid'], $config['secret'], $config['brandname'], $sandbox );
+        $sdk = payone_sdk::create($config['clientid'], $config['secret'], $config['brandname'], $sandbox);
 
         $paymentdata = new stdClass();
         $paymentdata->tid = $merchanttransactionid;
