@@ -18,6 +18,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Mink\Mink;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Driver\WebDriver;
 
 /**
  * Extra logging/debug context.
@@ -30,14 +31,13 @@ use Behat\Mink\Driver\Selenium2Driver;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_logging_context implements Context {
-
     /**
      * After each scenario, if it failed, dump browser logs.
      *
      * @AfterScenario
      */
     public function dump_browser_logs_after_failure(AfterScenarioScope $scope) {
-        Global $CFG;
+        global $CFG;
         // Only on fail.
         if ($scope->getTestResult()->getResultCode() === \Behat\Testwork\Tester\Result\TestResult::FAILED) {
             // Moodle's Behat bootstrap gives us $this->getSession() usually via behat_base.
@@ -61,8 +61,8 @@ class behat_logging_context implements Context {
             $session = $mink->getSession();
             $driver = $session->getDriver();
 
-            if (!($driver instanceof Selenium2Driver)) {
-                return;
+            if (!($driver instanceof WebDriver)) {
+            //    return;
             }
 
             // Prepare output dir.
