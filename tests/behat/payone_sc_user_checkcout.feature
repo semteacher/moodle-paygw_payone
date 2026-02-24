@@ -67,11 +67,7 @@ Feature: PayUnity basic configuration and useage by user
     And I click on "Pay Securely" "text" in the ".orderpart .button--raised.button--secure" "css_element"
     And I should see "Your payment is accepted"
     And I click on "Continue" "text" and wait for PayOne redirect
-    ##And I click on "Continue" "text"
-    ## STEPS BELOW DISABLED BECAUSE FAILING CONSTANTLY AT GITHUB ONLY (working OK for manual and local tests)
-    ##And I wait to be redirected
-    ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
-    ##And I reload the page
+    ## And I click on "Continue" "text"
     And I should see "Payment successful!" in the "#region-main" "css_element"
     And I should see "Test item 1" in the ".payment-success ul.list-group" "css_element"
     And I should see "Test item 2" in the ".payment-success ul.list-group" "css_element"
@@ -103,7 +99,6 @@ Feature: PayUnity basic configuration and useage by user
       | user  | credit | currency |
       | user1 | 4      | EUR      |
     # Return to 1st tab
-    ##And I switch to "Your shopping cart" tab
     And I switch to the main tab
     ## To avoid "local_shopping_cart\/noidentifierfound"
     And I reload the page
@@ -136,6 +131,11 @@ Feature: PayUnity basic configuration and useage by user
     And I click on "Pay Securely" "text" in the ".orderpart .button--raised.button--secure" "css_element"
     And I should see "Your payment is accepted"
     ##And I click on "Continue" "text"
+    And I click on "Continue" "text" and wait for PayOne redirect
+    And I should see "Payment successful!" in the "#region-main" "css_element"
+    And I should see "Test item 1" in the ".payment-success ul.list-group" "css_element"
+    And I should see "Credits used" in the ".payment-success ul.list-group" "css_element"
+    And I should see "-4.00 EUR" in the ".payment-success ul.list-group" "css_element"
     And I switch to "checkout2" tab
     # Important! two identical controls on page! "orderpart" is criaticl to click on!
     And I click on "Proceed to Payment Details" "text" in the ".orderpart .payment-proceed-to-payment" "css_element"
@@ -151,13 +151,22 @@ Feature: PayUnity basic configuration and useage by user
     And I should see "Your payment is accepted"
     And I click on "Continue" "text" and wait for PayOne redirect
     ## And I click on "Continue" "text"
-    ## STEPS BELOW DISABLED BECAUSE FAILING CONSTANTLY AT GITHUB ONLY (working OK for manual and local tests)
-    ##And I wait to be redirected
-    ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
-    ##And I reload the page
+    And I reload the page
     And I should see "Payment successful!" in the "#region-main" "css_element"
     And I should see "Test item 1" in the ".payment-success ul.list-group" "css_element"
-    And I should see "Test item 2" in the ".payment-success ul.list-group" "css_element"
+    ## Verify that all credits has been used and 2 instaces of test item 1 brought
+    And I log in as "admin"
+    And I visit "/local/shopping_cart/cashier.php"
+    And I wait until the page is ready
+    And I set the field "Select a user..." to "Username1"
+    And I should see "Username1 Test"
+    And I click on "Continue" "button"
+    And ".cashier-history-items .costcentercredits" "css_element" should not exist
+    ##And I wait "31" seconds
+    And I should see "Test item 1" in the "ul.cashier-history-items:nth-of-type(1) > li.list-group-item:nth-of-type(1)" "css_element"
+    And I should see "Test item 1" in the "ul.cashier-history-items:nth-of-type(1) > li.list-group-item:nth-of-type(2)" "css_element"
+    And following "Receipt" should download between "115000" and "116000" bytes
+    ##And following "Receipt" should download between "116001" and "118000" bytes
 
   @javascript
   Scenario: PayOne: user select two items use credits and and pay via card using PayOne
