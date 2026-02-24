@@ -66,9 +66,10 @@ Feature: PayUnity basic configuration and useage by user
     # Important! two identical controls on page! "orderpart" is criaticl to click on!
     And I click on "Pay Securely" "text" in the ".orderpart .button--raised.button--secure" "css_element"
     And I should see "Your payment is accepted"
-    And I click on "Continue" "text"
+    And I click on "Continue" "text" and wait for PayOne redirect
+    ##And I click on "Continue" "text"
     ## STEPS BELOW DISABLED BECAUSE FAILING CONSTANTLY AT GITHUB ONLY (working OK for manual and local tests)
-    And I wait to be redirected
+    ##And I wait to be redirected
     ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
     ##And I reload the page
     And I should see "Payment successful!" in the "#region-main" "css_element"
@@ -148,9 +149,10 @@ Feature: PayUnity basic configuration and useage by user
     # Important! two identical controls on page! "orderpart" is criaticl to click on!
     And I click on "Pay Securely" "text" in the ".orderpart .button--raised.button--secure" "css_element"
     And I should see "Your payment is accepted"
-    And I click on "Continue" "text"
+    And I click on "Continue" "text" and wait for PayOne redirect
+    ## And I click on "Continue" "text"
     ## STEPS BELOW DISABLED BECAUSE FAILING CONSTANTLY AT GITHUB ONLY (working OK for manual and local tests)
-    And I wait to be redirected
+    ##And I wait to be redirected
     ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
     ##And I reload the page
     And I should see "Payment successful!" in the "#region-main" "css_element"
@@ -206,9 +208,10 @@ Feature: PayUnity basic configuration and useage by user
     # Important! two identical controls on page! "orderpart" is criaticl to click on!
     And I click on "Pay Securely" "text" in the ".orderpart .button--raised.button--secure" "css_element"
     And I should see "Your payment is accepted"
-    And I click on "Continue" "text"
+    And I click on "Continue" "text" and wait for PayOne redirect
+    ##And I click on "Continue" "text"
     ## STEPS BELOW DISABLED BECAUSE FAILING CONSTANTLY AT GITHUB ONLY (working OK for manual and local tests)
-    And I wait to be redirected
+    ##And I wait to be redirected
     ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
     ## And I reload the page
     And I should see "Payment successful!" in the "#region-main" "css_element"
