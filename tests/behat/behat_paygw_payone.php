@@ -36,7 +36,6 @@ require_once(__DIR__ . '/../../../../../lib/behat/behat_base.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_paygw_payone extends behat_base {
-
     /**
      * Click an element and wait until browser returns from hosted checkout back to Moodle.
      *
@@ -50,7 +49,8 @@ class behat_paygw_payone extends behat_base {
     public function i_click_and_wait_for_payone_redirect(string $element, string $selectortype): void {
         global $CFG;
 
-        $this->execute('behat_general::i_click_on', [$element, $selectortype]);
+        $node = $this->find($selectortype, $element);
+        $node->click();
 
         $condition = 'window.location.href.indexOf(' . json_encode($CFG->wwwroot) . ') === 0';
         $timeoutms = self::get_extended_timeout() * 1000;
@@ -63,6 +63,7 @@ class behat_paygw_payone extends behat_base {
             );
         }
 
-        $this->wait_for_pending_js();
+        $pageready = 'document.readyState === "complete"';
+        $this->getSession()->wait($timeoutms, $pageready);
     }
 }
