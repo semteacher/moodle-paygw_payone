@@ -70,10 +70,10 @@ Feature: PayUnity basic configuration and useage by user
     ## STEPS BELOW DISABLED BECAUSE FAILING CONSTANTLY AT GITHUB ONLY (working OK for manual and local tests)
     ## And I wait to be redirected
     ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
-    ##And I reload the page
-    ##And I should see "Payment successful!" in the "#region-main" "css_element"
-    ##And I should see "Test item 1" in the ".payment-success ul.list-group" "css_element"
-    ##And I should see "Test item 2" in the ".payment-success ul.list-group" "css_element"
+    And I reload the page
+    And I should see "Payment successful!" in the "#region-main" "css_element"
+    And I should see "Test item 1" in the ".payment-success ul.list-group" "css_element"
+    And I should see "Test item 2" in the ".payment-success ul.list-group" "css_element"
 
   @javascript
   Scenario: PayOne: user select one items and pay twice with late credit added via card using PayOne
@@ -152,10 +152,10 @@ Feature: PayUnity basic configuration and useage by user
     ## STEPS BELOW DISABLED BECAUSE FAILING CONSTANTLY AT GITHUB ONLY (working OK for manual and local tests)
     ## And I wait to be redirected
     ## Line below - workaround for "An internal error has occurred. Please contact us. resultcode: 5. (press Proceed)"
-    ##And I reload the page
-    ##And I should see "Payment successful!" in the "#region-main" "css_element"
-    ##And I should see "Test item 1" in the ".payment-success ul.list-group" "css_element"
-    ##And I should see "Test item 2" in the ".payment-success ul.list-group" "css_element"
+    And I reload the page
+    And I should see "Payment successful!" in the "#region-main" "css_element"
+    And I should see "Test item 1" in the ".payment-success ul.list-group" "css_element"
+    And I should see "Test item 2" in the ".payment-success ul.list-group" "css_element"
 
   @javascript
   Scenario: PayOne: user select two items use credits and and pay via card using PayOne
