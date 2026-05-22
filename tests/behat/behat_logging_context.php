@@ -17,14 +17,11 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Mink\Mink;
-use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Driver\WebDriver;
 
 /**
  * Extra logging/debug context.
  *
- * IMPORTANT:
- *   Add this context to your plugin's Behat suite so Moodle loads it.
  * @package    paygw_payone
  * @category   test
  * @copyright  2024 Wunderbyte Gmbh <info@wunderbyte.at>
@@ -36,81 +33,82 @@ class behat_logging_context implements Context {
      *
      * @AfterScenario
      */
-    public function dump_browser_logs_after_failure(AfterScenarioScope $scope) {
+    public function dump_browser_logs_after_failure(AfterScenarioScope $scope): void {
         global $CFG;
-        // Only on fail.
-        if ($scope->getTestResult()->getResultCode() === \Behat\Testwork\Tester\Result\TestResult::FAILED) {
-            // Moodle's Behat bootstrap gives us $this->getSession() usually via behat_base.
-            // But this context is standalone, so we need to reach Mink through the environment.
-            // Trick: most Moodle contexts are registered in the same Mink instance. We can fetch it like this.
-            $environment = $scope->getEnvironment();
 
-            /** @var Mink $mink */
-            $mink = null;
-            foreach ($environment->getContexts() as $ctx) {
-                if (method_exists($ctx, 'getMink')) {
-                    $mink = $ctx->getMink();
-                    break;
-                }
+        if ($scope->getTestResult()->getResultCode() !== \Behat\Testwork\Tester\Result\TestResult::FAILED) {
+            return;
+        }
+
+        $mink = $this->get_mink_from_environment($scope);
+        if (!$mink) {
+            return;
+        }
+
+        $session = $mink->getSession();
+        $driver = $session->getDriver();
+        if (!($driver instanceof WebDriver) || empty($driver->wdSession)) {
+            return;
+        }
+
+        $outdir = $CFG->dataroot . '/behat_dump';
+        if (!is_dir($outdir)) {
+            mkdir($outdir, 0777, true);
+        }
+
+        $rawname = $scope->getScenario()->getTitle();
+        $sanename = preg_replace('/[^A-Za-z0-9._-]+/', '_', $rawname);
+        $ts = date('Ymd_His');
+
+        $consolelogentries = $this->read_wd_log($driver, 'browser');
+        file_put_contents(
+            $outdir . "/{$ts}_{$sanename}_console.json",
+            json_encode($consolelogentries, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
+
+        $perflogentries = $this->read_wd_log($driver, 'performance');
+        file_put_contents(
+            $outdir . "/{$ts}_{$sanename}_performance.json",
+            json_encode($perflogentries, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
+
+        try {
+            $html = $session->getPage()->getHtml();
+        } catch (\Throwable $e) {
+            $html = '<error>' . s($e->getMessage()) . '</error>';
+        }
+
+        file_put_contents($outdir . "/{$ts}_{$sanename}_page.html", $html);
+    }
+
+    /**
+     * Gets Mink instance from loaded contexts.
+     *
+     * @param AfterScenarioScope $scope
+     * @return Mink|null
+     */
+    private function get_mink_from_environment(AfterScenarioScope $scope): ?Mink {
+        $environment = $scope->getEnvironment();
+        foreach ($environment->getContexts() as $context) {
+            if (method_exists($context, 'getMink')) {
+                return $context->getMink();
             }
-            if (!$mink) {
-                // Can't get Mink, abort.
-                return;
-            }
+        }
+        return null;
+    }
 
-            $session = $mink->getSession();
-            $driver = $session->getDriver();
-
-            if (!($driver instanceof WebDriver)) {
-            //    return;
-            }
-
-            // Prepare output dir.
-            $outdir = $CFG->dataroot . '/behat_dump';
-            if (!is_dir($outdir)) {
-                @mkdir($outdir, 0777, true);
-            }
-
-            // Use scenario name (sanitized) as filename stem.
-            $rawname = $scope->getScenario()->getTitle();
-            $sanename = preg_replace('/[^A-Za-z0-9._-]+/', '_', $rawname);
-            $ts = date('Ymd_His');
-
-            // 1) Browser console log.
-            try {
-                $consolelogentries = $driver->wdSession->log('browser');
-            } catch (\Exception $e) {
-                $consolelogentries = [['level' => 'ERROR', 'message' => 'Could not read browser log: ' . $e->getMessage()]];
-            }
-
-            file_put_contents(
-                $outdir . "/{$ts}_{$sanename}_console.json",
-                json_encode($consolelogentries, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-            );
-
-            // 2) Performance log (network-ish / timeline-ish).
-            try {
-                $perflogentries = $driver->wdSession->log('performance');
-            } catch (\Exception $e) {
-                $perflogentries = [['level' => 'ERROR', 'message' => 'Could not read performance log: ' . $e->getMessage()]];
-            }
-
-            file_put_contents(
-                $outdir . "/{$ts}_{$sanename}_performance.json",
-                json_encode($perflogentries, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-            );
-
-            // 3) HTML snapshot of the page at failure time.
-            try {
-                $html = $session->getPage()->getHtml();
-            } catch (\Exception $e) {
-                $html = '<error>' . $e->getMessage() . '</error>';
-            }
-
-            file_put_contents(
-                $outdir . "/{$ts}_{$sanename}_page.html",
-                $html
-            );
+    /**
+     * Reads webdriver log and prevents teardown-time fatal failures.
+     *
+     * @param WebDriver $driver
+     * @param string $logtype
+     * @return array
+     */
+    private function read_wd_log(WebDriver $driver, string $logtype): array {
+        try {
+            return $driver->wdSession->log($logtype);
+        } catch (\Throwable $e) {
+            return [['level' => 'ERROR', 'message' => 'Could not read ' . $logtype . ' log: ' . $e->getMessage()]];
         }
     }
 }
